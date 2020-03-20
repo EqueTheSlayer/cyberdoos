@@ -1,0 +1,25 @@
+{
+  "name": "cyberdoos_bot",
+  "version": "1.0.0",
+  "description": "\"\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "''"
+  },
+  "keywords": [
+    "''"
+  ],
+  "author": "EqueTheSlayer",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.0.1",
+    "ffmpeg": "0.0.4",
+    "ms": "^2.1.2",
+    "opusscript": "0.0.7",
+    "ytdl-core": "^2.0.0"
+  }
+}
