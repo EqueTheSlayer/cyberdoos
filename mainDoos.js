@@ -7,6 +7,10 @@ const prefix = config.prefix;
 const apiKey = '9552deb6aed115532d3abdc34e24d985';
 const city = 'volgograd';
 const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=RU&appid=${apiKey}`;
+const express = require('express')
+const path = require('path')
+const PORT = process.env.PORT || 5000
+const host = '0.0.0.0'
 //создаём ссылку-приглашение для бота
 bot.on('ready', () => {
     console.log(`Запустился бот ${bot.user.username}`);
@@ -73,6 +77,14 @@ bot.on('message', async msg => {
 });
 
 bot.login(token);
+
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.render('pages/index'))
+  .listen(PORT, host, () => console.log(`Listening on ${ PORT }`))
+
 
 
 
