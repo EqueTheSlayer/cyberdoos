@@ -11,7 +11,6 @@ const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metr
 bot.on('ready', () => {
     console.log(`Запустился бот ${bot.user.username}`);
     bot.generateInvite(["ADMINISTRATOR"]).then(link => {
-        console.log(link);
     });
 });
 
@@ -19,13 +18,16 @@ bot.on('message', async msg => {
     if (msg.content.startsWith(`${prefix}погода`) && msg.author.bot === false) {
         request(url, function (err, response, body) {
             if(err){
-              console.log('error:', error);
+                console.log('ошибка');
             } else {
                 let data = JSON.parse(body);
-                let data2 = data.weather.find(item => item.id == 800);
-                msg.channel.send(`Сегодня в Усть-Парашинске ${data2.description}\n Температура составляет 🔥${data.main.temp}градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`);
-                console.log(data);
-                console.log(data[0])
+                let data2 = data.weather.find(item => item.id);
+                if (data2.description == 'ясно') {
+                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☀️${data2.description}☀️\nТемпература составляет 🔥${data.main.temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                }
+                if (data2.description == 'переменная облачность') {
+                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ⛅${data2.description}⛅\nТемпература составляет 🔥${data.main.temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                }
             }
           });
           
