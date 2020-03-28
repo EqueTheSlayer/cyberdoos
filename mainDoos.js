@@ -12,6 +12,11 @@ const path = require('path')
 const PORT = process.env.PORT || 5000
 const host = '0.0.0.0'
 
+let http = require("http");
+setInterval(function() {
+    http.get("http://morning-plateau-45402.herokuapp.com");
+}, 900000);
+
 express()
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
