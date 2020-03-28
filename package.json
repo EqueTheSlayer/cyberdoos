@@ -7,13 +7,6 @@
     "test": "node test.js",
     "start": "node mainDoos.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "''"
-  },
-  "keywords": [
-    "''"
-  ],
   "author": "EqueTheSlayer",
   "license": "ISC",
   "dependencies": {
@@ -22,6 +15,24 @@
     "ms": "^2.1.2",
     "opusscript": "0.0.7",
     "request": "^2.88.2",
-    "ytdl-core": "^2.0.0"
+    "ytdl-core": "^2.0.0",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "tape": "^4.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/node-js-getting-started"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "engines": {
+    "node": "12.x"
   }
 }
