@@ -7,22 +7,21 @@ const prefix = config.prefix;
 const apiKey = '9552deb6aed115532d3abdc34e24d985';
 const city = 'volgograd';
 const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=RU&appid=${apiKey}`;
-const express = require("express")
-const path = require('path')
-const PORT = process.env.PORT || 5000
-const host = '0.0.0.0'
+const express = require("express");
+const path = require('path');
+const PORT = process.env.PORT || 5000;
 
 let http = require("http");
 setInterval(function() {
     http.get("http://morning-plateau-45402.herokuapp.com");
-}, 900000);
+}, 300000);
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, host, () => console.log(`Listening on ${ PORT }`))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`))
 //создаём ссылку-приглашение для бота
 bot.on('ready', () => {
     console.log(`Запустился бот ${bot.user.username}`);
@@ -43,7 +42,7 @@ bot.on('message', async msg => {
                 if (data2.description == 'ясно') {
                     msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
                 }
-                if (data2.description.includes('облачность')) {
+                if (data2.description.includes('обла')) {
                     msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
                 }
             }
@@ -51,7 +50,6 @@ bot.on('message', async msg => {
     }
     console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
 });
-
 bot.login(token);
 
 
