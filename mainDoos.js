@@ -11,10 +11,10 @@ const express = require("express");
 const path = require('path');
 const PORT = process.env.PORT || 5000;
 
-// let http = require("http");
-// setInterval(function() {
-//     http.get("http://morning-plateau-45402.herokuapp.com");
-// }, 300000);
+let http = require("http");
+setInterval(function() {
+    http.get("http://morning-plateau-45402.herokuapp.com");
+}, 300000);
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
