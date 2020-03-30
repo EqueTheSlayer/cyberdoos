@@ -31,7 +31,7 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-    if (msg.content.match(`${prefix}[a-zA-Zа-яА-Я]+$`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[a-zA-Zа-яА-Я]+$`) > -1 && msg.author.bot === false) {
         request(url, function (err, response, body) {
             if(err){
                 console.log('ошибка');
