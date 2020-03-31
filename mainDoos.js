@@ -39,9 +39,9 @@ bot.on('message', async msg => {
             } else {
                 let covidData = JSON.parse(body);
                 console.log(covidData.Russia);
-                let lastday = codidData.Russia[covidData.Russia.length - 1];
+                let lastday = covidData.Russia[covidData.Russia.length - 1];
                 console.log(lastday)
-                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен ${covidData.Russia.confirmed} случаев заражения COVID-19, погибло ${covidData.Russia.deaths} человек. Дус все еще жив😭😭😭\`\`\``)
+                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${covidData.Russia.confirmed}💊 случаев заражения COVID-19, погибло ${covidData.Russia.deaths} человек. Дус все еще жив😭😭😭\`\`\``)
         }
         })
     }
