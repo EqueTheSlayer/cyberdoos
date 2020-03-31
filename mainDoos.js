@@ -57,6 +57,7 @@ bot.on('message', async msg => {
     }
     console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
 });
+bot.login(token);
 
 
 
