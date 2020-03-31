@@ -10,6 +10,7 @@ const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metr
 const express = require("express");
 const path = require('path');
 const PORT = process.env.PORT || 5000;
+Today = new Date();
 
 let http = require("http");
 setInterval(function () {
@@ -38,8 +39,10 @@ bot.on('message', async msg => {
             } else {
                 let covidData = JSON.parse(body);
                 console.log(covidData);
-                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен ${covidData.confirmed} случаев заражения COVID-19, погибло ${covidData.deaths} человек. Дус все еще жив😭😭😭`)
+                if(covidData.Russia.date = `${Today.getFullYear()-Today.getMonth()-Today.setDate(Today.getDate() - 1)}`) {
+                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен ${covidData.Russia.confirmed} случаев заражения COVID-19, погибло ${covidData.Russia.deaths} человек. Дус все еще жив😭😭😭\`\`\``)
             }
+        }
         })
     }
     if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
