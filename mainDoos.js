@@ -10,7 +10,6 @@ const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metr
 const express = require("express");
 const path = require('path');
 const PORT = process.env.PORT || 5000;
-let shablon = msg.content.split('');
 
 let http = require("http");
 setInterval(function() {
@@ -53,6 +52,7 @@ bot.on('message', async msg => {
             }
           }); 
     }
+    let shablon = msg.content.split('');
     if (msg.content.search(`${prefix}[ШАБЛОНшаблонAaOoHh]+$`) && shablon.length >= 4) {
         msg.channel.send(`\'ttr russian Добрый день. С вами ведущая новостей Вилигульма. Сегодня в нашу редакцию поступило крайне опечаливающее сообщение от президента Российской Федерации Владимира Владимировича Путина. В нем сказано, что Соединенные Штаты Америки без предупреждения напали на Усть-Парашинск ровно в 4:20 утра. По предварительным данным, третья мировая война началась из-за некого ${shablon[0]} ${shablon[1]} по кличке ${shablon[2]}. Этот ${shablon[3]} махинатор во время своей игры в доте закинул всю пачку снюса под губу`)
     }
