@@ -12,17 +12,17 @@ const path = require('path');
 const PORT = process.env.PORT || 5000;
 
 let http = require("http");
-setInterval(function() {
+setInterval(function () {
     http.get("http://morning-plateau-45402.herokuapp.com");
 }, 300000);
 
 express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`))
-  
+    .use(express.static(path.join(__dirname, 'public')))
+    .set('views', path.join(__dirname, 'views'))
+    .set('view engine', 'ejs')
+    .get('/', (req, res) => res.render('pages/index'))
+    .listen(PORT, () => console.log(`Listening on ${PORT}`))
+
 //создаём ссылку-приглашение для бота
 bot.on('ready', () => {
     console.log(`Запустился бот ${bot.user.username}`);
@@ -31,9 +31,18 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
+    if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
+        fetch("https://pomber.github.io/covid19/timeseries.json")
+            .then(response => response.json())
+            .then(data => {
+                data["Russia"].forEach(({ date, confirmed, recovered, deaths }) =>
+                    console.log(`${date} active cases: ${confirmed - recovered - deaths}`)
+                );
+            });
+    }
     if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
         request(url, function (err, response, body) {
-            if(err){
+            if (err) {
                 console.log('ошибка');
             } else {
                 let data = JSON.parse(body);
@@ -53,7 +62,7 @@ bot.on('message', async msg => {
                     msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
                 }
             }
-          }); 
+        });
     }
     console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
 });
