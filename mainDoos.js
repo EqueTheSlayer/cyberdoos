@@ -38,7 +38,7 @@ bot.on('message', async msg => {
                 console.log('covid ошибка')
             } else {
                 let covidData = JSON.parse(body);
-                console.log(covidData);
+                console.log(covidData.Russia);
                 if(covidData.Russia.date = `${Today.getFullYear()-Today.getMonth()-Today.setDate(Today.getDate() - 1)}`) {
                 msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен ${covidData.Russia.confirmed} случаев заражения COVID-19, погибло ${covidData.Russia.deaths} человек. Дус все еще жив😭😭😭\`\`\``)
             }
