@@ -32,13 +32,15 @@ bot.on('ready', () => {
 
 bot.on('message', async msg => {
     if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
-        request("https://pomber.github.io/covid19/timeseries.json")
-            .then(response => response.json())
-            .then(data => {
-                data["Russia"].forEach(({ date, confirmed, recovered, deaths }) =>
-                    console.log(`${date} active cases: ${confirmed - recovered - deaths}`)
-                );
-            });
+        request("https://pomber.github.io/covid19/timeseries.json", function(err, response, body){
+            if (err) {
+                console.log('covid ошибка')
+            } else {
+                let covidData = JSON.parse(body);
+                console.log(covidData);
+                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен ${confirmed} случаев заражения COVID-19, погибло ${deaths} человек. Дус все еще жив😭😭😭`)
+            }
+        })
     }
     if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
         request(url, function (err, response, body) {
