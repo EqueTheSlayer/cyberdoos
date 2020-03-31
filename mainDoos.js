@@ -32,7 +32,7 @@ bot.on('ready', () => {
 
 bot.on('message', async msg => {
     if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
-        fetch("https://pomber.github.io/covid19/timeseries.json")
+        request("https://pomber.github.io/covid19/timeseries.json")
             .then(response => response.json())
             .then(data => {
                 data["Russia"].forEach(({ date, confirmed, recovered, deaths }) =>
