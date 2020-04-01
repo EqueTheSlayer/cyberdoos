@@ -92,9 +92,8 @@ bot.on('message', async msg => {
                         server3.queue.splice (i, 1);
                     }
                     server3.dispatcher.end();
-                    msg.channel.send(`\`\`\`Песни спеты, катапультируюсь☄️☄️☄️\`\`\``);
+                    msg.channel.send(`\`\`\`💀💀💀Ваша песенка спета💀💀💀\`\`\``);
                 }
-                if(msg.guild.connection) msg.guild.voiceConnection.disconnect();
         break;        
     }
     //коронавирус
