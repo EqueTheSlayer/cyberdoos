@@ -10,7 +10,8 @@ const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metr
 const express = require("express");
 const path = require('path');
 const PORT = process.env.PORT || 5000;
-Today = new Date();
+let servers = {};
+const yrdl = require('ytdl-core');
 
 let http = require("http");
 setInterval(function () {
@@ -32,6 +33,49 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
+    //музыкальная функция
+    let args = msg.content.substring(prefix.length).split('');
+
+    switch (args[0]) {
+        case 'play': 
+
+            function play(connection, message) {
+                let server = servers[msg.guild.id];
+
+                server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter:'audioonly'}));
+
+                server.queue.shift();
+
+                server.dispatcher.on('end', function() {
+                    if (server.queue[0]){
+                        play(connection, msg);
+                    } else {
+                        connection.disconnect();
+                    }
+                })
+            }
+
+            if (!args[1]) {
+                msg.channel.send('Сначала укажи ссылку на песню, 🤡');
+                return;
+            }
+
+            if (!msg.member.voiceChannel) {
+                msg.channel.send('Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡');
+                return;
+            }
+
+            if (!servers[msg.guild.id]) servers[msg.guild.id] = {
+                queue: [] 
+            }
+            
+            let server = servers[msg.guild.id];
+
+            if (!msg.guild.voiceConnection) msg.member.voiceChannel.join().then(function(connection) {
+                play(connection, msg)
+            })
+    }
+    //коронавирус
     if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
         request("https://pomber.github.io/covid19/timeseries.json", function(err, response, body){
             if (err) {
@@ -45,6 +89,7 @@ bot.on('message', async msg => {
         }
         })
     }
+    //погода
     if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
         request(url, function (err, response, body) {
             if (err) {
