@@ -15,7 +15,7 @@ const ytdl = require('ytdl-core');
 
 let http = require("http");
 setInterval(function () {
-    http.get("http://morning-plateau-45402.herokuapp.com");
+    http.get("https://cyberdoos.herokuapp.com");
 }, 300000);
 
 express()
@@ -87,6 +87,7 @@ bot.on('message', async msg => {
 
         case 'stop':
             let server3 = servers[msg.guild.id];
+            console.log(server3)
                 if (msg.member.voice.channel) {
                     for (let i = server3.queue.length - 1; i >= 0; i--) {
                         server3.queue.splice (i, 1);
