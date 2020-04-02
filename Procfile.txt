@@ -1,1 +1,1 @@
-worker: node mainDoos.js
+web: node mainDoos.js
