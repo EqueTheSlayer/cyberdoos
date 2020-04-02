@@ -15,7 +15,7 @@ const ytdl = require('ytdl-core');
 
 let http = require("http");
 setInterval(function () {
-    http.get("https://cyberdoos.herokuapp.com");
+    http.get("http://cyberdoos.herokuapp.com");
 }, 300000);
 
 express()
