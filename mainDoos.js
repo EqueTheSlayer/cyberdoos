@@ -33,9 +33,9 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
+    if (msg.author.id != '281120774289489922') {
     //музыкальная функция
     let args = msg.content.substring(prefix.length).split(' ');
-
     switch (args[0]) {
         case 'play': 
 
@@ -105,7 +105,7 @@ bot.on('message', async msg => {
             } else {
                 let covidData = JSON.parse(body);
                 let lastday = covidData.Russia[covidData.Russia.length - 1];
-                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек. Дус все еще жив😭😭😭\`\`\``)
+                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек. Ванус все еще жив🤬😭🤬😭🤬\`\`\``)
         }
         })
     }
@@ -135,7 +135,8 @@ bot.on('message', async msg => {
         });
     }
     console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
-});
+} else (msg.reply('\`\`\`Ты кто нахуй такой шобы мне приказывать????? Отсоси пятнадцать камней из раста, 🤡'));
+})
 bot.login(token);
 
 
