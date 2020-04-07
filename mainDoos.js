@@ -34,109 +34,112 @@ bot.on('ready', () => {
 
 bot.on('message', async msg => {
     if (msg.author.id != '281120774289489922') {
-    //музыкальная функция
-    let args = msg.content.substring(prefix.length).split(' ');
-    switch (args[0]) {
-        case 'play': 
+        //музыкальная функция
+        let args = msg.content.substring(prefix.length).split(' ');
+        switch (args[0]) {
+            case 'play':
 
-            function play(connection, message) {
+                function play(connection, message) {
+                    let server = servers[msg.guild.id];
+
+                    server.dispatcher = connection.play(ytdl(server.queue[0], { filter: 'audioonly' }));
+
+                    server.queue.shift();
+
+                    server.dispatcher.on('end', function () {
+                        if (server.queue[0]) {
+                            play(connection, msg);
+                        } else {
+                            connection.disconnect();
+                        }
+                    })
+                }
+
+                if (!args[1]) {
+                    msg.channel.send(`\`\`\`Сначала укажи ссылку на песню, 🤡\`\`\``);
+                    return;
+                }
+
+                if (!msg.member.voice.channel) {
+                    msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
+                    return;
+                }
+
+                if (!servers[msg.guild.id]) servers[msg.guild.id] = {
+                    queue: []
+                }
+
                 let server = servers[msg.guild.id];
 
-                server.dispatcher = connection.play(ytdl(server.queue[0], {filter:'audioonly'}));
+                server.queue.push(args[1]);
 
-                server.queue.shift();
-
-                server.dispatcher.on('end', function() {
-                    if (server.queue[0]){
-                        play(connection, msg);
-                    } else {
-                        connection.disconnect();
-                    }
+                if (!msg.guild.voiceConnection) msg.member.voice.channel.join().then(function (connection) {
+                    play(connection, msg);
                 })
-            }
 
-            if (!args[1]) {
-                msg.channel.send(`\`\`\`Сначала укажи ссылку на песню, 🤡\`\`\``);
-                return;
-            }
+                break;
 
-            if (!msg.member.voice.channel) {
-                msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
-                return;
-            }
-
-            if (!servers[msg.guild.id]) servers[msg.guild.id] = {
-                queue: [] 
-            }
-            
-            let server = servers[msg.guild.id];
-            
-            server.queue.push(args[1]);
-
-            if (!msg.guild.voiceConnection) msg.member.voice.channel.join().then(function(connection) {
-                play(connection, msg);
-            })
-            
-        break;
-        
-        case 'skip':
-            let server2 = servers[msg.guild.id];
-                if(server2.dispatcher) server2.dispatcher.end();
+            case 'skip':
+                let server2 = servers[msg.guild.id];
+                if (server2.dispatcher) server2.dispatcher.end();
                 msg.channel.send(`\`\`\`Включаю следующую песню🎤🎤🎤\`\`\``)
-        break;
+                break;
 
-        case 'stop':
-            let server3 = servers[msg.guild.id];
-            console.log(server3)
+            case 'stop':
+                let server3 = servers[msg.guild.id];
+                console.log(server3)
                 if (msg.member.voice.channel) {
                     for (let i = server3.queue.length - 1; i >= 0; i--) {
-                        server3.queue.splice (i, 1);
+                        server3.queue.splice(i, 1);
                     }
                     server3.dispatcher.end();
                     msg.channel.send(`\`\`\`💀💀💀Ваша песенка спета💀💀💀\`\`\``);
                 }
-        break;        
-    }
-    //коронавирус
-    if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
-        request("https://pomber.github.io/covid19/timeseries.json", function(err, response, body){
-            if (err) {
-                console.log('covid ошибка')
-            } else {
-                let covidData = JSON.parse(body);
-                let lastday = covidData.Russia[covidData.Russia.length - 1];
-                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек. Ванус все еще жив🤬😭🤬😭🤬\`\`\``)
+                break;
         }
-        })
+        //коронавирус
+        if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
+            request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
+                if (err) {
+                    console.log('covid ошибка')
+                } else {
+                    let covidData = JSON.parse(body);
+                    let lastday = covidData.Russia[covidData.Russia.length - 1];
+                    msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек. Ванус все еще жив🤬😭🤬😭🤬\`\`\``)
+                }
+            })
+        }
+        //погода
+        if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
+            request(url, function (err, response, body) {
+                if (err) {
+                    console.log('ошибка');
+                } else {
+                    let data = JSON.parse(body);
+                    console.log(data);
+                    let data2 = data.weather.find(item => item.id);
+                    let temp = Math.floor(data.main.temp);
+                    if (data2.description == 'ясно') {
+                        msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                    }
+                    if (data2.description.includes('обла')) {
+                        msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                    }
+                    if (data2.description.includes('дождь')) {
+                        msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                    }
+                    if (data2.description.includes('пасму')) {
+                        msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                    }
+                }
+            });
+        }
+        console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
+    };
+    if (msg.author.id === '281120774289489922' && msg.content.startsWith(`${prefix}`)) {
+        msg.reply('\`\`\`Ты кто нахуй такой шобы мне приказывать????? Отсоси пятнадцать камней из раста, 🤡\`\`\`');
     }
-    //погода
-    if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
-        request(url, function (err, response, body) {
-            if (err) {
-                console.log('ошибка');
-            } else {
-                let data = JSON.parse(body);
-                console.log(data);
-                let data2 = data.weather.find(item => item.id);
-                let temp = Math.floor(data.main.temp);
-                if (data2.description == 'ясно') {
-                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
-                }
-                if (data2.description.includes('обла')) {
-                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
-                }
-                if (data2.description.includes('дождь')) {
-                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
-                }
-                if (data2.description.includes('пасму')) {
-                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
-                }
-            }
-        });
-    }
-    console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
-} else (msg.reply('\`\`\`Ты кто нахуй такой шобы мне приказывать????? Отсоси пятнадцать камней из раста, 🤡'));
-})
+});
 bot.login(token);
 
 
