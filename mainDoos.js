@@ -33,7 +33,9 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-    if ((msg.author.id !== '281120774289489922') || (msg.author.id !== '274610371417866242')) {
+    if ((msg.author.id === '281120774289489922' || msg.author.id === '274610371417866242') && msg.content.startsWith(`${prefix}`)) {
+        msg.reply('\`\`\`Ты кто нахуй такой шобы мне приказывать????? Отсоси пятнадцать камней из раста, 🤡\`\`\`');
+    } else {
         //музыкальная функция
         let args = msg.content.substring(prefix.length).split(' ');
         switch (args[0]) {
@@ -136,9 +138,6 @@ bot.on('message', async msg => {
         }
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
     };
-    if ((msg.author.id === '281120774289489922' || msg.author.id ==='274610371417866242') && msg.content.startsWith(`${prefix}`)) {
-        msg.reply('\`\`\`Ты кто нахуй такой шобы мне приказывать????? Отсоси пятнадцать камней из раста, 🤡\`\`\`');
-    }
 });
 bot.login(token);
 
