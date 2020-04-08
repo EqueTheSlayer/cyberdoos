@@ -51,10 +51,9 @@ bot.on('message', async msg => {
             return;
         }
     };
-
+    const voiceChannel = msg.member.voice.channel;
+    const args = msg.content.split(' ');
     async function execute(msg, serverQueue) {
-        const args = msg.content.split(' ');
-        const voiceChannel = msg.member.voice.channel;
         if (!voiceChannel) return msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
         const songInfo = await ytdl.getInfo(args[1]);
         const song = {
@@ -111,7 +110,7 @@ bot.on('message', async msg => {
         });
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 100);
     function skip(msg, serverQueue) {
-        if (!msg.author.voiceChannel) return msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
+        if (!voiceChannel) return msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
         if (!serverQueue) return msg.channel.send('\`\`\`Тут нечего скипать, 🤡\`\`\`');
         serverQueue.connection.dispatcher.end();
     }
