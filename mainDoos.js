@@ -54,6 +54,15 @@ bot.on('message', async msg => {
                 volume: 5,
                 playing: true,
             };
+            try {
+                let connection = await msg.member.voice.channel.join();
+                queueContruct.connection = connection;
+                play(msg.guild, queueContruct.songs[0]);
+            } catch (err) {
+                console.log(err);
+                queue.delete(msg.guild.id);
+                return msg.channel.send(err);
+            }
         } else {
             queueContruct.songs.push(song);
             console.log(serverQueue.songs);
@@ -71,16 +80,7 @@ bot.on('message', async msg => {
                 }
             }
         }
-        try {
-            let connection = await msg.member.voice.channel.join();
-            queueContruct.connection = connection;
-            play(msg.guild, queueContruct.songs[0]);
-        } catch (err) {
-            console.log(err);
-            queue.delete(msg.guild.id);
-            return msg.channel.send(err);
-        }
-        const dispatcher = serverQueue.connection.playStream(ytdl(song.url, {filter: "audioonly"}))
+        const dispatcher = serverQueue.connection.playStream(ytdl(song.url, { filter: "audioonly" }))
             .on('end', () => {
                 console.log('\`\`\`Песня закончилась🤖🤖🤖\`\`\`');
                 serverQueue.songs.shift();
