@@ -99,11 +99,11 @@ bot.on('message', async msg => {
         let voiceChannel = msg.member.voice.channel;
         let args = msg.content.split(' ');
         const songInfo = await ytdl.getInfo(args[1]);
+        console.log(songInfo);
         const song = {
             title: songInfo.title,
             url: songInfo.video_url
         };
-        console.log(song.Info.video_url)
         const dispatcher = serverQueue.connection.playStream(ytdl(song.url, { filter: "audioonly" }))
             .on('end', () => {
                 console.log('\`\`\`Песня закончилась🤖🤖🤖\`\`\`');
