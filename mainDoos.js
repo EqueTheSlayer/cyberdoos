@@ -65,7 +65,7 @@ bot.on('message', async msg => {
         try {
             let connection = await msg.member.voice.channel.join();
             queueContruct.connection = connection;
-            play(message.guild, queueContruct.songs[0]);
+            play(msg.guild, queueContruct.songs[0]);
         } catch (err) {
             console.log(err);
             queue.delete(msg.guild.id);
