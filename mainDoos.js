@@ -46,20 +46,19 @@ bot.on('message', async msg => {
             url: songInfo.video_url,
         };
         if (!serverQueue) {
-
+            const queueContruct = {
+                textChannel: msg.channel,
+                voiceChannel: msg.member.voice.channel,
+                connection: null,
+                songs: [],
+                volume: 5,
+                playing: true,
+            };
         } else {
             serverQueue.songs.push(song);
             console.log(serverQueue.songs);
             return msg.channel.send(`\`\`\`Я добавил 🎤${song.title}🎤 в очередь\`\`\``);
         }
-        const queueContruct = {
-            textChannel: msg.channel,
-            voiceChannel: msg.member.voice.channel,
-            connection: null,
-            songs: [],
-            volume: 5,
-            playing: true,
-        };
         queue.set(msg.guild.id, queueContruct);
         queueContruct.songs.push(song);
         if (msg.content.includes(`${prefix}play`)) {
