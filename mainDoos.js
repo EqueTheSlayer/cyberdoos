@@ -98,9 +98,9 @@ bot.on('message', async msg => {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
             }
             if (!serverQueue) {
-                return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`') + serverQueue.voiceChannel.leave();
+                return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
             }
-            serverQueue.dispatcher.end();
+            serverQueue.connection.dispatcher.end();
         }
 
         function stop(msg, serverQueue) {
@@ -108,7 +108,7 @@ bot.on('message', async msg => {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
             serverQueue.songs = [];
-            serverQueue.dispatcher.end();
+            serverQueue.connection.dispatcher.end();
             msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
         }
 
