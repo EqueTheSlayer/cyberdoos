@@ -89,7 +89,7 @@ bot.on('message', async msg => {
             } else {
                 serverQueue.songs.push(song);
                 console.log(serverQueue.songs);
-                return msg.channel.send(`\`\`\`🤖🤖🤖Добавил ${song.title} в очередь 🤖🤖🤖\`\`\``);
+                return msg.channel.send(`\`\`\`🤖Добавил 🎤${song.title}🎤 в очередь 🤖\`\`\``);
             }
 
         }
@@ -104,6 +104,7 @@ bot.on('message', async msg => {
             if (!msg.member.voice.channel) return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
             serverQueue.songs = [];
             serverQueue.connection.dispatcher.end();
+            msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`)
         }
 
         function play(guild, song) {
