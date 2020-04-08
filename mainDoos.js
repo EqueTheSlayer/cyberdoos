@@ -62,15 +62,6 @@ bot.on('message', async msg => {
         };
         queue.set(msg.guild.id, queueContruct);
         queueContruct.songs.push(song);
-        try {
-            let connection = await msg.member.voice.channel.join();
-            queueContruct.connection = connection;
-            play(msg.guild, queueContruct.songs[0]);
-        } catch (err) {
-            console.log(err);
-            queue.delete(msg.guild.id);
-            return msg.channel.send(err);
-        }
         if (msg.content.includes(`${prefix}play`)) {
             function play(guild, song) {
                 const serverQueue = queue.get(guild.id);
@@ -102,6 +93,15 @@ bot.on('message', async msg => {
             serverQueue.songs = [];
             serverQueue.connection.dispatcher.end();
             msg.channel.send(`\`\`\`💀💀💀Ваша песенка спета💀💀💀\`\`\``);
+        }
+        try {
+            let connection = await msg.member.voice.channel.join();
+            queueContruct.connection = connection;
+            play(msg.guild, queueContruct.songs[0]);
+        } catch (err) {
+            console.log(err);
+            queue.delete(msg.guild.id);
+            return msg.channel.send(err);
         }
 
         if (msg.content(`${prefix}`)) {
