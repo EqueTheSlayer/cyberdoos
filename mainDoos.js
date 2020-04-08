@@ -55,7 +55,7 @@ bot.on('message', async msg => {
                 playing: true,
             };
         } else {
-            serverQueue.songs.push(song);
+            queueContruct.songs.push(song);
             console.log(serverQueue.songs);
             return msg.channel.send(`\`\`\`Я добавил 🎤${song.title}🎤 в очередь\`\`\``);
         }
