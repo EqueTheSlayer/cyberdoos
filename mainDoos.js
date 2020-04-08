@@ -40,7 +40,7 @@ bot.on('message', async msg => {
         //музыкальная функция
         const serverQueue = queue.get(msg.guild.id);
 
-        if (message.content.startsWith(`${prefix}play`)) {
+        if (msg.content.startsWith(`${prefix}play`)) {
             execute(msg, serverQueue);
             return;
         } else if (msg.content.startsWith(`${prefix}skip`)) {
