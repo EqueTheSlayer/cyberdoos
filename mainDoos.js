@@ -94,14 +94,12 @@ bot.on('message', async msg => {
     }
     queue.set(msg.guild.id, queueContruct);
     queueContruct.songs.push(song);
-    if (msg.content.includes(`${prefix}play`)) {
-        function play(guild, song) {
-            const serverQueue = queue.get(guild.id);
-            if (!song) {
-                serverQueue.voiceChannel.leave();
-                queue.delete(guild.id);
-                return;
-            }
+    function play(guild, song) {
+        const serverQueue = queue.get(guild.id);
+        if (!song) {
+            serverQueue.voiceChannel.leave();
+            queue.delete(guild.id);
+            return;
         }
     }
     const dispatcher = serverQueue.connection.playStream(ytdl(song.url, { filter: "audioonly" }))
