@@ -50,8 +50,8 @@ bot.on('message', async msg => {
             stop(msg, serverQueue);
             return;
         }
-    const voiceChannel = msg.member.voice.channel;
-    const args = msg.content.split(' ');
+    let voiceChannel = msg.member.voice.channel;
+    let args = msg.content.split(' ');
     async function execute(msg, serverQueue) {
         if (!voiceChannel) return msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
         const songInfo = await ytdl.getInfo(args[1]);
