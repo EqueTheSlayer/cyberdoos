@@ -70,7 +70,7 @@ bot.on('message', async msg => {
                     connection: null,
                     songs: [],
                     volume: 5,
-                    playing: true,
+                    playing: true
                 };
 
                 queue.set(msg.guild.id, queueContruct);
@@ -95,7 +95,7 @@ bot.on('message', async msg => {
 
         function skip(msg, serverQueue) {
             if (!msg.member.voice.channel) return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
-            if (!serverQueue) return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
+            if (!serverQueue) return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`') + serverQueue.voiceChannel.leave();
             serverQueue.connection.dispatcher.end();
         }
 
@@ -117,7 +117,7 @@ bot.on('message', async msg => {
 
             const dispatcher = serverQueue.connection.play(ytdl(song.url))
                 .on('end', () => {
-                    console.log('\`\`\`🤖Песня закончилась🤖\`\`\`');
+                    msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
                     serverQueue.songs.shift();
                     play(guild, serverQueue.songs[0]);
                 })
