@@ -50,14 +50,14 @@ bot.on('message', async msg => {
             stop(msg, serverQueue);
             return;
         }
-        async function execute(msg, serverQueue) {
-            let voiceChannel = msg.member.voice.channel;
+        let voiceChannel = msg.member.voice.channel;
             let args = msg.content.split(' ');
             const songInfo = await ytdl.getInfo(args[1]);
             const song = {
                 title: songInfo.title,
                 url: songInfo.video_url,
             };
+        async function execute(msg, serverQueue) {
             if (!voiceChannel) return msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
             if (!serverQueue) {
                 const queueContruct = {
