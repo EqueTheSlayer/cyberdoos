@@ -135,45 +135,44 @@ bot.on('message', async msg => {
         msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
         return;
     }
-});
-//коронавирус
-if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
-    request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
-        if (err) {
-            console.log('covid ошибка')
-        } else {
-            let covidData = JSON.parse(body);
-            let lastday = covidData.Russia[covidData.Russia.length - 1];
-            msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек. Ванус все еще жив🤬😭🤬😭🤬\`\`\``)
-        }
-    })
-}
-//погода
-if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
-    request(url, function (err, response, body) {
-        if (err) {
-            console.log('ошибка');
-        } else {
-            let data = JSON.parse(body);
-            console.log(data);
-            let data2 = data.weather.find(item => item.id);
-            let temp = Math.floor(data.main.temp);
-            if (data2.description == 'ясно') {
-                msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+    //коронавирус
+    if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
+        request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
+            if (err) {
+                console.log('covid ошибка')
+            } else {
+                let covidData = JSON.parse(body);
+                let lastday = covidData.Russia[covidData.Russia.length - 1];
+                msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек. Ванус все еще жив🤬😭🤬😭🤬\`\`\``)
             }
-            if (data2.description.includes('обла')) {
-                msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+        })
+    }
+    //погода
+    if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
+        request(url, function (err, response, body) {
+            if (err) {
+                console.log('ошибка');
+            } else {
+                let data = JSON.parse(body);
+                console.log(data);
+                let data2 = data.weather.find(item => item.id);
+                let temp = Math.floor(data.main.temp);
+                if (data2.description == 'ясно') {
+                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                }
+                if (data2.description.includes('обла')) {
+                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                }
+                if (data2.description.includes('дождь')) {
+                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                }
+                if (data2.description.includes('пасму')) {
+                    msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                }
             }
-            if (data2.description.includes('дождь')) {
-                msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
-            }
-            if (data2.description.includes('пасму')) {
-                msg.channel.send(`\`\`\`Сегодня в Усть-Парашинске ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
-            }
-        }
-    });
-}
-console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
+        });
+    }
+    console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
 });
 bot.login(token);
 
