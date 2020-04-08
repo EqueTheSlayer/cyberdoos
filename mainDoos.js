@@ -50,7 +50,6 @@ bot.on('message', async msg => {
             stop(msg, serverQueue);
             return;
         }
-    };
     const voiceChannel = msg.member.voice.channel;
     const args = msg.content.split(' ');
     async function execute(msg, serverQueue) {
@@ -168,6 +167,7 @@ bot.on('message', async msg => {
         });
     }
     console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
+}
 });
 bot.login(token);
 
