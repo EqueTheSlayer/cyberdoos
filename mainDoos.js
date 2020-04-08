@@ -101,6 +101,15 @@ bot.on('message', async msg => {
                 queue.delete(guild.id);
                 return;
             }
+        }
+
+        function skip(msg, serverQueue, song) {
+            if (!msg.member.voice.channel) {
+                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
+            }
+            if (!serverQueue) {
+                return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
+            }
             const dispatcher = serverQueue.connection.play(ytdl(song.url))
                 .on('end', () => {
                     msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
@@ -111,22 +120,23 @@ bot.on('message', async msg => {
                     console.error(error);
                 });
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-        }
-
-        function skip(msg, serverQueue) {
-            if (!msg.member.voice.channel) {
-                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
-            }
-            if (!serverQueue) {
-                return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
-            }
             serverQueue.connection.dispatcher.end();
         }
 
-        function stop(msg, serverQueue) {
+        function stop(msg, serverQueue, song) {
             if (!msg.member.voice.channel) {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
+            const dispatcher = serverQueue.connection.play(ytdl(song.url))
+                .on('end', () => {
+                    msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+                    serverQueue.songs.shift();
+                    play(guild, serverQueue.songs[0]);
+                })
+                .on('error', error => {
+                    console.error(error);
+                });
+            dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
             serverQueue.songs = [];
             serverQueue.connection.dispatcher.end();
             msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
