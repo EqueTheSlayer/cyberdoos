@@ -94,16 +94,22 @@ bot.on('message', async msg => {
         }
 
         function skip(msg, serverQueue) {
-            if (!msg.member.voice.channel) return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
-            if (!serverQueue) return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`') + serverQueue.voiceChannel.leave();
+            if (!msg.member.voice.channel) {
+                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
+            }
+            if (!serverQueue) {
+                return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`') + serverQueue.voiceChannel.leave();
+            }
             serverQueue.connection.dispatcher.end();
         }
 
         function stop(msg, serverQueue) {
-            if (!msg.member.voice.channel) return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
+            if (!msg.member.voice.channel) {
+                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
+            };
             serverQueue.songs = [];
             serverQueue.connection.dispatcher.end();
-            msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`)
+            msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
         }
 
         function play(guild, song) {
