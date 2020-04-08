@@ -38,7 +38,7 @@ bot.on('message', async msg => {
         msg.reply('\`\`\`🤖🤖🤖Ты кто нахуй такой шобы мне приказывать❓❓❓ Отсоси пятнадцать камней из раста, 🤡🤡🤡\`\`\`');
     } else {
         //музыкальная функция
-        const serverQueue = guild.id;
+        const serverQueue = msg.guild.id;
         let args = msg.content.split(' ');
         const songInfo = await ytdl.getInfo(args[1]);
         const song = {
@@ -72,6 +72,15 @@ bot.on('message', async msg => {
                 }
             }
         }
+        try {
+            let connection = await msg.member.voice.channel.join();
+            queueContruct.connection = connection;
+            play(msg.guild, queueContruct.songs[0]);
+        } catch (err) {
+            console.log(err);
+            queue.delete(msg.guild.id);
+            return msg.channel.send(err);
+        }
         const dispatcher = serverQueue.connection.playStream(ytdl(song.url, {filter: "audioonly"}))
             .on('end', () => {
                 console.log('\`\`\`Песня закончилась🤖🤖🤖\`\`\`');
@@ -94,16 +103,6 @@ bot.on('message', async msg => {
             serverQueue.connection.dispatcher.end();
             msg.channel.send(`\`\`\`💀💀💀Ваша песенка спета💀💀💀\`\`\``);
         }
-        try {
-            let connection = await msg.member.voice.channel.join();
-            queueContruct.connection = connection;
-            play(msg.guild, queueContruct.songs[0]);
-        } catch (err) {
-            console.log(err);
-            queue.delete(msg.guild.id);
-            return msg.channel.send(err);
-        }
-
         if (msg.content(`${prefix}`)) {
             msg.channel.send(`\`\`\`Я шо похож на Вангу❓❓❓ Конкретнее выражайтесь, господин сэр 🤡\`\`\``);
             return;
