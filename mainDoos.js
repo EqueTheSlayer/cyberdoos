@@ -65,7 +65,6 @@ bot.on('message', async msg => {
                     voiceChannel: voiceChannel,
                     connection: null,
                     songs: [],
-                    volume: 100,
                     playing: true,
                 };
 
@@ -102,8 +101,9 @@ bot.on('message', async msg => {
         const songInfo = await ytdl.getInfo(args[1]);
         const song = {
             title: songInfo.title,
-            url: songInfo.video_url,
+            url: songInfo.video_url
         };
+        console.log(song.Info.video_url)
         const dispatcher = serverQueue.connection.playStream(ytdl(song.url, { filter: "audioonly" }))
             .on('end', () => {
                 console.log('\`\`\`Песня закончилась🤖🤖🤖\`\`\`');
