@@ -49,10 +49,7 @@ bot.on('message', async msg => {
         } else if (msg.content.startsWith(`${prefix}stop`)) {
             stop(msg, serverQueue);
             return;
-        } else {
-            msg.channel.send('You need to enter a valid command!')
         }
-
 
         async function execute(message, serverQueue) {
             const args = msg.content.split(' ');
