@@ -100,16 +100,6 @@ bot.on('message', async msg => {
             if (!serverQueue) {
                 return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
             }
-            const dispatcher = serverQueue.connection.play(ytdl(song.url))
-                .on('end', () => {
-                    msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0]);
-                })
-                .on('error', error => {
-                    console.error(error);
-                });
-            dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
             serverQueue.connection.dispatcher.end();
         }
 
@@ -117,16 +107,6 @@ bot.on('message', async msg => {
             if (!msg.member.voice.channel) {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
-            const dispatcher = serverQueue.connection.play(ytdl(song.url))
-                .on('end', () => {
-                    msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0]);
-                })
-                .on('error', error => {
-                    console.error(error);
-                });
-            dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
             serverQueue.songs = [];
             serverQueue.connection.dispatcher.end();
             msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
@@ -140,8 +120,8 @@ bot.on('message', async msg => {
                 queue.delete(guild.id);
                 return;
             }
-
-            const dispatcher = serverQueue.connection.play(ytdl(song.url))
+        }
+        const dispatcher = serverQueue.connection.play(ytdl(song.url))
                 .on('end', () => {
                     msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
                     serverQueue.songs.shift();
@@ -151,7 +131,6 @@ bot.on('message', async msg => {
                     console.error(error);
                 });
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-        }
         //коронавирус
         if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
             request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
