@@ -93,6 +93,26 @@ bot.on('message', async msg => {
 
         }
 
+        function play(guild, song) {
+            const serverQueue = queue.get(guild.id);
+
+            if (!song) {
+                serverQueue.voiceChannel.leave();
+                queue.delete(guild.id);
+                return;
+            }
+            const dispatcher = serverQueue.connection.play(ytdl(song.url))
+                .on('end', () => {
+                    msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+                    serverQueue.songs.shift();
+                    play(guild, serverQueue.songs[0]);
+                })
+                .on('error', error => {
+                    console.error(error);
+                });
+            dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+        }
+
         function skip(msg, serverQueue) {
             if (!msg.member.voice.channel) {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
@@ -111,26 +131,6 @@ bot.on('message', async msg => {
             serverQueue.connection.dispatcher.end();
             msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
         }
-
-        function play(guild, song) {
-            const serverQueue = queue.get(guild.id);
-
-            if (!song) {
-                serverQueue.voiceChannel.leave();
-                queue.delete(guild.id);
-                return;
-            }
-        }
-        const dispatcher = serverQueue.connection.play(ytdl(song.url))
-                .on('end', () => {
-                    msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0]);
-                })
-                .on('error', error => {
-                    console.error(error);
-                });
-            dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         //коронавирус
         if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
             request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
