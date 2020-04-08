@@ -92,8 +92,6 @@ bot.on('message', async msg => {
         }
 
     }
-    queue.set(msg.guild.id, queueContruct);
-    queueContruct.songs.push(song);
     function play(guild, song) {
         const serverQueue = queue.get(guild.id);
         if (!song) {
