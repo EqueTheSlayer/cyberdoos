@@ -54,6 +54,8 @@ bot.on('message', async msg => {
                 volume: 5,
                 playing: true,
             };
+            queue.set(msg.guild.id, queueContruct);
+            queueContruct.songs.push(song);
             try {
                 let connection = await msg.member.voice.channel.join();
                 queueContruct.connection = connection;
