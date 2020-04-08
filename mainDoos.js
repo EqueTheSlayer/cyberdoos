@@ -38,8 +38,7 @@ bot.on('message', async msg => {
         msg.reply('\`\`\`🤖🤖🤖Ты кто нахуй такой шобы мне приказывать❓❓❓ Отсоси пятнадцать камней из раста, 🤡🤡🤡\`\`\`');
     } else {
         //музыкальная функция
-        const serverQueue = queue.get(msg.guild.id);
-        console.log(msg.guild.id)
+        const serverQueue = 457536206285307904;
         let args = msg.content.split(' ');
         const songInfo = await ytdl.getInfo(args[1]);
         const song = {
