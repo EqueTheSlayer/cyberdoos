@@ -54,7 +54,6 @@ bot.on('message', async msg => {
         }
         const queueContruct = {
             textChannel: msg.channel,
-            voiceChannel: msg.author.voice.channel,
             connection: null,
             songs: [],
             volume: 5,
