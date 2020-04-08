@@ -54,6 +54,7 @@ bot.on('message', async msg => {
         }
         const queueContruct = {
             textChannel: msg.channel,
+            voiceChannel: msg.member.voice.channel,
             connection: null,
             songs: [],
             volume: 5,
@@ -62,7 +63,7 @@ bot.on('message', async msg => {
         queue.set(msg.guild.id, queueContruct);
         queueContruct.songs.push(song);
         try {
-            let connection = await msg.author.voice.channel.join();
+            let connection = await msg.member.voice.channel.join();
             queueContruct.connection = connection;
             play(message.guild, queueContruct.songs[0]);
         } catch (err) {
