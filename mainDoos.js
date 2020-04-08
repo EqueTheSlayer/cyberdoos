@@ -68,7 +68,7 @@ bot.on('message', async msg => {
                 voiceChannel: voiceChannel,
                 connection: null,
                 songs: [],
-                volume: 5,
+                volume: 100,
                 playing: true,
             };
 
@@ -111,7 +111,7 @@ bot.on('message', async msg => {
         .on('error', error => {
             console.error(error);
         });
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    dispatcher.setVolumeLogarithmic(serverQueue.volume / 100);
     function skip(msg, serverQueue) {
         if (!msg.author.voiceChannel) return msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
         if (!serverQueue) return msg.channel.send('\`\`\`Тут нечего скипать, 🤡\`\`\`');
@@ -119,7 +119,7 @@ bot.on('message', async msg => {
     }
 
     function stop(msg, serverQueue) {
-        if (!msg.author.voiceChannel) return msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
+        if (!voiceChannel) return msg.channel.send(`\`\`\`Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡\`\`\``);
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end();
         msg.channel.send(`\`\`\`💀💀💀Ваша песенка спета💀💀💀\`\`\``);
