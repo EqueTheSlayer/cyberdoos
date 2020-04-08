@@ -74,7 +74,7 @@ bot.on('message', async msg => {
                 queueContruct.songs.push(song);
 
                 try {
-                    var connection = await voiceChannel.join();
+                    let connection = await voiceChannel.join();
                     queueContruct.connection = connection;
                     play(msg.guild, queueContruct.songs[0]);
                 } catch (err) {
