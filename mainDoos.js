@@ -171,6 +171,7 @@ function stop(msg, serverQueue) {
     serverQueue.connection.dispatcher.end();
     msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
 }
+
 bot.login(token);
 
 
