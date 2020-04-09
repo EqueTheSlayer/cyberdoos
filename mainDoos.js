@@ -133,6 +133,25 @@ async function execute(msg, serverQueue) {
 
 }
 
+function skip(msg, serverQueue) {
+    if (!msg.member.voice.channel) {
+        return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
+    }
+    if (!serverQueue) {
+        return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
+    }
+    serverQueue.connection.dispatcher.end();
+}
+
+function stop(msg, serverQueue) {
+    if (!msg.member.voice.channel) {
+        return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
+    };
+    serverQueue.songs = [];
+    serverQueue.connection.dispatcher.end();
+    msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
+}
+
 function play(guild, song) {
     const serverQueue = queue.get(guild.id);
 
@@ -153,28 +172,4 @@ function play(guild, song) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
-function skip(msg, serverQueue) {
-    if (!msg.member.voice.channel) {
-        return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
-    }
-    if (!serverQueue) {
-        return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
-    }
-    serverQueue.connection.dispatcher.end();
-}
-
-function stop(msg, serverQueue) {
-    if (!msg.member.voice.channel) {
-        return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
-    };
-    serverQueue.songs = [];
-    serverQueue.connection.dispatcher.end();
-    msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
-}
-
 bot.login(token);
-
-
-
-
-
