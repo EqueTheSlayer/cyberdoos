@@ -101,17 +101,17 @@ bot.on('message', async msg => {
                 queue.delete(guild.id);
                 return;
             }
-            let dispatcher = serverQueue.connection.play(ytdl(song.url))
-                .on('end', () => {
-                    msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0]);
-                })
-                .on('error', error => {
-                    console.error(error);
-                });
-            dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         }
+        const dispatcher = serverQueue.connection.play(ytdl(song.url))
+        .on('end', () => {
+            msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+            serverQueue.songs.shift();
+            play(guild, serverQueue.songs[0]);
+        })
+        .on('error', error => {
+            console.error(error);
+        });
+    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
         function skip(msg, serverQueue) {
             if (!msg.member.voice.channel) {
