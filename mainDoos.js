@@ -160,7 +160,7 @@ function play(guild, song) {
         queue.delete(guild.id);
         return;
     }
-    const dispatcher = serverQueue.connection.play(ytdl(song.url))
+    const dispatcher = connection.play(ytdl(song.url, {filter: "audioonly"}))
     dispatcher.on('end', () => {
         msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
         serverQueue.songs.shift();
