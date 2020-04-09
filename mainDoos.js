@@ -166,9 +166,6 @@ function play(guild, song) {
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
     })
-    dispatcher.on('error', error => {
-        console.error(error);
-    });
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
