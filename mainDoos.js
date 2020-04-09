@@ -91,7 +91,7 @@ bot.on('message', async msg => {
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
     }
 });
-async function execute(message, serverQueue) {
+async function execute(msg, serverQueue) {
     const args = msg.content.split(' ');
 
     const voiceChannel = msg.member.voice.channel;
