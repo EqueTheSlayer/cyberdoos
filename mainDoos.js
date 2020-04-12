@@ -12,6 +12,7 @@ const path = require('path');
 const PORT = process.env.PORT || 5016;
 const ytdl = require('ytdl-core');
 const queue = new Map();
+const serverQueue = queue.get(msg.guild.id);
 
 
 let http = require("http");
@@ -38,7 +39,6 @@ bot.on('message', async msg => {
         msg.reply('\`\`\`🤖🤖🤖Ты кто нахуй такой шобы мне приказывать❓❓❓ Отсоси пятнадцать камней из раста, 🤡🤡🤡\`\`\`');
     } else {
         //музыкальная функция
-        const serverQueue = queue.get(msg.guild.id);
 
         if (msg.content.startsWith(`${prefix}play`)) {
             execute(msg, serverQueue);
