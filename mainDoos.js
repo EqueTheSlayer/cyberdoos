@@ -103,7 +103,7 @@ async function execute(msg, serverQueue) {
         url: songInfo.video_url,
     };
 
-    if (Object.keys(serverQueue) == 0) {
+    if (Object.keys(serverQueue).length == 0) {
         const queueContruct = {
             textChannel: msg.channel,
             voiceChannel: voiceChannel,
@@ -154,7 +154,7 @@ function skip(msg, serverQueue) {
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
     }
-    if (Object.keys(serverQueue) == 0) {
+    if (Object.keys(serverQueue).length == 0) {
         return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
     }
     serverQueue.connection.dispatcher.end();
