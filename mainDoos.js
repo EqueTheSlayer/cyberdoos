@@ -151,7 +151,7 @@ function play(guild, song) {
 }
 
 function skip(msg, serverQueue) {
-    const serverQueue = queue.get(msg.guild.id);
+    serverQueue = queue.get(msg.guild.id);
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
     }
@@ -162,7 +162,7 @@ function skip(msg, serverQueue) {
 }
 
 function stop(msg, serverQueue) {
-    const serverQueue = queue.get(msg.guild.id);
+    serverQueue = queue.get(msg.guild.id);
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
     };
