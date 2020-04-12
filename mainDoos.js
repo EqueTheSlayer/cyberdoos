@@ -157,7 +157,7 @@ function skip(msg, serverQueue) {
     if (Object.keys(serverQueue).length == 0) {
         return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
     }
-    serverQueue.connection.player.dispatcher.end(ending());
+    serverQueue.connection.dispatcher.end(ending());
 }
 
 function stop(msg, serverQueue) {
