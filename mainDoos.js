@@ -157,7 +157,7 @@ function skip(msg, serverQueue) {
     if (Object.keys(serverQueue).length == 0) {
         return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
     }
-    serverQueue.connection.dispatcher.end();
+    serverQueue.dispatcher.end();
 }
 
 function stop(msg, serverQueue) {
@@ -165,7 +165,7 @@ function stop(msg, serverQueue) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
     };
     serverQueue.songs = [];
-    serverQueue.connection.dispatcher.end();
+    serverQueue.dispatcher.end();
     msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
 }
 bot.login(token);
