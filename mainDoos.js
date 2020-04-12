@@ -147,7 +147,6 @@ function play(guild, song) {
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
     })
-    console.log(dispatcher)
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
@@ -158,7 +157,7 @@ function skip(msg, serverQueue) {
     if (Object.keys(serverQueue).length == 0) {
         return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
     }
-    serverQueue.end();
+    serverQueue.connection.end();
 }
 
 function stop(msg, serverQueue) {
@@ -166,7 +165,7 @@ function stop(msg, serverQueue) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
     };
     serverQueue.songs = [];
-    serverQueue.end();
+    serverQueue.connection.end();
     msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
 }
 bot.login(token);
