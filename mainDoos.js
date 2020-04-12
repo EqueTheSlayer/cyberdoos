@@ -161,7 +161,7 @@ function skip(msg, serverQueue) {
         msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
-    }));
+    });
 }
 
 function stop(msg, serverQueue) {
