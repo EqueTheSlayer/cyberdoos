@@ -142,7 +142,7 @@ function play(guild, song) {
         return;
     }
     const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-    dispatcher.on('end', function ending(){
+    dispatcher.on('end', () => {
         msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
@@ -157,7 +157,7 @@ function skip(msg, serverQueue) {
     if (Object.keys(serverQueue).length == 0) {
         return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
     }
-    serverQueue.connection.dispatcher.end(ending());
+    serverQueue.connection.dispatcher.end();
 }
 
 function stop(msg, serverQueue) {
