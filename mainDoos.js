@@ -103,7 +103,7 @@ async function execute(msg, serverQueue) {
         url: songInfo.video_url,
     };
 
-    if (!serverQueue) {
+    if (Object(keys(serverQueue)) == 0) {
         const queueContruct = {
             textChannel: msg.channel,
             voiceChannel: voiceChannel,
@@ -150,22 +150,22 @@ function play(guild, song) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
-function skip(msg, serverQueue, dispatcher) {
+function skip(msg, serverQueue) {
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
     }
-    if (!serverQueue) {
+    if (Object(keys(serverQueue)) == 0) {
         return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
     }
-    dispatcher.end();
+    serverQueue.connection.dispatcher.end();
 }
 
-function stop(msg, serverQueue, dispatcher) {
+function stop(msg, serverQueue) {
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
     };
     serverQueue.songs = [];
-    dispatcher.end();
+    serverQueue.connection.dispatcher.end();
     msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
 }
 bot.login(token);
