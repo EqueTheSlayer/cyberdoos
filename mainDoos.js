@@ -141,7 +141,7 @@ function play(guild, song) {
         queue.delete(guild.id);
         return;
     }
-    const dispatcher = serverQueue.connection.play(ytdl(song.url, {filter: "audioonly"}))
+    const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
     dispatcher.on('end', () => {
         msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
         serverQueue.songs.shift();
@@ -152,6 +152,12 @@ function play(guild, song) {
 
 function skip(msg, serverQueue) {
     serverQueue = queue.get(msg.guild.id);
+    dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
+    dispatcher.on('end', () => {
+        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+        serverQueue.songs.shift();
+        play(guild, serverQueue.songs[0]);
+    })
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
     }
@@ -163,6 +169,12 @@ function skip(msg, serverQueue) {
 
 function stop(msg, serverQueue) {
     serverQueue = queue.get(msg.guild.id);
+    dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
+    dispatcher.on('end', () => {
+        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+        serverQueue.songs.shift();
+        play(guild, serverQueue.songs[0]);
+    })
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
     };
