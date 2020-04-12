@@ -133,8 +133,9 @@ async function execute(msg, serverQueue) {
 
 }
 
-function play(msg, song) {
-    const serverQueue = queue.get(msg.guild.id);
+function play(guild, song) {
+    const serverQueue = queue.get(guild.id);
+    console.log(serverQueue)
 
     if (Object.keys(song).length == 0) {
         serverQueue.voiceChannel.leave();
