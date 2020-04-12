@@ -150,7 +150,7 @@ function play(guild, song) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
-function skip(msg, serverQueue, song) {
+function skip(msg, serverQueue, song, guild) {
     serverQueue = queue.get(guild.id);
     dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
     dispatcher.on('end', () => {
@@ -167,7 +167,7 @@ function skip(msg, serverQueue, song) {
     serverQueue.dispatcher.end();
 }
 
-function stop(msg, serverQueue, song) {
+function stop(msg, serverQueue, song, guild) {
     serverQueue = queue.get(guild.id);
     dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
     dispatcher.on('end', () => {
