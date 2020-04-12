@@ -155,7 +155,7 @@ function stop(msg, serverQueue) {
 function play(guild, song) {
     const serverQueue = queue.get(guild.id);
 
-    if (Object.keys(obj).length === 0) {
+    if (Object.keys(song).length === 0) {
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
         return;
