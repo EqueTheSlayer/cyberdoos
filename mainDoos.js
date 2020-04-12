@@ -12,7 +12,6 @@ const path = require('path');
 const PORT = process.env.PORT || 5016;
 const ytdl = require('ytdl-core');
 const queue = new Map();
-const serverQueue = queue.get(msg.guild.id);
 
 
 let http = require("http");
@@ -39,6 +38,7 @@ bot.on('message', async msg => {
         msg.reply('\`\`\`🤖🤖🤖Ты кто нахуй такой шобы мне приказывать❓❓❓ Отсоси пятнадцать камней из раста, 🤡🤡🤡\`\`\`');
     } else {
         //музыкальная функция
+        const serverQueue = queue.get(msg.guild.id);
 
         if (msg.content.startsWith(`${prefix}play`)) {
             execute(msg, serverQueue);
@@ -151,6 +151,7 @@ function play(guild, song) {
 }
 
 function skip(msg, serverQueue) {
+    const serverQueue = queue.get(msg.guild.id);
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
     }
@@ -161,6 +162,7 @@ function skip(msg, serverQueue) {
 }
 
 function stop(msg, serverQueue) {
+    const serverQueue = queue.get(msg.guild.id);
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
     };
