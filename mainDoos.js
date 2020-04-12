@@ -150,7 +150,7 @@ function play(guild, song) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
-function skip(msg, serverQueue) {
+function skip(msg, serverQueue, dispatcher) {
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
     }
@@ -160,7 +160,7 @@ function skip(msg, serverQueue) {
     dispatcher.end();
 }
 
-function stop(msg, serverQueue) {
+function stop(msg, serverQueue, dispatcher) {
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
     };
