@@ -147,6 +147,7 @@ function play(guild, song) {
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
     })
+    console.log(dispatcher)
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
