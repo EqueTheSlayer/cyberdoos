@@ -150,31 +150,18 @@ function play(guild, song) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
-function skip(msg, serverQueue, song) {
-    console.log(serverQueue);
-    dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-    dispatcher.on('end', () => {
-        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-        serverQueue.songs.shift();
-        play(guild, serverQueue.songs[0]);
-    })
+function skip(msg, serverQueue) {
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
     }
     if (Object.keys(serverQueue).length == 0) {
         return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
     }
+    console.log(dispatcher);
     serverQueue.dispatcher.end();
 }
 
-function stop(msg, serverQueue, song) {
-    serverQueue = queue.get(msg.guild.id);
-    dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-    dispatcher.on('end', () => {
-        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-        serverQueue.songs.shift();
-        play(guild, serverQueue.songs[0]);
-    })
+function stop(msg, serverQueue) {
     if (!msg.member.voice.channel) {
         return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
     };
