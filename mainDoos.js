@@ -157,8 +157,11 @@ function skip(msg, serverQueue) {
     if (Object.keys(serverQueue).length == 0) {
         return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
     }
-    serverQueue.connection.player.dispatcher.end();
-    console.log(serverQueue.connection.player.dispatcher.end())
+    serverQueue.connection.player.dispatcher.end(dispatcher.on('end', () => {
+        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+        serverQueue.songs.shift();
+        play(guild, serverQueue.songs[0]);
+    }));
 }
 
 function stop(msg, serverQueue) {
