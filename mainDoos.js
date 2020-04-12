@@ -103,7 +103,7 @@ async function execute(msg, serverQueue) {
         url: songInfo.video_url,
     };
 
-    if (Object.keys(serverQueue).length == 0) {
+    if (serverQueue == null) {
         const queueContruct = {
             textChannel: msg.channel,
             voiceChannel: voiceChannel,
