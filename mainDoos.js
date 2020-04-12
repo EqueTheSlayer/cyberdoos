@@ -135,7 +135,6 @@ async function execute(msg, serverQueue) {
 
 function play(guild, song) {
     const serverQueue = queue.get(guild.id);
-    console.log(serverQueue)
 
     if (Object.keys(song).length == 0) {
         serverQueue.voiceChannel.leave();
@@ -152,7 +151,7 @@ function play(guild, song) {
 }
 
 function skip(msg, serverQueue, song) {
-    serverQueue = queue.get(msg.guild.id);
+    console.log(serverQueue);
     dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
     dispatcher.on('end', () => {
         msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
