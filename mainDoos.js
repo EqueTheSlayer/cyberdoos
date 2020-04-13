@@ -136,7 +136,8 @@ bot.on('message', async msg => {
         }
 
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
-        const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
+        console.log(serverQueue)
+        const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
         dispatcher.on('end', () => {
             msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
             serverQueue.songs.shift();
