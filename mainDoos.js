@@ -38,8 +38,7 @@ bot.on('message', async msg => {
         msg.reply('\`\`\`🤖🤖🤖Ты кто нахуй такой шобы мне приказывать❓❓❓ Отсоси пятнадцать камней из раста, 🤡🤡🤡\`\`\`');
     } else {
         //музыкальная функция
-        const serverQueue = queue.get(msg.guild.id);
-        console.log(msg.guild.id)
+        const serverQueue = ['457536206285307904']
 
         if (msg.content.startsWith(`${prefix}play`)) {
                 const args = msg.content.split(' ');
@@ -53,7 +52,7 @@ bot.on('message', async msg => {
                     url: songInfo.video_url,
                 };
 
-                if (serverQueue == null || undefined) {
+                if (serverQueue == null) {
                     const queueContruct = {
                         textChannel: msg.channel,
                         voiceChannel: voiceChannel,
