@@ -133,21 +133,22 @@ bot.on('message', async msg => {
     }
 });
 function play(guild, song) {
-    const serverQueue = queue.get(guild.id);
+    let serverQueue = queue.get(guild.id);
 
     if (Object.keys(song).length == 0) {
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
         return;
     }
-    const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-    dispatcher.on('end', () => {
-        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-        serverQueue.songs.shift();
-        play(guild, serverQueue.songs[0]);
-    })
+    let dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
+
+dispatcher.on('end', () => {
+    msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+    serverQueue.songs.shift();
+    play(guild, serverQueue.songs[0]);
+})
 
 function skip(msg, serverQueue) {
     if (!msg.member.voice.channel) {
