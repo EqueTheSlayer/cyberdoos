@@ -89,6 +89,12 @@ bot.on('message', async msg => {
         }
 
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
+        const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
+    dispatcher.on('end', () => {
+        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+        serverQueue.songs.shift();
+        play(guild, serverQueue.songs[0]);
+    })
     }
     async function execute(msg, serverQueue) {
         const args = msg.content.split(' ');
@@ -131,12 +137,6 @@ bot.on('message', async msg => {
         }
 
     }
-    const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-    dispatcher.on('end', () => {
-        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-        serverQueue.songs.shift();
-        play(guild, serverQueue.songs[0]);
-    })
 });
 function play(guild, song) {
     const serverQueue = queue.get(guild.id);
