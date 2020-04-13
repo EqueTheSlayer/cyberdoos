@@ -39,6 +39,7 @@ bot.on('message', async msg => {
     } else {
         //музыкальная функция
         const serverQueue = queue.get(msg.guild.id);
+        console.log(serverQueue)
 
         if (msg.content.startsWith(`${prefix}play`)) {
                 const args = msg.content.split(' ');
@@ -136,7 +137,6 @@ bot.on('message', async msg => {
         }
 
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
-        console.log(serverQueue)
         const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
         dispatcher.on('end', () => {
             msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
