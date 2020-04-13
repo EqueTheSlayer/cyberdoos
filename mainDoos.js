@@ -53,7 +53,7 @@ bot.on('message', async msg => {
                     url: songInfo.video_url,
                 };
 
-                if (serverQueue == null) {
+                if (serverQueue == null || undefined) {
                     const queueContruct = {
                         textChannel: msg.channel,
                         voiceChannel: voiceChannel,
