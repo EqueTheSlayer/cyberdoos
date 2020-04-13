@@ -108,7 +108,7 @@ bot.on('message', async msg => {
                 voiceChannel: voiceChannel,
                 connection: null,
                 songs: [],
-                volume: 5,
+                volume: 100,
                 playing: true
             };
 
@@ -147,7 +147,6 @@ bot.on('message', async msg => {
             queue.delete(guild.id);
             return;
         }
-        dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
     }
 
     function skip(msg, serverQueue) {
