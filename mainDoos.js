@@ -39,7 +39,7 @@ bot.on('message', async msg => {
     } else {
         //музыкальная функция
         const serverQueue = queue.get(msg.guild.id);
-        console.log(serverQueue)
+        console.log(msg.guild.id)
 
         if (msg.content.startsWith(`${prefix}play`)) {
                 const args = msg.content.split(' ');
