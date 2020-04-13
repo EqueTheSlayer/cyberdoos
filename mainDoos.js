@@ -39,12 +39,6 @@ bot.on('message', async msg => {
     } else {
         //музыкальная функция
         const serverQueue = queue.get(msg.guild.id);
-        const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-    dispatcher.on('end', () => {
-        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-        serverQueue.songs.shift();
-        play(guild, serverQueue.songs[0]);
-    })
 
         if (msg.content.startsWith(`${prefix}play`)) {
             execute(msg, serverQueue);
@@ -137,35 +131,40 @@ bot.on('message', async msg => {
         }
 
     }
-
-    function play(guild, song) {
-        const serverQueue = queue.get(guild.id);
-
-        if (Object.keys(song).length == 0) {
-            serverQueue.voiceChannel.leave();
-            queue.delete(guild.id);
-            return;
-        }
-        dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    }
-
-    function skip(msg, serverQueue) {
-        if (!msg.member.voice.channel) {
-            return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
-        }
-        if (Object.keys(serverQueue).length == 0) {
-            return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
-        }
-        serverQueue.connection.dispatcher.end();
-    }
-
-    function stop(msg, serverQueue) {
-        if (!msg.member.voice.channel) {
-            return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
-        };
-        serverQueue.songs = [];
-        serverQueue.connection.dispatcher.end();
-        msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
-    }
+    const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
+    dispatcher.on('end', () => {
+        msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+        serverQueue.songs.shift();
+        play(guild, serverQueue.songs[0]);
+    })
 });
+function play(guild, song) {
+    const serverQueue = queue.get(guild.id);
+
+    if (Object.keys(song).length == 0) {
+        serverQueue.voiceChannel.leave();
+        queue.delete(guild.id);
+        return;
+    }
+    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+}
+
+function skip(msg, serverQueue) {
+    if (!msg.member.voice.channel) {
+        return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
+    }
+    if (Object.keys(serverQueue).length == 0) {
+        return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
+    }
+    serverQueue.connection.dispatcher.end();
+}
+
+function stop(msg, serverQueue) {
+    if (!msg.member.voice.channel) {
+        return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
+    };
+    serverQueue.songs = [];
+    serverQueue.connection.dispatcher.end();
+    msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
+}
 bot.login(token);
