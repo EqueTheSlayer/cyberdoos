@@ -41,7 +41,6 @@ bot.on('message', async msg => {
         const serverQueue = queue.get(msg.guild.id);
 
         if (msg.content.startsWith(`${prefix}play`)) {
-            async function execute(msg, serverQueue) {
                 const args = msg.content.split(' ');
 
                 const voiceChannel = msg.member.voice.channel;
@@ -78,31 +77,25 @@ bot.on('message', async msg => {
                 } else {
                     serverQueue.songs.push(song);
                     console.log(serverQueue.songs);
-                    return msg.channel.send(`\`\`\`🤖Добавил 🎤${song.title}🎤 в очередь 🤖\`\`\``);
+                    msg.channel.send(`\`\`\`🤖Добавил 🎤${song.title}🎤 в очередь 🤖\`\`\``);
                 }
-            };
-            return;
         } else if (msg.content.startsWith(`${prefix}skip`)) {
-            function skip(msg, serverQueue) {
+        
                 if (!msg.member.voice.channel) {
                     return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
                 }
                 if (Object.keys(serverQueue).length == 0) {
-                    return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
+                    msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
                 }
                 serverQueue.connection.dispatcher.end();
-            };
-            return;
         } else if (msg.content.startsWith(`${prefix}stop`)) {
-            function stop(msg, serverQueue) {
+        
                 if (!msg.member.voice.channel) {
-                    return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
+                    msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
                 };
                 serverQueue.songs = [];
                 serverQueue.connection.dispatcher.end();
                 msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
-            };
-            return;
         }
         //коронавирус
         if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
