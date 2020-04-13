@@ -146,7 +146,6 @@ function play(guild, song) {
         queue.delete(guild.id);
         return;
     }
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
 function skip(msg, serverQueue) {
