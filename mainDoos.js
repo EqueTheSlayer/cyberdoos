@@ -90,82 +90,83 @@ bot.on('message', async msg => {
 
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
     }
-});
-async function execute(msg, serverQueue) {
-    const args = msg.content.split(' ');
+    async function execute(msg, serverQueue) {
+        const args = msg.content.split(' ');
 
-    const voiceChannel = msg.member.voice.channel;
-    if (!voiceChannel) return msg.channel.send('Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡');
+        const voiceChannel = msg.member.voice.channel;
+        if (!voiceChannel) return msg.channel.send('Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡');
 
-    const songInfo = await ytdl.getInfo(args[1]);
-    const song = {
-        title: songInfo.title,
-        url: songInfo.video_url,
-    };
-
-    if (serverQueue == null) {
-        const queueContruct = {
-            textChannel: msg.channel,
-            voiceChannel: voiceChannel,
-            connection: null,
-            songs: [],
-            volume: 5,
-            playing: true
+        const songInfo = await ytdl.getInfo(args[1]);
+        const song = {
+            title: songInfo.title,
+            url: songInfo.video_url,
         };
 
-        queue.set(msg.guild.id, queueContruct);
-        queueContruct.songs.push(song);
+        if (serverQueue == null) {
+            const queueContruct = {
+                textChannel: msg.channel,
+                voiceChannel: voiceChannel,
+                connection: null,
+                songs: [],
+                volume: 5,
+                playing: true
+            };
 
-        try {
-            let connection = await voiceChannel.join();
-            queueContruct.connection = connection;
-            play(msg.guild, queueContruct.songs[0]);
-        } catch (err) {
-            console.log(err);
-            queue.delete(msg.guild.id);
-            return msg.channel.send(err);
+            queue.set(msg.guild.id, queueContruct);
+            queueContruct.songs.push(song);
+
+            try {
+                let connection = await voiceChannel.join();
+                queueContruct.connection = connection;
+                play(msg.guild, queueContruct.songs[0]);
+            } catch (err) {
+                console.log(err);
+                queue.delete(msg.guild.id);
+                return msg.channel.send(err);
+            }
+        } else {
+            serverQueue.songs.push(song);
+            console.log(serverQueue.songs);
+            return msg.channel.send(`\`\`\`🤖Добавил 🎤${song.title}🎤 в очередь 🤖\`\`\``);
         }
-    } else {
-        serverQueue.songs.push(song);
-        console.log(serverQueue.songs);
-        return msg.channel.send(`\`\`\`🤖Добавил 🎤${song.title}🎤 в очередь 🤖\`\`\``);
+
     }
 
-}
-
-function play(guild, song) {
-    const serverQueue = queue.get(guild.id);
-
-    if (Object.keys(song).length == 0) {
-        serverQueue.voiceChannel.leave();
-        queue.delete(guild.id);
-        return;
-    }
     const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
     dispatcher.on('end', () => {
         msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
     })
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-}
 
-function skip(msg, serverQueue) {
-    if (!msg.member.voice.channel) {
-        return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
-    }
-    if (Object.keys(serverQueue).length == 0) {
-        return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
-    }
-    serverQueue.connection.dispatcher.end();
-}
+    function play(guild, song) {
+        const serverQueue = queue.get(guild.id);
 
-function stop(msg, serverQueue) {
-    if (!msg.member.voice.channel) {
-        return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
-    };
-    serverQueue.songs = [];
-    serverQueue.connection.dispatcher.end();
-    msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
-}
+        if (Object.keys(song).length == 0) {
+            serverQueue.voiceChannel.leave();
+            queue.delete(guild.id);
+            return;
+        }
+        dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    }
+
+    function skip(msg, serverQueue) {
+        if (!msg.member.voice.channel) {
+            return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
+        }
+        if (Object.keys(serverQueue).length == 0) {
+            return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
+        }
+        serverQueue.connection.dispatcher.end();
+    }
+
+    function stop(msg, serverQueue) {
+        if (!msg.member.voice.channel) {
+            return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
+        };
+        serverQueue.songs = [];
+        serverQueue.connection.dispatcher.end();
+        msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
+    }
+});
 bot.login(token);
