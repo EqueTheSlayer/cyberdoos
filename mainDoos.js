@@ -118,22 +118,7 @@ bot.on('message', async msg => {
                 try {
                     let connection = await voiceChannel.join();
                     queueContruct.connection = connection;
-                    play(msg.guild, queueContruct.songs[0]) {
-                        let serverQueue = queue.get(guild.id);
-
-                        if (Object.keys(song).length == 0) {
-                            serverQueue.voiceChannel.leave();
-                            queue.delete(guild.id);
-                            return;
-                        }
-                        const dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-                        dispatcher.on('end', () => {
-                            msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
-                            serverQueue.songs.shift();
-                            play(guild, serverQueue.songs[0]);
-                        })
-                        dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-                    };
+                    play(msg.guild, queueContruct.songs[0]);
                 } catch (err) {
                     console.log(err);
                     queue.delete(msg.guild.id);
@@ -144,6 +129,22 @@ bot.on('message', async msg => {
                 console.log(serverQueue.songs);
                 return msg.channel.send(`\`\`\`🤖Добавил 🎤${song.title}🎤 в очередь 🤖\`\`\``);
             }
+
+        }
+        function play(guild, song) {
+            let serverQueue = queue.get(guild.id);
+
+            if (Object.keys(song).length == 0) {
+                serverQueue.voiceChannel.leave();
+                queue.delete(guild.id);
+            }
+            let dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
+            dispatcher.on('end', () => {
+                msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
+                serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0]);
+            })
+            dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         }
 
         function skip(msg, serverQueue) {
