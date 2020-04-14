@@ -38,7 +38,8 @@ bot.on('message', async msg => {
         msg.reply('\`\`\`🤖🤖🤖Ты кто нахуй такой шобы мне приказывать❓❓❓ Отсоси пятнадцать камней из раста, 🤡🤡🤡\`\`\`');
     } else {
         //музыкальная функция
-        const serverQueue = queue.get(msg.guild.id);
+        const servers = queue.set(msg.guild.id)
+        const serverQueue = servers.get(msg.guild.id);
 
         if (msg.content.startsWith(`${prefix}play`)) {
             execute(msg, serverQueue);
