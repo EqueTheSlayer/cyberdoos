@@ -138,7 +138,7 @@ bot.on('message', async msg => {
                 queue.delete(guild.id);
             }
             let dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-            dispatcher.on('end', () => {
+            dispatcher.on('pause', () => {
                 msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
                 serverQueue.songs.shift();
                 play(guild, serverQueue.songs[0]);
@@ -153,7 +153,7 @@ bot.on('message', async msg => {
             if (Object.keys(serverQueue).length == 0) {
                 return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
             }
-            serverQueue.connection.dispatcher.end();
+            serverQueue.connection.dispatcher.pause(silence = true);
         }
 
         function stop(msg, serverQueue) {
@@ -161,7 +161,7 @@ bot.on('message', async msg => {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
             serverQueue.songs = [];
-            serverQueue.connection.dispatcher.end();
+            serverQueue.connection.dispatcher.pause(silence = true);
             msg.channel.send(`☠️☠️☠️Ваша песенка спета☠️☠️☠️`);
         }
     }
