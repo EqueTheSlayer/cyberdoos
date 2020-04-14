@@ -101,7 +101,7 @@ bot.on('message', async msg => {
                 url: songInfo.video_url,
             };
 
-            if (serverQueue.size == 0) {
+            if (serverQueue.length == 0) {
                 const queueContruct = {
                     textChannel: msg.channel,
                     voiceChannel: voiceChannel,
