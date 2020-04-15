@@ -155,7 +155,7 @@ bot.on('message', async msg => {
             if (Object.keys(serverQueue).length == 0) {
                 return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
             };
-            if (!msg.member.voice.channel || msg.member.voice.channelID !== bot.voice.channelID) {
+            if (!msg.member.voice.channel) {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
             serverQueue.dispatcher.pause();
@@ -163,7 +163,7 @@ bot.on('message', async msg => {
         }
 
         function stop(msg, serverQueue) {
-            if (!msg.member.voice.channel || msg.member.voice.channel.id !== bot.voiceChannel.id) {
+            if (!msg.member.voice.channel) {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
             serverQueue.songs = [];
