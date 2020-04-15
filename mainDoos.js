@@ -35,7 +35,7 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-    if (msg.content.startsWith(`/`)) {
+    if (msg.content.startsWith(`/play`)) {
         msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
     }
     if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.includes(`${prefix}`)) {
