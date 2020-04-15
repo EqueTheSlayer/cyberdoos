@@ -158,6 +158,9 @@ bot.on('message', async msg => {
             if (Object.keys(serverQueue).length == 0) {
                 return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
             }
+            if (msg.member.voice.channelID !== bot.voice.channelID) {
+                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
+            }
             serverQueue.dispatcher.pause();
             msg.channel.send('\`\`\`🤖Включаю следующую песню🤖\`\`\`');
         }
