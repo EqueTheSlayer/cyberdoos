@@ -138,7 +138,7 @@ bot.on('message', async msg => {
                 queue.delete(guild.id);
             }
             serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-            serverQueue.dispatcher.on('pause', () => {
+            serverQueue.dispatcher.on('end', () => {
                 msg.channel.send('\`\`\`🤖Песня закончилась🤖\`\`\`');
                 serverQueue.songs.shift();
                 play(guild, serverQueue.songs[0]);
