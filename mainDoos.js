@@ -132,10 +132,8 @@ bot.on('message', async msg => {
         }
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
+
             if (song == undefined) {
-                return;
-            }
-            if (Object.keys(song).length == 0) {
                 serverQueue.voice.channel.leave();
                 queue.delete(guild.id);
             }
