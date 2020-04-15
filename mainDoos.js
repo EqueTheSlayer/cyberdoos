@@ -163,7 +163,7 @@ bot.on('message', async msg => {
         }
 
         function stop(msg, serverQueue) {
-            if (!msg.member.voice.channel || msg.member.voice.channelID !== bot.voice.channelID) {
+            if (!msg.member.voice.channel || msg.member.voiceChannel.id !== bot.voiceChannel.id) {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
             serverQueue.songs = [];
