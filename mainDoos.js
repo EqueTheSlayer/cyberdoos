@@ -31,7 +31,7 @@ bot.on('ready', () => {
     console.log(`Запустился бот ${bot.user.username}`);
     bot.generateInvite(["ADMINISTRATOR"]).then(link => {
     });
-    bot.user.setActivity('🤖Плывет по киберпространству🤖')
+    bot.user.setActivity('🤖кибержизнь🤖')
 });
 
 bot.on('message', async msg => {
