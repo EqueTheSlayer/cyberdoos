@@ -163,8 +163,8 @@ bot.on('message', async msg => {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
             serverQueue.songs = [];
-            serverQueue.dispatcher.pause();
             msg.channel.send(`☠️☠️☠️Ваша песенка спета, отключаюсь...☠️☠️☠️`);
+            serverQueue.dispatcher.pause();
         }
     }
 });
