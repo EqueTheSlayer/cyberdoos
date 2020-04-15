@@ -152,21 +152,18 @@ bot.on('message', async msg => {
         }
 
         function skip(msg, serverQueue) {
-            if (!msg.member.voice.channel) {
-                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
-            }
             if (Object.keys(serverQueue).length == 0) {
                 return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
-            }
-            if (msg.member.voice.channelID !== bot.voice.channelID) {
-                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`');
-            }
+            };
+            if (!msg.member.voice.channel || msg.member.voice.channelID !== bot.voice.channelID) {
+                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
+            };
             serverQueue.dispatcher.pause();
             msg.channel.send('\`\`\`🤖Включаю следующую песню🤖\`\`\`');
         }
 
         function stop(msg, serverQueue) {
-            if (!msg.member.voice.channel) {
+            if (!msg.member.voice.channel || msg.member.voice.channelID !== bot.voice.channelID) {
                 return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
             };
             serverQueue.songs = [];
