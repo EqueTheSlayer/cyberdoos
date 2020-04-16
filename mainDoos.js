@@ -112,85 +112,45 @@ bot.on('message', async msg => {
                     description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
                 }
             });
-            if (args[1].startsWith('http')) {
-                const songInfo = await ytdl.getInfo(args[1]);
-                const song = {
-                    title: songInfo.title,
-                    url: songInfo.video_url,
+            const songInfo = await ytdl.getInfo(songLink);
+            const song = {
+                title: songInfo.title,
+                url: songInfo.video_url,
+            };
+
+            if (serverQueue == undefined) {
+                const queueContruct = {
+                    textChannel: msg.channel,
+                    voiceChannel: voiceChannel,
+                    connection: null,
+                    songs: [],
+                    volume: 5,
+                    playing: true
                 };
 
-                if (serverQueue == undefined) {
-                    const queueContruct = {
-                        textChannel: msg.channel,
-                        voiceChannel: voiceChannel,
-                        connection: null,
-                        songs: [],
-                        volume: 5,
-                        playing: true
-                    };
+                queue.set(msg.guild.id, queueContruct);
+                queueContruct.songs.push(song);
 
-                    queue.set(msg.guild.id, queueContruct);
-                    queueContruct.songs.push(song);
-
-                    try {
-                        let connection = await voiceChannel.join();
-                        queueContruct.connection = connection;
-                        play(msg.guild, queueContruct.songs[0]);
-                    } catch (err) {
-                        console.log(err);
-                        queue.delete(msg.guild.id);
-                        return msg.channel.send(err);
-                    }
-                } else {
-                    serverQueue.songs.push(song);
-                    console.log(serverQueue.songs);
-                    return msg.channel.send({
-                        embed: {
-                            color: 15105570,
-                            description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
-                        }
-                    });
+                try {
+                    let connection = await voiceChannel.join();
+                    queueContruct.connection = connection;
+                    play(msg.guild, queueContruct.songs[0]);
+                } catch (err) {
+                    console.log(err);
+                    queue.delete(msg.guild.id);
+                    return msg.channel.send(err);
                 }
             } else {
-                const songInfo = await ytdl.getInfo(songLink);
-                const song = {
-                    title: songInfo.title,
-                    url: songInfo.video_url,
-                };
-
-                if (serverQueue == undefined) {
-                    const queueContruct = {
-                        textChannel: msg.channel,
-                        voiceChannel: voiceChannel,
-                        connection: null,
-                        songs: [],
-                        volume: 5,
-                        playing: true
-                    };
-
-                    queue.set(msg.guild.id, queueContruct);
-                    queueContruct.songs.push(song);
-
-                    try {
-                        let connection = await voiceChannel.join();
-                        queueContruct.connection = connection;
-                        play(msg.guild, queueContruct.songs[0]);
-                    } catch (err) {
-                        console.log(err);
-                        queue.delete(msg.guild.id);
-                        return msg.channel.send(err);
+                serverQueue.songs.push(song);
+                console.log(serverQueue.songs);
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
                     }
-                } else {
-                    serverQueue.songs.push(song);
-                    console.log(serverQueue.songs);
-                    return msg.channel.send({
-                        embed: {
-                            color: 15105570,
-                            description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
-                        }
-                    });
-                }
+                });
             }
+
         }
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
