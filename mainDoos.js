@@ -98,7 +98,12 @@ bot.on('message', async msg => {
             const args = msg.content.split(' ');
 
             const voiceChannel = msg.member.voice.channel;
-            if (!voiceChannel) return msg.channel.send('Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡');
+            if (!voiceChannel) return msg.channel.send({
+                embed: {
+                    color: 15105570,
+                    description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
+                }
+            });
 
             const songInfo = await ytdl.getInfo(args[1]);
             const song = {
@@ -133,7 +138,7 @@ bot.on('message', async msg => {
                 console.log(serverQueue.songs);
                 return msg.channel.send({
                     embed: {
-                        color: 15844367,
+                        color: 15105570,
                         description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
                     }
                 });
@@ -161,7 +166,7 @@ bot.on('message', async msg => {
             if (Object.keys(serverQueue).length == 0) {
                 return msg.channel.send({
                     embed: {
-                        color: 15844367,
+                        color: 15105570,
                         description: 'Включи хоть одну песню, 🤡'
                     }
                 })
@@ -169,20 +174,25 @@ bot.on('message', async msg => {
             if (!msg.member.voice.channel) {
                 return msg.channel.send({
                     embed: {
-                        color: 15844367,
+                        color: 15105570,
                         description: 'А я и не для тебя пою, 🤡'
                     }
                 })
             };
             serverQueue.dispatcher.pause();
-            msg.channel.send('\`\`\`🤖Включаю следующую песню🤖\`\`\`');
+            msg.channel.send({
+                embed: {
+                    color: 15105570,
+                    description: '🤖Включаю следующую песню🤖'
+                }
+            })
         }
 
         function stop(msg, serverQueue) {
             if (!msg.member.voice.channel) {
                 return msg.channel.send({
                     embed: {
-                        color: 15844367,
+                        color: 15105570,
                         description: 'А я и не для тебя пою, 🤡'
                     }
                 })
@@ -190,7 +200,7 @@ bot.on('message', async msg => {
             serverQueue.songs = [];
             msg.channel.send({
                 embed: {
-                    color: 15844367,
+                    color: 15105570,
                     description: `☠️☠️☠️Ваша песенка спета, отключаюсь...☠️☠️☠️`
                 }
             })
