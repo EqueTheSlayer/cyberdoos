@@ -174,7 +174,7 @@ bot.on('message', async msg => {
             msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: `🎤🎤🎤Воспроизвожу ${song.title} 🎤🎤🎤`
+                    description: `Воспроизвожу 🎤🎤🎤 ${song.title} 🎤🎤🎤`
                 }
             })
             serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
