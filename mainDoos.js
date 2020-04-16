@@ -103,7 +103,8 @@ bot.on('message', async msg => {
         async function execute(msg, serverQueue) {
             let args = msg.content.split(' ');
             let query = args.shift();
-            console.log(args)
+            let query2 = args.join(' ');
+            console.log(query2)
             let result = await search(args, opts);
             console.log(result)
             let songLink = result.results.find(item => item.link);
