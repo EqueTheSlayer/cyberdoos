@@ -100,9 +100,9 @@ bot.on('message', async msg => {
 
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
         async function execute(msg, serverQueue) {
-            let filter = m => m.author.id === msg.author.id;
-            let query = await msg.channel.awaitMessages(filter, { max: 1 });
-            let result = await search(query.first().content, opts);
+            let args = msg.content.split(' ');
+            let query = args.shift();
+            let result = await search(query, opts);
             console.log(result)
             let songLink = result.results.find(item => item.link);
             let songLink2 = songLink.link;
