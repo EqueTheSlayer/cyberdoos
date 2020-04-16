@@ -103,9 +103,7 @@ bot.on('message', async msg => {
             let filter = m => m.author.id === msg.author.id;
             let query = await msg.channel.awaitMessages(filter, { max: 1 });
             let result = await search(query.first().content, opts);
-            if (results) {
-                let youtubeResults = result.results;
-                let songLink = result.link;
+            let songLink = result.link;
             }
             const args = msg.content.split(' ');
             const voiceChannel = msg.member.voice.channel;
