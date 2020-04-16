@@ -112,7 +112,7 @@ bot.on('message', async msg => {
                     description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
                 }
             });
-            const songInfo = await ytdl.getInfo(args[1]);
+            const songInfo = await ytdl.getInfo(args[1] || songLink);
             const song = {
                 title: songInfo.title,
                 url: songInfo.video_url,
