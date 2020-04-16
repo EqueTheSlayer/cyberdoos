@@ -131,10 +131,12 @@ bot.on('message', async msg => {
             } else {
                 serverQueue.songs.push(song);
                 console.log(serverQueue.songs);
-                return msg.channel.send({embed: {
-                    color: 15844367,
-                    description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
-                }});
+                return msg.channel.send({
+                    embed: {
+                        color: 15844367,
+                        description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
+                    }
+                });
             }
 
         }
@@ -148,8 +150,8 @@ bot.on('message', async msg => {
             serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
             serverQueue.dispatcher.on('speaking', (value) => {
                 if (!value) {
-                serverQueue.songs.shift();
-                play(guild, serverQueue.songs[0]);
+                    serverQueue.songs.shift();
+                    play(guild, serverQueue.songs[0]);
                 }
             })
             serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
@@ -157,10 +159,20 @@ bot.on('message', async msg => {
 
         function skip(msg, serverQueue) {
             if (Object.keys(serverQueue).length == 0) {
-                return msg.channel.send('\`\`\`Включи хоть одну песню, 🤡\`\`\`');
+                return msg.channel.send({
+                    embed: {
+                        color: 15844367,
+                        description: 'Включи хоть одну песню, 🤡'
+                    }
+                })
             };
             if (!msg.member.voice.channel) {
-                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
+                return msg.channel.send({
+                    embed: {
+                        color: 15844367,
+                        description: 'А я и не для тебя пою, 🤡'
+                    }
+                })
             };
             serverQueue.dispatcher.pause();
             msg.channel.send('\`\`\`🤖Включаю следующую песню🤖\`\`\`');
@@ -168,10 +180,20 @@ bot.on('message', async msg => {
 
         function stop(msg, serverQueue) {
             if (!msg.member.voice.channel) {
-                return msg.channel.send('\`\`\`А я и не для тебя пою, 🤡\`\`\`')
+                return msg.channel.send({
+                    embed: {
+                        color: 15844367,
+                        description: 'А я и не для тебя пою, 🤡'
+                    }
+                })
             };
             serverQueue.songs = [];
-            msg.channel.send(`☠️☠️☠️Ваша песенка спета, отключаюсь...☠️☠️☠️`);
+            msg.channel.send({
+                embed: {
+                    color: 15844367,
+                    description: `☠️☠️☠️Ваша песенка спета, отключаюсь...☠️☠️☠️`
+                }
+            })
             serverQueue.dispatcher.pause();
         }
     }
