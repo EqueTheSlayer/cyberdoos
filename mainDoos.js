@@ -112,10 +112,11 @@ bot.on('message', async msg => {
                     description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
                 }
             });
-            const songInfo;
             if (args[1].startsWith('http')) {
+                const songInfo = await ytdl.getInfo(args[1]);
                 music();
             } else {
+                const songInfo = await ytdl.getInfo(songLink);
                 music();
             }
             function music() {
