@@ -104,115 +104,115 @@ bot.on('message', async msg => {
             let query = await msg.channel.awaitMessages(filter, { max: 1 });
             let result = await search(query.first().content, opts);
             let songLink = result.link;
-        }
-        const args = msg.content.split(' ');
-        const voiceChannel = msg.member.voice.channel;
-        if (!voiceChannel) return msg.channel.send({
-            embed: {
-                color: 15105570,
-                description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
-            }
-        });
-        const songInfo = await ytdl.getInfo(args[1] || songLink);
-        const song = {
-            title: songInfo.title,
-            url: songInfo.video_url,
-        };
-
-        if (serverQueue == undefined) {
-            const queueContruct = {
-                textChannel: msg.channel,
-                voiceChannel: voiceChannel,
-                connection: null,
-                songs: [],
-                volume: 5,
-                playing: true
-            };
-
-            queue.set(msg.guild.id, queueContruct);
-            queueContruct.songs.push(song);
-
-            try {
-                let connection = await voiceChannel.join();
-                queueContruct.connection = connection;
-                play(msg.guild, queueContruct.songs[0]);
-            } catch (err) {
-                console.log(err);
-                queue.delete(msg.guild.id);
-                return msg.channel.send(err);
-            }
-        } else {
-            serverQueue.songs.push(song);
-            console.log(serverQueue.songs);
-            return msg.channel.send({
+            const args = msg.content.split(' ');
+            const voiceChannel = msg.member.voice.channel;
+            if (!voiceChannel) return msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
+                    description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
                 }
             });
+            const songInfo = await ytdl.getInfo(args[1]);
+            const song = {
+                title: songInfo.title,
+                url: songInfo.video_url,
+            };
+
+            if (serverQueue == undefined) {
+                const queueContruct = {
+                    textChannel: msg.channel,
+                    voiceChannel: voiceChannel,
+                    connection: null,
+                    songs: [],
+                    volume: 5,
+                    playing: true
+                };
+
+                queue.set(msg.guild.id, queueContruct);
+                queueContruct.songs.push(song);
+
+                try {
+                    let connection = await voiceChannel.join();
+                    queueContruct.connection = connection;
+                    play(msg.guild, queueContruct.songs[0]);
+                } catch (err) {
+                    console.log(err);
+                    queue.delete(msg.guild.id);
+                    return msg.channel.send(err);
+                }
+            } else {
+                serverQueue.songs.push(song);
+                console.log(serverQueue.songs);
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
+                    }
+                });
+            }
+
+        }
+        function play(guild, song) {
+            let serverQueue = queue.get(guild.id);
+
+            if (song == undefined) {
+                serverQueue.voiceChannel.leave();
+                queue.delete(guild.id);
+            }
+            serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
+            serverQueue.dispatcher.on('speaking', (value) => {
+                if (!value) {
+                    serverQueue.songs.shift();
+                    play(guild, serverQueue.songs[0]);
+                }
+            })
+            serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         }
 
-    }
-    function play(guild, song) {
-        let serverQueue = queue.get(guild.id);
-
-        if (song == undefined) {
-            serverQueue.voiceChannel.leave();
-            queue.delete(guild.id);
+        function skip(msg, serverQueue) {
+            if (Object.keys(serverQueue).length == 0) {
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: 'Включи хоть одну песню, 🤡'
+                    }
+                })
+            };
+            if (!msg.member.voice.channel) {
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: 'А я и не для тебя пою, 🤡'
+                    }
+                })
+            };
+            serverQueue.dispatcher.pause();
+            msg.channel.send({
+                embed: {
+                    color: 15105570,
+                    description: '🤖Включаю следующую песню🤖'
+                }
+            })
         }
-        serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-        serverQueue.dispatcher.on('speaking', (value) => {
-            if (!value) {
-                serverQueue.songs.shift();
-                play(guild, serverQueue.songs[0]);
-            }
-        })
-        serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    }
 
-    function skip(msg, serverQueue) {
-        if (Object.keys(serverQueue).length == 0) {
-            return msg.channel.send({
+        function stop(msg, serverQueue) {
+            if (!msg.member.voice.channel) {
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: 'А я и не для тебя пою, 🤡'
+                    }
+                })
+            };
+            serverQueue.songs = [];
+            msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: 'Включи хоть одну песню, 🤡'
+                    description: `☠️☠️☠️Ваша песенка спета, отключаюсь...☠️☠️☠️`
                 }
             })
-        };
-        if (!msg.member.voice.channel) {
-            return msg.channel.send({
-                embed: {
-                    color: 15105570,
-                    description: 'А я и не для тебя пою, 🤡'
-                }
-            })
-        };
-        serverQueue.dispatcher.pause();
-        msg.channel.send({
-            embed: {
-                color: 15105570,
-                description: '🤖Включаю следующую песню🤖'
-            }
-        })
-    }
-
-    function stop(msg, serverQueue) {
-        if (!msg.member.voice.channel) {
-            return msg.channel.send({
-                embed: {
-                    color: 15105570,
-                    description: 'А я и не для тебя пою, 🤡'
-                }
-            })
-        };
-        serverQueue.songs = [];
-        msg.channel.send({
-            embed: {
-                color: 15105570,
-                description: `☠️☠️☠️Ваша песенка спета, отключаюсь...☠️☠️☠️`
-            }
-        })
-        serverQueue.dispatcher.pause();
+            serverQueue.dispatcher.pause();
+        }
     }
 });
 bot.login(token);
