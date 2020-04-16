@@ -12,11 +12,12 @@ const path = require('path');
 const PORT = process.env.PORT || 5016;
 const ytdl = require('ytdl-core');
 const queue = new Map();
+const search = require('youtube-search');
 
 
 let http = require("http");
 setInterval(function () {
-    http.get("http://cyberdoos.herokuapp.com");
+    http.get('http://cyberdoos.herokuapp.com');
 }, 300000);
 
 express()
@@ -130,7 +131,10 @@ bot.on('message', async msg => {
             } else {
                 serverQueue.songs.push(song);
                 console.log(serverQueue.songs);
-                return msg.channel.send(`\`\`\`🤖Добавил 🎤${song.title}🎤 в очередь 🤖\`\`\``);
+                return msg.channel.send({embed: {
+                    color: 15844367,
+                    description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
+                }});
             }
 
         }
