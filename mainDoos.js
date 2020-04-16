@@ -104,7 +104,7 @@ bot.on('message', async msg => {
             let args = msg.content.split(' ');
             let query = args.shift();
             let query2 = args.join(' ');
-            let query3 = Array.from(query2);
+            let query3 = [query2];
             console.log(query3)
             let result = await search(query3, opts);
             console.log(result)
