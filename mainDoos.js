@@ -171,6 +171,12 @@ bot.on('message', async msg => {
                     play(guild, serverQueue.songs[0]);
                 }
             })
+            msg.channel.send({
+                embed: {
+                    color: 15105570,
+                    description: `🎤🎤🎤Воспроизвожу ${song.title} 🎤🎤🎤`
+                }
+            })
             serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         }
 
