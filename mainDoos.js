@@ -15,7 +15,7 @@ const queue = new Map();
 const search = require('youtube-search');
 const opts = {
     maxResults: 1,
-    key: botconfig.YOUTUBE_API,
+    key: config.YOUTUBE_API,
     type: 'video'
 }
 
@@ -105,12 +105,6 @@ bot.on('message', async msg => {
             let result = await search(query.first().content, opts);
             if (results) {
                 let youtubeResults = result.results;
-                let i = 0;
-                let titles = youtubeResults.Map(result => {
-                    i++;
-                    return i + ')' + result.title;
-                })
-                l
                 let songLink = result.link;
             }
             const args = msg.content.split(' ');
