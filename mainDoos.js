@@ -112,19 +112,52 @@ bot.on('message', async msg => {
                     description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
                 }
             });
-            if (args[1].startsWith('http')) {
-                const songInfo = await ytdl.getInfo(args[1]);
-                music();
+            if (args[1].startsWith('http')){
+            const songInfo = await ytdl.getInfo(args[1]);
+            const song = {
+                title: songInfo.title,
+                url: songInfo.video_url,
+            };
+
+            if (serverQueue == undefined) {
+                const queueContruct = {
+                    textChannel: msg.channel,
+                    voiceChannel: voiceChannel,
+                    connection: null,
+                    songs: [],
+                    volume: 5,
+                    playing: true
+                };
+
+                queue.set(msg.guild.id, queueContruct);
+                queueContruct.songs.push(song);
+
+                try {
+                    let connection = await voiceChannel.join();
+                    queueContruct.connection = connection;
+                    play(msg.guild, queueContruct.songs[0]);
+                } catch (err) {
+                    console.log(err);
+                    queue.delete(msg.guild.id);
+                    return msg.channel.send(err);
+                }
+            } else {
+                serverQueue.songs.push(song);
+                console.log(serverQueue.songs);
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
+                    }
+                });
+            }
             } else {
                 const songInfo = await ytdl.getInfo(songLink);
-                music();
-            }
-            function music() {
                 const song = {
                     title: songInfo.title,
                     url: songInfo.video_url,
                 };
-
+    
                 if (serverQueue == undefined) {
                     const queueContruct = {
                         textChannel: msg.channel,
@@ -134,10 +167,10 @@ bot.on('message', async msg => {
                         volume: 5,
                         playing: true
                     };
-
+    
                     queue.set(msg.guild.id, queueContruct);
                     queueContruct.songs.push(song);
-
+    
                     try {
                         let connection = await voiceChannel.join();
                         queueContruct.connection = connection;
@@ -158,6 +191,8 @@ bot.on('message', async msg => {
                     });
                 }
             }
+            
+
         }
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
