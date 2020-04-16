@@ -46,6 +46,9 @@ bot.on('message', async msg => {
         const serverQueue = queue.get(msg.guild.id);
 
         if (msg.content.startsWith(`${prefix}play`)) {
+            let filter = m => m.author.id === msg.author.id;
+            let collected = await msg.channel.awaitMessages(filter, {max: 1});
+            console.log(collected);
             execute(msg, serverQueue);
             return;
         } else if (msg.content.startsWith(`${prefix}skip`)) {
