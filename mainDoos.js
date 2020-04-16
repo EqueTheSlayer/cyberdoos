@@ -13,6 +13,11 @@ const PORT = process.env.PORT || 5016;
 const ytdl = require('ytdl-core');
 const queue = new Map();
 const search = require('youtube-search');
+const opts = {
+    maxResults: 1,
+    key: botconfig.YOUTUBE_API,
+    type: 'video'
+}
 
 
 let http = require("http");
@@ -46,9 +51,6 @@ bot.on('message', async msg => {
         const serverQueue = queue.get(msg.guild.id);
 
         if (msg.content.startsWith(`${prefix}play`)) {
-            let filter = m => m.author.id === msg.author.id;
-            let collected = await msg.channel.awaitMessages(filter, {max: 1});
-            console.log(collected);
             execute(msg, serverQueue);
             return;
         } else if (msg.content.startsWith(`${prefix}skip`)) {
@@ -98,8 +100,20 @@ bot.on('message', async msg => {
 
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
         async function execute(msg, serverQueue) {
+            let filter = m => m.author.id === msg.author.id;
+            let query = await msg.channel.awaitMessages(filter, { max: 1 });
+            let result = await search(query.first().content, opts);
+            if (results) {
+                let youtubeResults = result.results;
+                let i = 0;
+                let titles = youtubeResults.Map(result => {
+                    i++;
+                    return i + ')' + result.title;
+                })
+                l
+                let songLink = result.link;
+            }
             const args = msg.content.split(' ');
-
             const voiceChannel = msg.member.voice.channel;
             if (!voiceChannel) return msg.channel.send({
                 embed: {
@@ -107,8 +121,7 @@ bot.on('message', async msg => {
                     description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
                 }
             });
-
-            const songInfo = await ytdl.getInfo(args[1]);
+            const songInfo = await ytdl.getInfo(args[1] || songLink);
             const song = {
                 title: songInfo.title,
                 url: songInfo.video_url,
