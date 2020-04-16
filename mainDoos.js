@@ -104,8 +104,7 @@ bot.on('message', async msg => {
             let query = await msg.channel.awaitMessages(filter, { max: 1 });
             let result = await search(query.first().content, opts);
             console.log(result)
-            let songLink = result.results.link;
-            const args = msg.content.split(' ');
+            let songLink = result.results.find(item => item.link);
             const voiceChannel = msg.member.voice.channel;
             if (!voiceChannel) return msg.channel.send({
                 embed: {
