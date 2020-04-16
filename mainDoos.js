@@ -17,7 +17,7 @@ const opts = {
     maxResults: 1,
     key: config.YOUTUBE_API,
     type: 'video',
-    order: 'relevance'
+    order: 'title'
 }
 
 
