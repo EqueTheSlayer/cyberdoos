@@ -42,6 +42,9 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
+    if (msg.content.startsWith(`${prefix}`)) {
+        msg.delete({timeout: 3000});
+    }
     if (msg.author.bot === true) {
         msg.delete({timeout: 60000});
     }
