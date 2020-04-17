@@ -43,7 +43,7 @@ bot.on('ready', () => {
 
 bot.on('message', async msg => {
     if (msg.author.bot === true) {
-        msg.delete({timeout: 3000});
+        msg.delete({timeout: 300000});
     }
     if (msg.content.startsWith(`/play`)) {
         msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
@@ -164,7 +164,7 @@ bot.on('message', async msg => {
             let serverQueue = queue.get(guild.id);
 
             if (song == undefined) {
-                serverQueue.voiceChannel.leave();
+                setTimeout(serverQueue.voiceChannel.leave(), 3000);
                 queue.delete(guild.id);
             }
             serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
