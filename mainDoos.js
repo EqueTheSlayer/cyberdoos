@@ -43,7 +43,7 @@ bot.on('ready', () => {
 
 bot.on('message', async msg => {
     if (msg.author.bot === true) {
-        msg.delete({timeout: 300000});
+        msg.delete({timeout: 60000});
     }
     if (msg.content.startsWith(`/play`)) {
         msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
