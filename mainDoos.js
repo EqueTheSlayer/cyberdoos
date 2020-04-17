@@ -164,7 +164,9 @@ bot.on('message', async msg => {
             let serverQueue = queue.get(guild.id);
 
             if (song == undefined) {
-                serverQueue.voiceChannel.leave({timeout: 3000});
+                setTimeout(() => {
+                    serverQueue.voiceChannel.leave();
+                }, 3000);
                 queue.delete(guild.id);
             }
             serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
