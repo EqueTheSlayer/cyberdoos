@@ -69,24 +69,25 @@ bot.on('message', async msg => {
             let args2 = msg.content.split(' ');
             let num = Number(args2[1]);
             if (typeof num !== NaN) {
-            function getRandomInRange(max) {
-                return msg.reply({
+                function getRandomInRange(max) {
+                    return msg.reply({
+                        embed: {
+                            color: 15105570,
+                            description: `Ваше число ${Math.floor(Math.random() * (max + 1))}`
+                        }
+                    });
+                }
+                getRandomInRange(num);
+            } 
+            if (typeof num === NaN) {
+                msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваше число ${Math.floor(Math.random() * (max + 1))}`
+                        description: `Ты не указал числа, 🤡`
                     }
-                });
+                })
             }
-            getRandomInRange(num);
-        } else {
-            msg.reply({
-                embed: {
-                    color: 15105570,
-                    description: `Ты не указал числа, 🤡`
-                }
-            })
         }
-    }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
             const coins = ['орел', 'решка'];
