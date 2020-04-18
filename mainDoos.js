@@ -65,12 +65,12 @@ bot.on('message', async msg => {
             msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
         }
         //случайное число
-        let args1 = msg.content.split(' ');
+        let args2 = msg.content.split(' ');
         if (msg.content.startsWith('!roll')) {
             function getRandomInRange(max) {
-                return Math.floor(Math.random() * (max + 1));
+                return msg.reply(`Ваше число${Math.floor(Math.random() * (max + 1))}`);
             }
-            getRandomInRange(args1[1]);
+            getRandomInRange(args2[1]);
         }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
