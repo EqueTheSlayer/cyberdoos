@@ -69,24 +69,15 @@ bot.on('message', async msg => {
             let args2 = msg.content.split(' ');
             let num = Number(args2[1]);
             console.log(typeof num)
-            if ((typeof num) === number) {
-                function getRandomInRange(max) {
-                    return msg.reply({
-                        embed: {
-                            color: 15105570,
-                            description: `Ваше число ${Math.floor(Math.random() * (max + 1))}`
-                        }
-                    });
-                }
-                getRandomInRange(num);
-            } else {
-                msg.reply({
+            function getRandomInRange(max) {
+                return msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Как я могу выбрать случайное число, если ты указал НЕ число❓❓❓`
+                        description: `Ваше число ${Math.floor(Math.random() * (max + 1))}`
                     }
                 });
             }
+            getRandomInRange(num);
         }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
