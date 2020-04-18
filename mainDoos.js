@@ -68,6 +68,8 @@ bot.on('message', async msg => {
         if (msg.content.startsWith('!roll') && msg.author.bot === false) {
             let args2 = msg.content.split(' ');
             console.log(args2);
+            let num = Number(args2[1]);
+            if ((typeof num) = Number) {
             function getRandomInRange(max) {
                 return msg.reply({
                     embed: {
@@ -76,8 +78,16 @@ bot.on('message', async msg => {
                     }
                 });
             }
-            getRandomInRange(args2[1]);
+            getRandomInRange(num);
+        } else {
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Как я могу выбрать случайное число, если ты указал НЕ число❓❓❓`
+                }
+            });
         }
+    }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
             const coins = ['орел', 'решка'];
