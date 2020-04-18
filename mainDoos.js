@@ -19,6 +19,8 @@ const opts = {
     type: 'video',
     order: 'relevance'
 }
+const coins = ['орел', 'решка'];
+let flip = coins[Math.floor(Math.random() * 2)];
 
 
 let http = require("http");
@@ -42,37 +44,36 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-    //help command
-    if (msg.content.startsWith(`${prefix}help`)) {
-        msg.reply({embed: {
-            color: 15105570,
-            description: `Список всех заклинаний: !play (название песни или ссылка)▶️\n !skip (если есть очередь)⏹️\n !stop⏯️ \n !flip (подбросить монетку)💫 \n !погода (текущая погода в Усть-Парашинске)🌞\n !вирус (статистика заболевших коронавирусом на территории РФ)💊`
-        }
-    })
-    }
-    //coin flip
-    const coins = ['орел' , 'решка'];
-    let flip = coins[Math.floor(Math.random() * 2)];
-    if (msg.content.startsWith(`${prefix}flip`)) {
-        if (flip === 'орел') {
-            msg.reply(`\`\`\`Выпал 🌞🌞орел🌞🌞\`\`\``);
-        } else {
-            msg.reply(`\`\`\`Выпала 🌞🌞решка🌞🌞\`\`\``);
-        }
-    }
-    // deleting msg and checking if msg.author in blacklist
-    if (msg.content.startsWith(`${prefix}`)) {
-        msg.delete({timeout: 300000});
-    }
-    if (msg.author.bot === true) {
-        msg.delete({timeout: 300000});
-    }
-    if (msg.content.startsWith(`/play`)) {
-        msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
-    }
     if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.includes(`${prefix}`)) {
         msg.reply('\`\`\`🤖🤖🤖По какому праву ты что-то говоришь мне❓❓❓ Сначала научись себя вести, 🤡🤡🤡\`\`\`');
     } else {
+        //help command
+        if (msg.content.startsWith(`${prefix}help`)) {
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Список всех заклинаний: !play (название песни или ссылка)▶️\n !skip (если есть очередь)⏹️\n !stop⏯️ \n !flip (подбросить монетку)💫 \n !погода (текущая погода в Усть-Парашинске)🌞\n !вирус (статистика заболевших коронавирусом на территории РФ)💊`
+                }
+            })
+        }
+        // deleting msg and checking if msg.author in blacklist
+        if (msg.content.startsWith(`${prefix}`)) {
+            msg.delete({ timeout: 300000 });
+        }
+        if (msg.author.bot === true) {
+            msg.delete({ timeout: 300000 });
+        }
+        if (msg.content.startsWith(`/play`)) {
+            msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
+        }
+        //coin flip
+        if (msg.content.startsWith(`${prefix}flip`)) {
+            if (flip === 'орел') {
+                msg.reply(`\`\`\`Выпал 🌞🌞орел🌞🌞\`\`\``);
+            } else {
+                msg.reply(`\`\`\`Выпала 🌞🌞решка🌞🌞\`\`\``);
+            }
+        }
         //музыкальная функция
         const serverQueue = queue.get(msg.guild.id);
 
