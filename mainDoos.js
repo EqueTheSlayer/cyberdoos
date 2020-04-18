@@ -65,9 +65,9 @@ bot.on('message', async msg => {
             msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
         }
         //случайное число
-        let args2 = msg.content.split(' ');
-        console.log(args2);
         if (msg.content.startsWith('!roll') && msg.author.bot === false) {
+            let args2 = msg.content.split(' ');
+            console.log(args2);
             if ((typeof args2[1]) === Number) {
                 function getRandomInRange(max) {
                     return msg.reply({
