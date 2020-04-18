@@ -68,7 +68,7 @@ bot.on('message', async msg => {
         if (msg.content.startsWith('!roll') && msg.author.bot === false) {
             let args2 = msg.content.split(' ');
             let num = Number(args2[1]);
-            console.log(typeof num)
+            if (typeof num !== NaN) {
             function getRandomInRange(max) {
                 return msg.reply({
                     embed: {
@@ -78,7 +78,15 @@ bot.on('message', async msg => {
                 });
             }
             getRandomInRange(num);
+        } else {
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Ты не указал числа, 🤡`
+                }
+            })
         }
+    }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
             const coins = ['орел', 'решка'];
