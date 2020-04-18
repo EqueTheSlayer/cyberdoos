@@ -64,6 +64,14 @@ bot.on('message', async msg => {
         if (msg.content.startsWith(`/play`)) {
             msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
         }
+        //случайное число
+        let args1 = msg.content.split(' ');
+        if (msg.content.startsWith('!roll')) {
+            function getRandomInRange(max) {
+                return Math.floor(Math.random() * (max + 1));
+            }
+            getRandomInRange(args[1]);
+        }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
             const coins = ['орел', 'решка'];
@@ -72,14 +80,14 @@ bot.on('message', async msg => {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `\`\`\`Выпал орёл\`\`\``
+                        description: `Выпал орёл`
                     }
                 });
             } else {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `\`\`\`Выпала решка\`\`\``
+                        description: `Выпала решка`
                     }
                 });
             }
