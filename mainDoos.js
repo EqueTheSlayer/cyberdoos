@@ -62,10 +62,10 @@ bot.on('message', async msg => {
     }
     // deleting msg and checking if msg.author in blacklist
     if (msg.content.startsWith(`${prefix}`)) {
-        msg.delete({timeout: 60000});
+        msg.delete({timeout: 300000});
     }
     if (msg.author.bot === true) {
-        msg.delete({timeout: 60000});
+        msg.delete({timeout: 300000});
     }
     if (msg.content.startsWith(`/play`)) {
         msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
