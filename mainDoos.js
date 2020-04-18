@@ -66,11 +66,13 @@ bot.on('message', async msg => {
         }
         //случайное число
         let args2 = msg.content.split(' ');
-        if (msg.content.startsWith('!roll')) {
-            function getRandomInRange(max) {
-                return msg.reply(`Ваше число${Math.floor(Math.random() * (max + 1))}`);
+        if (typeOf(args2[1]) = Number) {
+            if (msg.content.startsWith('!roll')) {
+                function getRandomInRange(max) {
+                    return msg.reply(`Ваше число ${Math.floor(Math.random() * (max + 1))}`);
+                }
+                getRandomInRange(args2[1]);
             }
-            getRandomInRange(args2[1]);
         }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
