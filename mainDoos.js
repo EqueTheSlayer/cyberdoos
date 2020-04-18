@@ -70,7 +70,7 @@ bot.on('message', async msg => {
             function getRandomInRange(max) {
                 return Math.floor(Math.random() * (max + 1));
             }
-            getRandomInRange(args[1]);
+            getRandomInRange(args1[1]);
         }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
