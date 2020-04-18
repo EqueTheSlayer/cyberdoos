@@ -69,12 +69,17 @@ bot.on('message', async msg => {
             const coins = ['орел', 'решка'];
             let flip = coins[Math.floor(Math.random() * 2)];
             if (flip === 'орел') {
-                msg.reply(`\`\`\`\*Выпал орел\*\`\`\``);
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `\`\`\`Выпал орёл\`\`\``
+                    }
+                });
             } else {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `\`\`\`\*Выпала решка\*\`\`\``
+                        description: `\`\`\`Выпала решка\`\`\``
                     }
                 });
             }
