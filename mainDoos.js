@@ -68,7 +68,7 @@ bot.on('message', async msg => {
         if (msg.content.startsWith('!roll') && msg.author.bot === false) {
             let args2 = msg.content.split(' ');
             console.log(args2[1]);
-            let num = Number(args2[1]);
+            let maxi = Number(args2[1]);
             console.log(Number(args2[1]))
             if ((typeof num) == 'number') { 
                 function getRandomInRange(max) {
@@ -79,7 +79,7 @@ bot.on('message', async msg => {
                         }
                     });
                 }
-                getRandomInRange(num);
+                getRandomInRange(maxi);
             } else {
                 msg.reply({
                     embed: {
