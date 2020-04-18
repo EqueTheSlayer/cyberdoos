@@ -42,6 +42,25 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
+    //help command
+    if (msg.content.startsWith(`${prefix}help`)) {
+        msg.reply({embed: {
+            color: 15105570,
+            description: `Список всех заклинаний: !play (название песни или ссылка)▶️, !skip (если есть очередь)⏹️, !stop⏯️ \n !flip (подбросить монетку)💫 \n !погода (текущая погода в Усть-Парашинске)🌞\n !вирус (статистика заболевших коронавирусом на территории РФ)💊`
+        }
+    })
+    }
+    //coin flip
+    const coins = ['орел' , 'решка'];
+    let flip = coins[Math.floor(Math.random() * 2)];
+    if (msg.content.startsWith(`${prefix}flip`)) {
+        if (flip === 'орел') {
+            msg.reply(`\`\`\`Выпал 🌞🌞орел🌞🌞\`\`\``);
+        } else {
+            msg.reply(`\`\`\`Выпала 🌞🌞решка🌞🌞\`\`\``);
+        }
+    }
+    // deleting msg and checking if msg.author in blacklist
     if (msg.content.startsWith(`${prefix}`)) {
         msg.delete({timeout: 60000});
     }
