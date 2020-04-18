@@ -69,7 +69,7 @@ bot.on('message', async msg => {
             let args2 = msg.content.split(' ');
             console.log(args2);
             let num = Number(args2[1]);
-            if ((typeof num) = Number) {
+            if ((typeof num) === Number) {
             function getRandomInRange(max) {
                 return msg.reply({
                     embed: {
