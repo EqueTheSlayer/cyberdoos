@@ -68,17 +68,15 @@ bot.on('message', async msg => {
         if (msg.content.startsWith('!roll') && msg.author.bot === false) {
             let args2 = msg.content.split(' ');
             console.log(args2);
-            if ((typeof args2[1]) === Number) {
-                function getRandomInRange(max) {
-                    return msg.reply({
-                        embed: {
-                            color: 15105570,
-                            description: `Ваше число ${Math.floor(Math.random() * (max + 1))}`
-                        }
-                    });
-                }
-                getRandomInRange(args2[1]);
+            function getRandomInRange(max) {
+                return msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ваше число ${Math.floor(Math.random() * (max + 1))}`
+                    }
+                });
             }
+            getRandomInRange(args2[1]);
         }
         //подброс монетки
         if (msg.content.startsWith(`${prefix}flip`)) {
