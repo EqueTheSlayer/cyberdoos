@@ -118,7 +118,7 @@ bot.on('message', async msg => {
         }
         //коронавирус
         if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
-            request("https://pomber.github.io/covid19/timeseries.json"), function (err, response, body) {
+            request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
                 if (err) {
                     console.log('covid ошибка')
                 } else {
@@ -130,8 +130,8 @@ bot.on('message', async msg => {
                             description: `\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек.\`\`\``
                         }
                     })
-                }
             }
+            })
         }
         //погода
         if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
