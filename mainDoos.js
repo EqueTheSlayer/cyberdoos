@@ -195,14 +195,24 @@ bot.on('message', async msg => {
             let result = await search(query3, opts);
             console.log(result);
             let songLink = result.results.find(item => item.link);
-            let songLink2 = songLink.link;
+            if (msg.content.includes('http')) {
+                let songLink2 = args[1];
+                checking();
+            } else {
+                songLink2 = songLink.link;
+                checking()
+            }
+            
             const voiceChannel = msg.member.voice.channel;
+
             if (!voiceChannel) return msg.channel.send({
                 embed: {
                     color: 15105570,
                     description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
                 }
             });
+        }
+        function checking(msg, serverQueue, songLink2) {
             const songInfo = await ytdl.getInfo(songLink2);
             const song = {
                 title: songInfo.title,
@@ -241,7 +251,6 @@ bot.on('message', async msg => {
                     }
                 });
             }
-
         }
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
