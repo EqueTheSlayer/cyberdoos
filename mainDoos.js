@@ -4,8 +4,6 @@ const request = require('request');
 const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
-const apiKey = '9552deb6aed115532d3abdc34e24d985';
-const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=RU&appid=${apiKey}`;
 const express = require("express");
 const path = require('path');
 const PORT = process.env.PORT || 5016;
@@ -132,6 +130,10 @@ bot.on('message', async msg => {
         }
         //погода
         if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
+            let weatherCountry = msg.content.split(' ');
+            const apiKey = '9552deb6aed115532d3abdc34e24d985';
+            const city = 'volgograd';
+            const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountry[1]}&units=metric&lang=RU&appid=${apiKey}`;
             request(url, function (err, response, body) {
                 if (err) {
                     console.log('ошибка');
