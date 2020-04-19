@@ -127,7 +127,7 @@ bot.on('message', async msg => {
                     msg.reply({
                         embed: {
                             color: 15105570,
-                            description: `\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек.\`\`\``
+                            description: `На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек.`
                         }
                     })
             }
