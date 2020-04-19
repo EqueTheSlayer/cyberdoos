@@ -124,7 +124,7 @@ bot.on('message', async msg => {
                 } else {
                     let covidData = JSON.parse(body);
                     let lastday = covidData.Russia[covidData.Russia.length - 1];
-                    msg.reply({
+                    msg.channel.send({
                         embed: {
                             color: 15105570,
                             description: `На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек.`
@@ -148,8 +148,9 @@ bot.on('message', async msg => {
                     console.log(data);
                     let data2 = data.weather.find(item => item.id);
                     let temp = Math.floor(data.main.temp);
+
                     if (data2.description == 'ясно') {
-                        msg.reply({
+                        msg.channel.send({
                             embed: {
                                 color: 15105570,
                                 description: `${data.name}. Погода в настоящий момент. ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
@@ -157,7 +158,7 @@ bot.on('message', async msg => {
                         })
                     }
                     if (data2.description.includes('обла')) {
-                        msg.reply({
+                        msg.channel.send({
                             embed: {
                                 color: 15105570,
                                 description: `${data.name}. Погода в настоящий момент. ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
@@ -165,7 +166,7 @@ bot.on('message', async msg => {
                         })
                     }
                     if (data2.description.includes('дождь')) {
-                        msg.reply({
+                        msg.channel.send({
                             embed: {
                                 color: 15105570,
                                 description: `${data.name}. Погода в настоящий момент. 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
@@ -173,7 +174,7 @@ bot.on('message', async msg => {
                         })
                     }
                     if (data2.description.includes('пасму')) {
-                        msg.reply({
+                        msg.channel.send({
                             embed: {
                                 color: 15105570,
                                 description: `${data.name}. Погода в настоящий момент. ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
