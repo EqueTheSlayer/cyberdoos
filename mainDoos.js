@@ -5,7 +5,6 @@ const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
 const apiKey = '9552deb6aed115532d3abdc34e24d985';
-const city = 'volgograd';
 const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=RU&appid=${apiKey}`;
 const express = require("express");
 const path = require('path');
@@ -156,7 +155,7 @@ bot.on('message', async msg => {
                 }
             });
         }
-
+        //функции музыкальной команды
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
         async function execute(msg, serverQueue) {
             let args = msg.content.split(' ');
