@@ -118,21 +118,27 @@ bot.on('message', async msg => {
         }
         //коронавирус
         if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
-            request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
+            request("https://pomber.github.io/covid19/timeseries.json"), function (err, response, body) {
                 if (err) {
                     console.log('covid ошибка')
                 } else {
                     let covidData = JSON.parse(body);
                     let lastday = covidData.Russia[covidData.Russia.length - 1];
-                    msg.channel.send(`\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек. Ванус все еще жив🤬😭🤬😭🤬\`\`\``)
+                    msg.reply({
+                        embed: {
+                            color: 15105570,
+                            description: `\`\`\`На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек.\`\`\``
+                        }
+                    })
                 }
-            })
+            }
         }
         //погода
         if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
             let weatherCountry = msg.content.split(' ');
             const apiKey = '9552deb6aed115532d3abdc34e24d985';
-            const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountry[1]}&units=metric&lang=RU&appid=${apiKey}`;
+            let weatherCountryWithoutCommand = weatherCountry.shift().join(' ');
+            const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountryWithoutCommand}&units=metric&lang=RU&appid=${apiKey}`;
             request(url, function (err, response, body) {
                 if (err) {
                     console.log('ошибка');
@@ -142,16 +148,36 @@ bot.on('message', async msg => {
                     let data2 = data.weather.find(item => item.id);
                     let temp = Math.floor(data.main.temp);
                     if (data2.description == 'ясно') {
-                        msg.channel.send(`\`\`\`${data.name}. Погода в настоящий момент. ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                        msg.reply({
+                            embed: {
+                                color: 15105570,
+                                description: `\`\`\`${data.name}. Погода в настоящий момент. ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``
+                            }
+                        })
                     }
                     if (data2.description.includes('обла')) {
-                        msg.channel.send(`\`\`\`${data.name}. Погода в настоящий момент. ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                        msg.reply({
+                            embed: {
+                                color: 15105570,
+                                description: `\`\`\`${data.name}. Погода в настоящий момент. ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``
+                            }
+                        })
                     }
                     if (data2.description.includes('дождь')) {
-                        msg.channel.send(`\`\`\`${data.name}. Погода в настоящий момент. 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                        msg.reply({
+                            embed: {
+                                color: 15105570,
+                                description: `\`\`\`${data.name}. Погода в настоящий момент. 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``
+                            }
+                        })
                     }
                     if (data2.description.includes('пасму')) {
-                        msg.channel.send(`\`\`\`${data.name}. Погода в настоящий момент. ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``);
+                        msg.reply({
+                            embed: {
+                                color: 15105570,
+                                description: `\`\`\`${data.name}. Погода в настоящий момент. ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.\`\`\``
+                            }
+                        })
                     }
                 }
             });
