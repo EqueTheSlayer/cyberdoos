@@ -37,10 +37,6 @@ bot.on('ready', () => {
     bot.user.setActivity('🤖кибержизнь🤖')
 });
 
-bot.on('guildMemberRemove', member => {
-    member.channels.get('457536206285307907').send(`${member.username} был выгнан с позором в помойку говна 💩🤡💩`);
-})
-
 bot.on('message', async msg => {
     //черный список
     if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.includes(`${prefix}`)) {
@@ -269,9 +265,6 @@ bot.on('message', async msg => {
             let serverQueue = queue.get(guild.id);
 
             if (song == undefined) {
-                setTimeout(() => {
-                    serverQueue.voiceChannel.leave();
-                }, 300000);
                 queue.delete(guild.id);
             }
             serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
@@ -332,6 +325,9 @@ bot.on('message', async msg => {
                     description: `☠️☠️☠️Ваша песенка спета, отключение через 5 минут☠️☠️☠️`
                 }
             })
+            setTimeout(() => {
+                serverQueue.voiceChannel.leave();
+            }, 300000);
             serverQueue.dispatcher.pause();
         }
     }
