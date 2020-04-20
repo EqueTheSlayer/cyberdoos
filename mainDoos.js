@@ -202,7 +202,7 @@ bot.on('message', async msg => {
             console.log(result);
             let songLink = result.results.find(item => item.link);
             let songLink2 = ' ';
-            if (msg.content.startsWith('http')) {
+            if (msg.content.startsWith('!play http')) {
                  songLink2 = args[1];
             } else {
                  songLink2 = songLink.link;
