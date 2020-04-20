@@ -142,6 +142,9 @@ bot.on('message', async msg => {
             if (weatherCountryWithoutCommand2 == 'ВОЛГОГРАД'.toLowerCase() || weatherCountryWithoutCommand2 == 'ВЛГ'.toLowerCase()) {
                 weatherCountryWithoutCommand2 = 'volgograd';
             };
+            if (weatherCountryWithoutCommand2 == 'УЛ') {
+                weatherCountryWithoutCommand2 = 'Ust-Labinsk';
+            }
             const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountryWithoutCommand2}&units=metric&lang=RU&appid=${apiKey}`;
             request(url, function (err, response, body) {
                 if (err) {
