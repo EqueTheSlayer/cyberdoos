@@ -58,9 +58,6 @@ bot.on('message', async msg => {
         if (msg.author.bot === true) {
             msg.delete({ timeout: 300000 });
         }
-        if (msg.content.startsWith(`/play`)) {
-            msg.channel.send(`\`\`\`А как же я?😥😥😥\`\`\``)
-        }
         //случайное число
         if (msg.content.startsWith('!roll') && msg.author.bot === false) {
             let args2 = msg.content.split(' ');
