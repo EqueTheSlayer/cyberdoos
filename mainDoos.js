@@ -139,7 +139,7 @@ bot.on('message', async msg => {
             const apiKey = '9552deb6aed115532d3abdc34e24d985';
             let weatherCountryWithoutCommand = weatherCountry.shift();
             let weatherCountryWithoutCommand2 = weatherCountry.join(' ');
-            if (weatherCountryWithoutCommand2 == 'волгоград'.toLowerCase() || weatherCountryWithoutCommand2 == 'влг'.toLowerCase()) {
+            if (weatherCountryWithoutCommand2 == 'ВОЛГОГРАД'.toLowerCase() || weatherCountryWithoutCommand2 == 'ВЛГ'.toLowerCase()) {
                 weatherCountryWithoutCommand2 = 'volgograd';
             };
             const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountryWithoutCommand2}&units=metric&lang=RU&appid=${apiKey}`;
