@@ -197,7 +197,7 @@ bot.on('message', async msg => {
             let result = await search(query3, opts);
             let songLink = result.results.find(item => item.link);
             let songLink2 = '';
-            if (msg.content.startsWith('!play http')) {
+            if (msg.content.startsWith(`${prefix}play http`)) {
                 songLink2 = args[0];
                 if (songLink2.search('([A-Za-z0-9_\-]{11})') === -1) {
                     msg.channel.send(
