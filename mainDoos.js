@@ -224,6 +224,7 @@ bot.on('message', async msg => {
                 }
             });
             const songInfo = await ytdl.getInfo(songLink2);
+            console.log(songInfo);
             const song = {
                 title: songInfo.title,
                 url: songInfo.video_url,
