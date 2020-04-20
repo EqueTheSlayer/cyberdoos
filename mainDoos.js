@@ -202,8 +202,8 @@ bot.on('message', async msg => {
             let songLink2 = ' ';
             if (msg.content.startsWith('!play http')) {
                 songLink2 = args[0];
+                console.log(songLink2.search('/^[a-zA-Z0-9-_]{11}$/'))
                 if (songLink2.search('/^[a-zA-Z0-9-_]{11}$/') > -1) {
-                    console.log(songLink2.search('/^[a-zA-Z0-9-_]{11}$/'))
                     console.log('песня поется');
                 } else {
                     msg.channel.send(
