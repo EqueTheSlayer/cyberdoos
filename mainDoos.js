@@ -204,8 +204,6 @@ bot.on('message', async msg => {
                 songLink2 = args[0];
                 console.log(songLink2.search('([A-Za-z0-9_\-]{11})'))
                 if (songLink2.search('/^[a-zA-Z0-9-_]{11}$/') === -1) {
-                    console.log('песня поется');
-                } else {
                     msg.channel.send(
                         {
                             embed: {
@@ -213,6 +211,8 @@ bot.on('message', async msg => {
                                 description: `👺Указанная ссылка не существует👺`
                             }
                         })
+                } else {
+                    console.log('песня поется');
                 }
 
             } else {
