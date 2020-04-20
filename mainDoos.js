@@ -130,7 +130,7 @@ bot.on('message', async msg => {
                             description: `На данное время в округе Усть-Парашинска обнаружен 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек.`
                         }
                     })
-            }
+                }
             })
         }
         //погода
@@ -202,18 +202,18 @@ bot.on('message', async msg => {
             let songLink = result.results.find(item => item.link);
             let songLink2 = ' ';
             if (msg.content.startsWith('!play http')) {
-                 songLink2 = args[0];
-                 if (songLink.id.match(/^[a-zA-Z0-9-_]{11}$/) === null) {
-                     msg.channel.send(
-                         {embed: {
-                        color: 15105570,
-                        description:`👺Указанная ссылка не существует👺` 
-                    }
-                })
-                 }
-
+                songLink2 = args[0];
+                if (songLink.id.match(/^[a-zA-Z0-9-_]{11}$/) == null) {
+                    msg.channel.send(
+                        {
+                            embed: {
+                                color: 15105570,
+                                description: `👺Указанная ссылка не существует👺`
+                            }
+                        })
+                }
             } else {
-                 songLink2 = songLink.link;
+                songLink2 = songLink.link;
             }
             const voiceChannel = msg.member.voice.channel;
             if (!voiceChannel) return msg.channel.send({
