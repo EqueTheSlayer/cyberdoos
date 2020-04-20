@@ -37,6 +37,10 @@ bot.on('ready', () => {
     bot.user.setActivity('🤖кибержизнь🤖')
 });
 
+bot.on('guildMemberRemove', member => {
+    member.channels.get('457536206285307907').send(`${member.username} был выгнан с позором в помойку говна 💩🤡💩`);
+})
+
 bot.on('message', async msg => {
     //черный список
     if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.includes(`${prefix}`)) {
