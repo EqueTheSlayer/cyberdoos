@@ -203,6 +203,14 @@ bot.on('message', async msg => {
             let songLink2 = ' ';
             if (msg.content.startsWith('!play http')) {
                  songLink2 = args[0];
+                 if (songLink.id.match(/^[a-zA-Z0-9-_]{11}$/) === null) {
+                     msg.channel.send(
+                         {embed: {
+                        color: 15105570,
+                        description:`👺Указанная ссылка не существует👺` 
+                    }
+                })
+                 }
 
             } else {
                  songLink2 = songLink.link;
@@ -318,7 +326,7 @@ bot.on('message', async msg => {
             msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: `☠️☠️☠️Ваша песенка спета, отключаюсь...☠️☠️☠️`
+                    description: `☠️☠️☠️Ваша песенка спета, отключение через 5 минут☠️☠️☠️`
                 }
             })
             serverQueue.dispatcher.pause();
