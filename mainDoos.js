@@ -197,13 +197,13 @@ bot.on('message', async msg => {
             let query = args.shift();
             let query2 = args.join(' ');
             let query3 = [query2];
-            console.log(query3);
             let result = await search(query3, opts);
             console.log(result);
             let songLink = result.results.find(item => item.link);
             let songLink2 = ' ';
             if (msg.content.startsWith('!play http')) {
-                 songLink2 = args[1];
+                 songLink2 = args[0];
+
             } else {
                  songLink2 = songLink.link;
             }
