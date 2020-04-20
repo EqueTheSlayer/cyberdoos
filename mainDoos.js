@@ -201,10 +201,11 @@ bot.on('message', async msg => {
             let result = await search(query3, opts);
             console.log(result);
             let songLink = result.results.find(item => item.link);
+            let songLink2 = ' ';
             if (msg.content.startsWith('http')) {
-                let songLink2 = args[1];
+                 songLink2 = args[1];
             } else {
-                let songLink2 = songLink.link;
+                 songLink2 = songLink.link;
             }
             const voiceChannel = msg.member.voice.channel;
             if (!voiceChannel) return msg.channel.send({
