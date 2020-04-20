@@ -59,7 +59,7 @@ bot.on('message', async msg => {
             msg.delete({ timeout: 300000 });
         }
         //случайное число
-        if (msg.content.startsWith('!roll') && msg.author.bot === false) {
+        if (msg.content.startsWith(`${prefix}roll`) && msg.author.bot === false) {
             let args2 = msg.content.split(' ');
             if (isNaN(args2[1]) === false && Number(args2[1]) >= 0) {
                 function getRandomInRange(max) {
