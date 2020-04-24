@@ -42,7 +42,7 @@ bot.on('message', async msg => {
     let allmsg = msg.content.split(' ');
     let firstPartMsg = allmsg[0]; 
     //черный список
-    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.startsWith(`${commands.find(firstPartMsg)}`)) {
+    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.startsWith(`${commands.find(() => firstPartMsg)}`)) {
         msg.reply('\`\`\`🤖🤖🤖По какому праву ты что-то говоришь мне❓❓❓ Сначала научись себя вести, 🤡🤡🤡\`\`\`');
     } else {
         //!help список команд
