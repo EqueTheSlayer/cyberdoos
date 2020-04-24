@@ -271,7 +271,7 @@ bot.on('message', async msg => {
             if (song == undefined) {
                 queue.delete(guild.id);
             }
-            if (typeof song.url == undefined) {
+            if (song.url === undefined) {
                 setTimeout(() => {
                     serverQueue.voiceChannel.leave();
                 }, 300000);
