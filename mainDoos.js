@@ -271,12 +271,12 @@ bot.on('message', async msg => {
             if (song == undefined) {
                 queue.delete(guild.id);
             }
-            if (song.url !== undefined) {
-                serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
-            } else {
+            if (typeof song.url == undefined) {
                 setTimeout(() => {
                     serverQueue.voiceChannel.leave();
                 }, 300000);
+            } else {
+                serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
             }
             serverQueue.dispatcher.on('finish', () => {
                 serverQueue.songs.shift();
