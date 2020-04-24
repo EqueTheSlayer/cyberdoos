@@ -271,7 +271,13 @@ bot.on('message', async msg => {
             if (song == undefined) {
                 queue.delete(guild.id);
             }
-            serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
+            if (song.url !== undefined) {
+                serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
+            } else {
+                setTimeout(() => {
+                    serverQueue.voiceChannel.leave();
+                }, 300000);
+            }
             serverQueue.dispatcher.on('finish', () => {
                 serverQueue.songs.shift();
                 play(guild, serverQueue.songs[0]);
