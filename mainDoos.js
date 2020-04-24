@@ -16,8 +16,6 @@ const opts = {
     type: 'video',
     order: 'relevance'
 }
-const commands = [`${prefix}play`, `${prefix}stop`, `${prefix}skip`, `${prefix}flip`, `${prefix}roll` ,`${prefix}help` ,`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс] `,`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`]
-
 let http = require("http");
 setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
