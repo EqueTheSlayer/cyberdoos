@@ -43,9 +43,12 @@ bot.on('message', async msg => {
     let firstPartMsg = allmsg[0]; 
     console.log(commands.find((firstPartMsg) => firstPartMsg));
     //черный список
-    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.startsWith(commands.find(() => firstPartMsg))) {
+    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.startsWith(commands.find(firstPartMsg => firstPartMsg))) {
         msg.reply('\`\`\`🤖🤖🤖По какому праву ты что-то говоришь мне❓❓❓ Сначала научись себя вести, 🤡🤡🤡\`\`\`');
     } else {
+        let allmsg = msg.content.split(' ');
+    let firstPartMsg = allmsg[0]; 
+    console.log(commands.find((firstPartMsg) => firstPartMsg));
         //!help список команд
         if (msg.content.startsWith(`${prefix}help`)) {
             msg.reply({
