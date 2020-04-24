@@ -268,15 +268,12 @@ bot.on('message', async msg => {
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
 
-            if (song == undefined) {
+            if (!song) {
+                serverQueue.voiceChannel.leave();
                 queue.delete(guild.id);
+                return;
             }
-            if (song.url === undefined) {
-                setTimeout(() => {
-                    serverQueue.voiceChannel.leave();
-                }, 300000);
-            } else {
-                serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
+            serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
             serverQueue.dispatcher.on('finish', () => {
                 serverQueue.songs.shift();
                 play(guild, serverQueue.songs[0]);
@@ -295,7 +292,6 @@ bot.on('message', async msg => {
             })
             serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         }
-    }
 
         function skip(msg, serverQueue) {
             if (Object.keys(serverQueue).length == 0) {
