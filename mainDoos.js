@@ -16,6 +16,7 @@ const opts = {
     type: 'video',
     order: 'relevance'
 }
+const commands = `play stop skip flip roll help [ВвB][Ии][РрPp][УуYy][CcСс] [Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`
 
 let http = require("http");
 setInterval(function () {
@@ -39,7 +40,7 @@ bot.on('ready', () => {
 
 bot.on('message', async msg => {
     //черный список
-    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.startsWith(`${prefix}`)) {
+    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.includes(`${prefix}${commands}`)) {
         msg.reply('\`\`\`🤖🤖🤖По какому праву ты что-то говоришь мне❓❓❓ Сначала научись себя вести, 🤡🤡🤡\`\`\`');
     } else {
         //!help список команд
