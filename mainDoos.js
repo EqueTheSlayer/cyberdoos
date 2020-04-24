@@ -268,11 +268,15 @@ bot.on('message', async msg => {
                 queue.delete(guild.id);
             }
             serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }))
-            serverQueue.dispatcher.on('speaking', (value) => {
-                if (!value) {
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0]);
-                }
+            serverQueue.dispatcher.on('finish', handler => {
+                serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0]);
+                msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: `🤖Песня ${song.title} окончена 🤖`
+                    }
+                });
             })
             msg.channel.send({
                 embed: {
@@ -300,7 +304,7 @@ bot.on('message', async msg => {
                     }
                 })
             };
-            serverQueue.dispatcher.pause();
+            serverQueue.dispatcher.destroy();
             msg.channel.send({
                 embed: {
                     color: 15105570,
@@ -328,7 +332,7 @@ bot.on('message', async msg => {
             setTimeout(() => {
                 serverQueue.voiceChannel.leave();
             }, 300000);
-            serverQueue.dispatcher.pause();
+            serverQueue.dispatcher.destroy();
         }
     }
 });
