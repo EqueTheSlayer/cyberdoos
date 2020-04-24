@@ -296,7 +296,7 @@ bot.on('message', async msg => {
         }
 
         function skip(msg, serverQueue) {
-            if (Object.keys(serverQueue).length == 0) {
+            if (!serverQueue) {
                 return msg.channel.send({
                     embed: {
                         color: 15105570,
