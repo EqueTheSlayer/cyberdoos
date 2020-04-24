@@ -40,10 +40,9 @@ bot.on('ready', () => {
 
 bot.on('message', async msg => {
     let allmsg = msg.content.split(' ');
-    let firstPartMsg = allmsg[0]; 
-    console.log(commands.find((firstPartMsg) => firstPartMsg));
+    let firstPartMsg = allmsg[0];
     //черный список
-    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content == commands.indexOf(firstPartMsg) !== -1) {
+    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content === (commands.indexOf(firstPartMsg) !== -1)) {
         msg.reply('\`\`\`🤖🤖🤖По какому праву ты что-то говоришь мне❓❓❓ Сначала научись себя вести, 🤡🤡🤡\`\`\`');
     } else {
         //!help список команд
