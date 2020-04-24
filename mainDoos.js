@@ -38,7 +38,7 @@ bot.on('ready', () => {
 
 bot.on('message', async msg => {
     //черный список
-    if ((msg.author.id === '281120774289489922' || msg.author.id === '274614692385652737') && msg.content.startsWith(`${prefix}`)) {
+    if ((msg.author.id === '281120774289489922') && msg.content.startsWith(`${prefix}`)) {
         msg.reply({
             embed: {
                 color: 15105570,
