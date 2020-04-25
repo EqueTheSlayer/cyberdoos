@@ -153,8 +153,6 @@ bot.on('message', async msg => {
                 } else {
                     let data = JSON.parse(body);
                     console.log(data);
-                    let data2 = data.weather.find(item => item.id);
-                    let temp = Math.floor(data.main.temp);
                     if (data.message === 'city not found') {
                         msg.channel.send({
                             embed: {
@@ -162,7 +160,9 @@ bot.on('message', async msg => {
                                 description: `Города с таким названием не существует`
                             }
                         })
-                    }
+                    } else {
+                    let data2 = data.weather.find(item => item.id);
+                    let temp = Math.floor(data.main.temp);
                     if (data2.description == 'ясно') {
                         msg.channel.send({
                             embed: {
@@ -196,8 +196,9 @@ bot.on('message', async msg => {
                         })
                     }
                 }
-            });
-        }
+            };
+        });
+        };
         //функции музыкальной команды
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
         async function execute(msg, serverQueue) {
