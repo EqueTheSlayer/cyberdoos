@@ -268,7 +268,6 @@ bot.on('message', async msg => {
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
 
-            console.log(song)
             if (!song) {
                 setTimeout(() => {
                     serverQueue.voiceChannel.leave();
@@ -277,74 +276,72 @@ bot.on('message', async msg => {
                 return;
             }
             serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
-            serverQueue.dispatcher.on('speaking', (value) => {
-                if (!value) {
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0]);
-                    msg.channel.send({
-                        embed: {
-                            color: 15105570,
-                            description: `🤖Песня ${song.title} окончена 🤖`
-                        }
-                    });
+            serverQueue.dispatcher.on('finish', () => {
+                serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0]);
+                msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: `🤖Песня ${song.title} окончена 🤖`
+                    };
+                });
+            });
+            msg.channel.send({
+                embed: {
+                    color: 15105570,
+                    description: `Воспроизвожу 🎤🎤🎤 ${song.title} 🎤🎤🎤`
                 }
-        })
-        msg.channel.send({
-            embed: {
-                color: 15105570,
-                description: `Воспроизвожу 🎤🎤🎤 ${song.title} 🎤🎤🎤`
-            }
-        })
-        serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    }
+            })
+            serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+        }
 
-    function skip(msg, serverQueue) {
-        if (!serverQueue) {
-            return msg.channel.send({
+        function skip(msg, serverQueue) {
+            if (!serverQueue) {
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: 'Включи хоть одну песню, 🤡'
+                    }
+                })
+            };
+            if (!msg.member.voice.channel) {
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: 'А я и не для тебя пою, 🤡'
+                    }
+                })
+            };
+            serverQueue.dispatcher.destroy();
+            msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: 'Включи хоть одну песню, 🤡'
+                    description: '🤖Включаю следующую песню🤖'
                 }
             })
-        };
-        if (!msg.member.voice.channel) {
-            return msg.channel.send({
-                embed: {
-                    color: 15105570,
-                    description: 'А я и не для тебя пою, 🤡'
-                }
-            })
-        };
-        serverQueue.dispatcher.pause(true);
-        msg.channel.send({
-            embed: {
-                color: 15105570,
-                description: '🤖Включаю следующую песню🤖'
-            }
-        })
-    }
+        }
 
-    function stop(msg, serverQueue) {
-        if (!msg.member.voice.channel) {
-            return msg.channel.send({
+        function stop(msg, serverQueue) {
+            if (!msg.member.voice.channel) {
+                return msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: 'А я и не для тебя пою, 🤡'
+                    }
+                })
+            };
+            serverQueue.songs = [];
+            msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: 'А я и не для тебя пою, 🤡'
+                    description: `☠️☠️☠️Ваша песенка спета, отключение через 5 минут☠️☠️☠️`
                 }
             })
-        };
-        serverQueue.songs = [];
-        msg.channel.send({
-            embed: {
-                color: 15105570,
-                description: `☠️☠️☠️Ваша песенка спета, отключение через 5 минут☠️☠️☠️`
-            }
-        })
-        setTimeout(() => {
-            serverQueue.voiceChannel.leave();
-        }, 300000);
-        serverQueue.dispatcher.pause(true);
+            setTimeout(() => {
+                serverQueue.voiceChannel.leave();
+            }, 300000);
+            serverQueue.dispatcher.destroy();
+        }
     }
-}
 });
 bot.login(token);
