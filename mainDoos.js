@@ -325,15 +325,17 @@ bot.on('message', async msg => {
                 return;
             }
             serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
-            serverQueue.dispatcher.on('finish', () => {
-                serverQueue.songs.shift();
-                play(guild, serverQueue.songs[0]);
-                msg.channel.send({
-                    embed: {
-                        color: 15105570,
-                        description: `🤖Песня ${song.title} окончена 🤖`
-                    }
-                });
+            serverQueue.dispatcher.on('speaking', (value) => {
+                if (!value) {
+                    serverQueue.songs.shift();
+                    play(guild, serverQueue.songs[0]);
+                    msg.channel.send({
+                        embed: {
+                            color: 15105570,
+                            description: `🤖Песня ${song.title} окончена 🤖`
+                        }
+                    });
+                };
             });
             msg.channel.send({
                 embed: {
