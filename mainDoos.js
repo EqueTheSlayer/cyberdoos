@@ -283,7 +283,7 @@ bot.on('message', async msg => {
                     }
                 })
             };
-            if (!voiceChannel) {
+            if (!msg.member.voice.channel) {
                 return msg.channel.send({
                     embed: {
                         color: 15105570,
