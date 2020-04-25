@@ -270,7 +270,7 @@ bot.on('message', async msg => {
 
             if (song === undefined) {
                 setTimeout(() => {
-                    serverQueue.voiceChannel.leave();
+                    serverQueue.voice.channel.leave();
                 }, 300000);
                 queue.delete(guild.id);
                 return;
@@ -339,7 +339,7 @@ bot.on('message', async msg => {
                 }
             })
             setTimeout(() => {
-                serverQueue.voiceChannel.leave();
+                serverQueue.voice.channel.leave();
             }, 300000);
         }
     }
