@@ -312,7 +312,7 @@ bot.on('message', async msg => {
                     }
                 })
             };
-            serverQueue.dispatcher.destroy();
+            dispatcher.destroy();
             msg.channel.send({
                 embed: {
                     color: 15105570,
@@ -340,7 +340,7 @@ bot.on('message', async msg => {
             setTimeout(() => {
                 serverQueue.voiceChannel.leave();
             }, 300000);
-            serverQueue.dispatcher.destroy();
+            dispatcher.destroy();
         }
     }
 });
