@@ -155,7 +155,14 @@ bot.on('message', async msg => {
                     console.log(data);
                     let data2 = data.weather.find(item => item.id);
                     let temp = Math.floor(data.main.temp);
-
+                    if (data === undefined) {
+                        msg.channel.send({
+                            embed: {
+                                color: 15105570,
+                                description: `Такого города не существует`
+                            }
+                        })
+                    }
                     if (data2.description == 'ясно') {
                         msg.channel.send({
                             embed: {
