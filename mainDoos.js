@@ -268,6 +268,7 @@ bot.on('message', async msg => {
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
 
+            console.log(song)
             if (!song) {
                 setTimeout(() => {
                     serverQueue.voiceChannel.leave();
