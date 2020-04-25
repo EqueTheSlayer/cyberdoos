@@ -268,7 +268,7 @@ bot.on('message', async msg => {
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
 
-            if (!song) {
+            if (song === undefined) {
                 setTimeout(() => {
                     serverQueue.voiceChannel.leave();
                 }, 300000);
@@ -296,7 +296,7 @@ bot.on('message', async msg => {
         }
 
         function skip(msg, serverQueue) {
-            if (!serverQueue) {
+            if (serverQueue === undefined) {
                 return msg.channel.send({
                     embed: {
                         color: 15105570,
