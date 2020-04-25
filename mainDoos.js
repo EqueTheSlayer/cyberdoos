@@ -231,7 +231,7 @@ bot.on('message', async msg => {
                 url: songInfo.video_url,
             };
 
-            if (serverQueue == undefined) {
+            if (serverQueue === undefined) {
                 const queueContruct = {
                     textChannel: msg.channel,
                     voiceChannel: voiceChannel,
@@ -331,6 +331,7 @@ bot.on('message', async msg => {
                 })
             };
             serverQueue.songs = [];
+            serverQueue.dispatcher.destroy();
             msg.channel.send({
                 embed: {
                     color: 15105570,
@@ -340,7 +341,6 @@ bot.on('message', async msg => {
             setTimeout(() => {
                 serverQueue.voiceChannel.leave();
             }, 300000);
-            serverQueue.dispatcher.destroy();
         }
     }
 });
