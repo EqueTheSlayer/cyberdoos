@@ -283,7 +283,7 @@ bot.on('message', async msg => {
                     }
                 })
             };
-            serverQueue.dispatcher.destroy();
+            serverQueue.dispatcher.pause();
             msg.channel.send({
                 embed: {
                     color: 15105570,
@@ -302,7 +302,7 @@ bot.on('message', async msg => {
                 })
             };
             serverQueue.songs = [];
-            serverQueue.dispatcher.destroy();
+            serverQueue.dispatcher.pause();
             msg.channel.send({
                 embed: {
                     color: 15105570,
