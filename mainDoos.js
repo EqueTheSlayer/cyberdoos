@@ -275,7 +275,7 @@ bot.on('message', async msg => {
                     }
                 })
             };
-            if (!msg.member.voice.channel) {
+            if (!voiceChannel) {
                 return msg.channel.send({
                     embed: {
                         color: 15105570,
@@ -310,7 +310,7 @@ bot.on('message', async msg => {
                 }
             })
             setTimeout(() => {
-                serverQueue.voice.channel.leave();
+                serverQueue.voiceChannel.leave();
             }, 300000);
         }
 
@@ -319,7 +319,7 @@ bot.on('message', async msg => {
 
             if (song === undefined) {
                 setTimeout(() => {
-                    serverQueue.voice.channel.leave();
+                    serverQueue.voiceChannel.leave();
                 }, 300000);
                 queue.delete(guild.id);
                 return;
