@@ -239,7 +239,7 @@ bot.on('message', async msg => {
                 url: songInfo.video_url,
             };
 
-            if (serverQueue === undefined) {
+            if (!serverQueue) {
                 const queueContruct = {
                     textChannel: msg.channel,
                     voiceChannel: voiceChannel,
@@ -275,7 +275,7 @@ bot.on('message', async msg => {
         }
 
         function skip(msg, serverQueue) {
-            if (serverQueue === undefined) {
+            if (!serverQueue) {
                 return msg.channel.send({
                     embed: {
                         color: 15105570,
@@ -325,14 +325,14 @@ bot.on('message', async msg => {
         function play(guild, song) {
             let serverQueue = queue.get(guild.id);
 
-            if (song === undefined) {
+            if (!song) {
                 setTimeout(() => {
-                    serverQueue.voiceChannel.leave();
+                    serverQueue.msg.member.voice.channel.leave();
                 }, 300000);
                 queue.delete(guild.id);
                 return;
             }
-            serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url, { filter: "audioonly" }));
+            serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url));
             serverQueue.dispatcher.on('speaking', (value) => {
                 if (!value) {
                     serverQueue.songs.shift();
