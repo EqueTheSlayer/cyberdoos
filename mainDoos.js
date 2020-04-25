@@ -283,7 +283,7 @@ bot.on('message', async msg => {
                     embed: {
                         color: 15105570,
                         description: `🤖Песня ${song.title} окончена 🤖`
-                    };
+                    }
                 });
             });
             msg.channel.send({
