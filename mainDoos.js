@@ -1,4 +1,7 @@
 const Discord = require('discord.js');
+const textToSpeech = require('@google-cloud/text-to-speech');
+const fs = require('fs');
+const util = require('util');
 const bot = new Discord.Client();
 const request = require('request');
 const config = require('./botconfig.json');
@@ -46,6 +49,25 @@ bot.on('message', async msg => {
             }
         })
     } else {
+        const client = new textToSpeech.TextToSpeechClient();
+        async function ttr() {
+            if (msg.content.startsWith(`${prefix}ttr`)) {
+                let textWords = msg.content.split(' ');
+                textWords.shift();
+                let language = textWords.shift();
+                let text = textWords.join(' ');
+                const requestTtr = {
+                    input: { text: text },
+                    voice: { languageCode: `${language}`, ssmlGender: 'NEUTRAL' },
+                    audioConfig: { audioEncoding: 'MP3' },
+                };
+                const [response] = await client.synthesizeSpeech(request);
+                const writeFile = util.promisify(fs.writeFile);
+                await writeFile('output.mp3', response.audioContent, 'binary');
+                console.log('Audio content written to file: output.mp3');
+            }
+        }
+        ttr();
         //!help список команд
         if (msg.content.startsWith(`${prefix}help`)) {
             msg.reply({
@@ -161,43 +183,43 @@ bot.on('message', async msg => {
                             }
                         })
                     } else {
-                    let data2 = data.weather.find(item => item.id);
-                    let temp = Math.floor(data.main.temp);
-                    if (data2.description == 'ясно') {
-                        msg.channel.send({
-                            embed: {
-                                color: 15105570,
-                                description: `${data.name}. Погода в настоящий момент. ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
-                            }
-                        })
+                        let data2 = data.weather.find(item => item.id);
+                        let temp = Math.floor(data.main.temp);
+                        if (data2.description == 'ясно') {
+                            msg.channel.send({
+                                embed: {
+                                    color: 15105570,
+                                    description: `${data.name}. Погода в настоящий момент. ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
+                                }
+                            })
+                        }
+                        if (data2.description.includes('обла')) {
+                            msg.channel.send({
+                                embed: {
+                                    color: 15105570,
+                                    description: `${data.name}. Погода в настоящий момент. ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
+                                }
+                            })
+                        }
+                        if (data2.description.includes('дождь')) {
+                            msg.channel.send({
+                                embed: {
+                                    color: 15105570,
+                                    description: `${data.name}. Погода в настоящий момент. 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
+                                }
+                            })
+                        }
+                        if (data2.description.includes('пасму')) {
+                            msg.channel.send({
+                                embed: {
+                                    color: 15105570,
+                                    description: `${data.name}. Погода в настоящий момент. ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
+                                }
+                            })
+                        }
                     }
-                    if (data2.description.includes('обла')) {
-                        msg.channel.send({
-                            embed: {
-                                color: 15105570,
-                                description: `${data.name}. Погода в настоящий момент. ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
-                            }
-                        })
-                    }
-                    if (data2.description.includes('дождь')) {
-                        msg.channel.send({
-                            embed: {
-                                color: 15105570,
-                                description: `${data.name}. Погода в настоящий момент. 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
-                            }
-                        })
-                    }
-                    if (data2.description.includes('пасму')) {
-                        msg.channel.send({
-                            embed: {
-                                color: 15105570,
-                                description: `${data.name}. Погода в настоящий момент. ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
-                            }
-                        })
-                    }
-                }
-            };
-        });
+                };
+            });
         };
         //функции музыкальной команды
         console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
