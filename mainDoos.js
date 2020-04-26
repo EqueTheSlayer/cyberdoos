@@ -1,7 +1,4 @@
 const Discord = require('discord.js');
-const textToSpeech = require('@google-cloud/text-to-speech');
-const fs = require('fs');
-const util = require('util');
 const bot = new Discord.Client();
 const request = require('request');
 const config = require('./botconfig.json');
@@ -49,25 +46,6 @@ bot.on('message', async msg => {
             }
         })
     } else {
-        const client = new textToSpeech.TextToSpeechClient();
-        async function ttr() {
-            if (msg.content.startsWith(`${prefix}ttr`)) {
-                let textWords = msg.content.split(' ');
-                textWords.shift();
-                let language = textWords.shift();
-                let text = textWords.join(' ');
-                const requestTtr = {
-                    input: { text: text },
-                    voice: { languageCode: `${language}`, ssmlGender: 'NEUTRAL' },
-                    audioConfig: { audioEncoding: 'MP3' },
-                };
-                const [response] = await client.synthesizeSpeech(requestTtr);
-                const writeFile = util.promisify(fs.writeFile);
-                await writeFile('output.mp3', response.audioContent, 'binary');
-                console.log('Audio content written to file: output.mp3');
-            }
-        }
-        ttr();
         //!help список команд
         if (msg.content.startsWith(`${prefix}help`)) {
             msg.reply({
