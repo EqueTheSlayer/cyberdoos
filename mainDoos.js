@@ -337,7 +337,7 @@ bot.on('message', async msg => {
                 if (!value) {
                     serverQueue.songs.shift();
                     play(guild, serverQueue.songs[0]);
-                    if (msg.content != `${prefix}stop`) {
+                    if (msg.content !== `${prefix}stop`) {
                         msg.channel.send({
                             embed: {
                                 color: 15105570,
