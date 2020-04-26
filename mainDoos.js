@@ -314,7 +314,7 @@ bot.on('message', async msg => {
             msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: `☠️Ваша песенка спета, отключение через 5 минут☠️`
+                    description: `☠️Произвожу отключение через 5 минут☠️`
                 }
             })
             setTimeout(() => {
@@ -337,14 +337,12 @@ bot.on('message', async msg => {
                 if (!value) {
                     serverQueue.songs.shift();
                     play(guild, serverQueue.songs[0]);
-                    if (msg.content !== `${prefix}stop`) {
-                        msg.channel.send({
-                            embed: {
-                                color: 15105570,
-                                description: `🤖Песня ${song.title} окончена 🤖`
-                            }
-                        });
-                    }
+                    msg.channel.send({
+                        embed: {
+                            color: 15105570,
+                            description: `🤖Песня ${song.title} окончена 🤖`
+                        }
+                    });
                 };
             });
             msg.channel.send({
