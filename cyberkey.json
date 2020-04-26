@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cyberdoos-bot-discord-js",
+  "private_key_id": "57062c5bdc17adf3ada6272563a0c3ca32aa0e88",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDbu9w8oUC9M9JA\nrGKK0mSNIWZrZ6izs32eBf8ndOGJLEzMAY1aKdWuMJGI3OkIOkrM9iaJIT5tD9i5\nkA03z1rXoiM/PVA44MG586o1x/m+2bifEwjpyxpNufQf99quf4zoZju2hbhL7o8i\nDC/lRoj51eYVQOHBBCmtihGVld7JXJRgPKS6ry/wU7aP6ezsf8pFdlNUU6tyUflg\nR1SSYCznk0CpEqySb6g5O4mIvEOGn2O8tllBVpHpeabKmAGpLiFjxSe7Q300ojBb\n07Z8PaqzG401el7/QGjJlk0HRh2xCIbvwIXjLUC3MkeNpr8UlLRGov4U416SBSCb\nY6mvH5HPAgMBAAECggEACwMcivDizNGHmN8Kza+YSnbWf6KaS5kF6Nn0Fdxb7a3C\nrxavffRnORZGCj+rjhmPjwKDgwEtu0tLkiS6dqJ1swjYuZcS1GNZ4FqGuM0PhkAr\n+H61fzPRPosV4eRD0kdpSU4kjjBKwKb/lWDMUFzQl62m1dZJsv46akVnWmxAZEqD\nRFqfG3aRGPj7bUpUCkmHX1gC7In0Qduj2DuggHFhbaTg3mTPm/JBHrK+TSmhDr64\n+lG8rOjxgPUjVC28z+zTsKB+KKESnqoXD/QogvbX9zo3tM0e7mLH5BO4La5rI0Qf\nWcoPr33gUWeSHdh98lXgl6jQToDSICApCTKRhz2vAQKBgQDzaMY2Gp9bGkK8WSM1\nZYrxkpiVNlKOatl3yhv1G1yDulIZU08th5UVuPaWBgAYCvYMtD8d0HCgAug69b9u\n3PgX7n0AAZRJ1tyhViC5Li811aXq1TLnyE3NmZcUL+6slcM8aSFxnrIJCf1TKfQ2\nfPEyb5JIKvp+wBdzhpJksjVZcQKBgQDnGZNmUnBDlgaE6gwalpiSK4kcMeyLKzqJ\n4DRkRkzisDFD5tCbmOB7bMbh65C6zM8NKmkbia3hVRxYd9rIU+CtBoTfTn6Wh85B\n9YNbHOp6a2NtPkz+mNlzyQnWR/daHKULOb75Do+9cs9jgznBUor18Ta/39hWAxRi\nSeJgstf/PwKBgCd4LuPpDzwTlwy5m4b2D0C617kiVOK5Gshc4omtRSQrG1L1+lnU\nqW0bUAjlsjAz3tASjkWEXi7kKcodvUv50tT2nBhbKTOL/ry+nZHJlmgxW7UnmxiQ\nl2UmaaQhXZ9orX7nQUAOTqo+j3Bj1jDbs7TM+LhxF6tj9KmMAcMITrRRAoGAcYcT\n7SlEcz9JNpRPm+QtUWlHsu0nmfqDiGX29ue+L4KEwSmrgzSn2ppGXYe+krW4ZWxX\nNCr/m3mXMjK27MCf2AAi2ByUfVh7z9VPUTw0SC1nK6x2YIAwGvxA895ougDmZ0xX\n77viixvSm71Eax8kmsuDrODHQwHCSsKnDf/tsjsCgYEAxmRkzz+VKSuhl81XK60N\n5kL53ss5SEpAx5BxhJhg8uJv7xOxcOwQgNpb7PSaK7Pb9fyWk6S8dpu+cnJyTGa/\nh/onzsAwIJv/U+410/tRKTJTWqo6W3SpkB7N2j1PxfVjAVziO/L2er6THh3nYq/a\nuBZ6urfSwieTwPI+RXFmJ1I=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cyberdoos@cyberdoos-bot-discord-js.iam.gserviceaccount.com",
+  "client_id": "101930214889303184355",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cyberdoos%40cyberdoos-bot-discord-js.iam.gserviceaccount.com"
+}
