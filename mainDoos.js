@@ -208,7 +208,7 @@ bot.on('message', async msg => {
             let query3 = [query2];
             let result = await search(query3, opts);
             let songLink = result.results.find(item => item.link);
-            console.log(songLink);
+            console.log(query3);
             let songLink2 = '';
             if (msg.content.startsWith(`${prefix}play http`)) {
                 songLink2 = args[0];
