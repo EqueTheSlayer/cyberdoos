@@ -219,23 +219,24 @@ bot.on('message', async msg => {
                             description: `👺Не могу найти видео с подобным названием👺`
                         }
                     })
-            }
-            if (msg.content.startsWith(`${prefix}play http`)) {
-                songLink2 = args[0];
-                if (songLink2.search('([A-Za-z0-9_\-]{11})') === -1) {
-                    msg.channel.send(
-                        {
-                            embed: {
-                                color: 15105570,
-                                description: `👺Указанная ссылка не существует👺`
-                            }
-                        })
-                } else {
-                    console.log('песня поется');
-                }
-
             } else {
-                songLink2 = songLink.link;
+                if (msg.content.startsWith(`${prefix}play http`)) {
+                    songLink2 = args[0];
+                    if (songLink2.search('([A-Za-z0-9_\-]{11})') === -1) {
+                        msg.channel.send(
+                            {
+                                embed: {
+                                    color: 15105570,
+                                    description: `👺Указанная ссылка не существует👺`
+                                }
+                            })
+                    } else {
+                        console.log('песня поется');
+                    }
+
+                } else {
+                    songLink2 = songLink.link;
+                }
             }
             const voiceChannel = msg.member.voice.channel;
             if (!voiceChannel) return msg.channel.send({
