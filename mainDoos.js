@@ -237,53 +237,52 @@ bot.on('message', async msg => {
                 } else {
                     songLink2 = songLink.link;
                 }
-            }
-            const voiceChannel = msg.member.voice.channel;
-            if (!voiceChannel) return msg.channel.send({
-                embed: {
-                    color: 15105570,
-                    description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
-                }
-            });
-            const songInfo = await ytdl.getInfo(songLink2);
-            const song = {
-                title: songInfo.title,
-                url: songInfo.video_url,
-            };
-
-            if (!serverQueue) {
-                const queueContruct = {
-                    textChannel: msg.channel,
-                    voiceChannel: voiceChannel,
-                    connection: null,
-                    songs: [],
-                    volume: 5,
-                    playing: true
-                };
-
-                queue.set(msg.guild.id, queueContruct);
-                queueContruct.songs.push(song);
-
-                try {
-                    let connection = await voiceChannel.join();
-                    queueContruct.connection = connection;
-                    play(msg.guild, queueContruct.songs[0]);
-                } catch (err) {
-                    console.log(err);
-                    queue.delete(msg.guild.id);
-                    return msg.channel.send(err);
-                }
-            } else {
-                serverQueue.songs.push(song);
-                console.log(serverQueue.songs);
-                return msg.channel.send({
+                const voiceChannel = msg.member.voice.channel;
+                if (!voiceChannel) return msg.channel.send({
                     embed: {
                         color: 15105570,
-                        description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
+                        description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
                     }
                 });
-            }
+                const songInfo = await ytdl.getInfo(songLink2);
+                const song = {
+                    title: songInfo.title,
+                    url: songInfo.video_url,
+                };
 
+                if (!serverQueue) {
+                    const queueContruct = {
+                        textChannel: msg.channel,
+                        voiceChannel: voiceChannel,
+                        connection: null,
+                        songs: [],
+                        volume: 5,
+                        playing: true
+                    };
+
+                    queue.set(msg.guild.id, queueContruct);
+                    queueContruct.songs.push(song);
+
+                    try {
+                        let connection = await voiceChannel.join();
+                        queueContruct.connection = connection;
+                        play(msg.guild, queueContruct.songs[0]);
+                    } catch (err) {
+                        console.log(err);
+                        queue.delete(msg.guild.id);
+                        return msg.channel.send(err);
+                    }
+                } else {
+                    serverQueue.songs.push(song);
+                    console.log(serverQueue.songs);
+                    return msg.channel.send({
+                        embed: {
+                            color: 15105570,
+                            description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
+                        }
+                    });
+                }
+            }
         }
 
         function skip(msg, serverQueue) {
