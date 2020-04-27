@@ -208,7 +208,7 @@ bot.on('message', async msg => {
             let query3 = [query2];
             let result = await search(query3, opts);
             let songLink = result.results.find(item => item.link);
-            console.log(songLink)
+            console.log(songLink.link);
             let songLink2 = '';
             if (msg.content.startsWith(`${prefix}play http`)) {
                 songLink2 = args[0];
@@ -225,9 +225,7 @@ bot.on('message', async msg => {
                 }
 
             } else {
-                if (!link) {
-                    songLink2 = songLink.link;
-                }
+                songLink2 = songLink.link;
             }
             const voiceChannel = msg.member.voice.channel;
             if (!voiceChannel) return msg.channel.send({
