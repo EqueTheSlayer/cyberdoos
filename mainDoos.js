@@ -206,7 +206,7 @@ bot.on('message', async msg => {
             let query = args.shift();
             let query2 = args.join(' ');
             let query3 = [query2];
-            let result = await search(query3, opts);
+            let result = await search(query3);
             let songLink = result.results.find(item => item.link);
             console.log(result);
             let songLink2 = '';
