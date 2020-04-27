@@ -211,7 +211,7 @@ bot.on('message', async msg => {
             console.log(result);
             console.log(query3);
             let songLink2 = '';
-            if (result.results = []) {
+            if (result.results.length = 0) {
                 msg.channel.send(
                     {
                         embed: {
