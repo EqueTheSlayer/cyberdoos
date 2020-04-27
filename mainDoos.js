@@ -211,6 +211,15 @@ bot.on('message', async msg => {
             console.log(result);
             console.log(query3);
             let songLink2 = '';
+            if (!result) {
+                msg.channel.send(
+                    {
+                        embed: {
+                            color: 15105570,
+                            description: `👺Не могу найти видео с подобным названием👺`
+                        }
+                    })
+            }
             if (msg.content.startsWith(`${prefix}play http`)) {
                 songLink2 = args[0];
                 if (songLink2.search('([A-Za-z0-9_\-]{11})') === -1) {
