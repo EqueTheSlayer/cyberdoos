@@ -224,7 +224,9 @@ bot.on('message', async msg => {
                 }
 
             } else {
-                songLink2 = songLink.link;
+                if (!link) {
+                    songLink2 = songLink.link;
+                }
             }
             const voiceChannel = msg.member.voice.channel;
             if (!voiceChannel) return msg.channel.send({
