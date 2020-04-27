@@ -209,9 +209,8 @@ bot.on('message', async msg => {
             let result = await search(query3, opts);
             let songLink = result.results.find(item => item.link);
             console.log(result);
-            console.log(query3);
             let songLink2 = '';
-            if (result.results.length = 0) {
+            if (result.results.length < 1) {
                 msg.channel.send(
                     {
                         embed: {
