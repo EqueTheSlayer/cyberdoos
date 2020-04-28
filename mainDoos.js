@@ -337,7 +337,7 @@ bot.on('message', async msg => {
 
             if (!song) {
                 setTimeout(() => {
-                    serverQueue.msg.member.voice.channel.leave();
+                    msg.member.voice.channel.leave();
                 }, 300000);
                 queue.delete(guild.id);
                 return;
