@@ -37,15 +37,6 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-    //черный список
-    if ((msg.author.id === '281120774289489922') && msg.content.startsWith(`${prefix}`)) {
-        msg.reply({
-            embed: {
-                color: 15105570,
-                description: `🤖🤖🤖По какому праву ты что-то говоришь мне❓❓❓ Сначала научись себя вести, 🤡🤡🤡`
-            }
-        })
-    } else {
         //!help список команд
         if (msg.content.startsWith(`${prefix}help`)) {
             msg.reply({
@@ -363,6 +354,5 @@ bot.on('message', async msg => {
             })
             serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         }
-    }
 });
 bot.login(token);
