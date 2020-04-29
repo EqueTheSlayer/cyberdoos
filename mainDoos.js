@@ -141,6 +141,12 @@ bot.on('message', async msg => {
             request(url, function (err, response, body) {
                 if (err) {
                     console.log('ошибка');
+                    msg.channel.send({
+                        embed: {
+                            color: 15105570,
+                            description: `❌🏙️ Города с таким названием не существует ❌🏙️`
+                        }
+                    })
                 } else {
                     let data = JSON.parse(body);
                     console.log(data);
