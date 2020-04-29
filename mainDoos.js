@@ -144,7 +144,7 @@ bot.on('message', async msg => {
                     msg.channel.send({
                         embed: {
                             color: 15105570,
-                            description: `❌🏙️ Города с таким названием не существует ❌🏙️`
+                            description: `❌🏙️ В моих базах данных такого города нет ❌🏙️`
                         }
                     })
                 } else {
@@ -154,7 +154,7 @@ bot.on('message', async msg => {
                         msg.channel.send({
                             embed: {
                                 color: 15105570,
-                                description: `❌🏙️ Города с таким названием не существует ❌🏙️`
+                                description: `❌🏙️ В моих базах данных такого города нет ❌🏙️`
                             }
                         })
                     } else {
