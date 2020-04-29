@@ -37,328 +37,321 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-        //!help список команд
-        if (msg.content.startsWith(`${prefix}help`)) {
+    //!help список команд
+    if (msg.content.startsWith(`${prefix}help`)) {
+        msg.reply({
+            embed: {
+                color: 15105570,
+                description: `Список всех заклинаний: \n ${prefix}play (название песни или ссылка)▶️\n ${prefix}skip (если есть очередь)⏹️\n ${prefix}stop⏯️ \n ${prefix}roll <число> (показывает случайное число от 0 до <число>)💻\n ${prefix}flip (подбросить монетку)💫 \n ${prefix}погода (текущая погода в указанном городе(eng))🌞\n ${prefix}вирус (статистика заболевших коронавирусом на территории РФ)💊`
+            }
+        })
+    }
+    // удаление сообщений каждые 5 минут
+    if (msg.content.startsWith(`${prefix}`)) {
+        msg.delete({ timeout: 300000 });
+    }
+    if (msg.author.bot === true) {
+        msg.delete({ timeout: 300000 });
+    }
+    //случайное число
+    if (msg.content.startsWith(`${prefix}roll`) && msg.author.bot === false) {
+        let args2 = msg.content.split(' ');
+        if (isNaN(args2[1]) === false && Number(args2[1]) >= 0) {
+            function getRandomInRange(max) {
+                return msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ваше число ${Math.floor(Math.random() * (max + 1))}`
+                    }
+                });
+            }
+            getRandomInRange(Number(args2[1]));
+        } else {
             msg.reply({
                 embed: {
                     color: 15105570,
-                    description: `Список всех заклинаний: \n ${prefix}play (название песни или ссылка)▶️\n ${prefix}skip (если есть очередь)⏹️\n ${prefix}stop⏯️ \n ${prefix}roll <число> (показывает случайное число от 0 до <число>)💻\n ${prefix}flip (подбросить монетку)💫 \n ${prefix}погода (текущая погода в указанном городе(eng))🌞\n ${prefix}вирус (статистика заболевших коронавирусом на территории РФ)💊`
+                    description: `Ты не указал числа или число отрицательное, 🤡`
                 }
             })
         }
-        // удаление сообщений каждые 5 минут
-        if (msg.content.startsWith(`${prefix}`)) {
-            msg.delete({ timeout: 300000 });
-        }
-        if (msg.author.bot === true) {
-            msg.delete({ timeout: 300000 });
-        }
-        //случайное число
-        if (msg.content.startsWith(`${prefix}roll`) && msg.author.bot === false) {
-            let args2 = msg.content.split(' ');
-            if (isNaN(args2[1]) === false && Number(args2[1]) >= 0) {
-                function getRandomInRange(max) {
-                    return msg.reply({
-                        embed: {
-                            color: 15105570,
-                            description: `Ваше число ${Math.floor(Math.random() * (max + 1))}`
-                        }
-                    });
+    }
+    //подброс монетки
+    if (msg.content.startsWith(`${prefix}flip`)) {
+        const coins = ['орел', 'решка'];
+        let flip = coins[Math.floor(Math.random() * 2)];
+        if (flip === 'орел') {
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Выпал орёл`
                 }
-                getRandomInRange(Number(args2[1]));
+            });
+        } else {
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Выпала решка`
+                }
+            });
+        }
+    }
+    //музыкальная функция
+    const serverQueue = queue.get(msg.guild.id);
+
+    if (msg.content.startsWith(`${prefix}play`)) {
+        execute(msg, serverQueue);
+        return;
+    } else if (msg.content.startsWith(`${prefix}skip`)) {
+        skip(msg, serverQueue);
+        return;
+    } else if (msg.content.startsWith(`${prefix}stop`)) {
+        stop(msg, serverQueue);
+        return;
+    }
+    //коронавирус
+    if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
+        request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
+            if (err) {
+                console.log('covid ошибка')
             } else {
+                let covidData = JSON.parse(body);
+                let lastday = covidData.Russia[covidData.Russia.length - 1];
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ты не указал числа или число отрицательное, 🤡`
+                        description: `На данное время на территории Российской Федерации обнаружено 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек.`
                     }
                 })
             }
-        }
-        //подброс монетки
-        if (msg.content.startsWith(`${prefix}flip`)) {
-            const coins = ['орел', 'решка'];
-            let flip = coins[Math.floor(Math.random() * 2)];
-            if (flip === 'орел') {
-                msg.reply({
+        })
+    }
+    //погода
+    if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
+        let weatherCountry = msg.content.split(' ');
+        const apiKey = '9552deb6aed115532d3abdc34e24d985';
+        weatherCountry.shift();
+        let weatherCountryWithoutCommand = weatherCountry.join(' ');
+        if (weatherCountryWithoutCommand.search(`[Вв][Лл][Гг]`) > -1 || weatherCountryWithoutCommand.search(`[Вв][Оо][Лл][Гг][Оо][Гг][Рр][Аа][Дд]`) > -1) {
+            weatherCountryWithoutCommand = 'volgograd';
+        };
+        if (weatherCountryWithoutCommand.search(`[Уу][Лл]`) > -1) {
+            weatherCountryWithoutCommand = 'Ust-Labinsk';
+        };
+        if (weatherCountryWithoutCommand.search(`[Сс][Пп][Бб]`) > -1 || weatherCountryWithoutCommand.search(`[Пп][Ии][Тт][Ее][Рр]`) > -1) {
+            weatherCountryWithoutCommand = 'Saint-Petersburg'
+        };
+        const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountryWithoutCommand}&units=metric&lang=RU&appid=${apiKey}`;
+        request(url, function (err, response, body) {
+            let data = JSON.parse(body);
+            console.log(data);
+            if (data.message === 'city not found') {
+                msg.channel.send({
                     embed: {
                         color: 15105570,
-                        description: `Выпал орёл`
+                        description: `❌🏙️ В моих базах данных такого города нет ❌🏙️`
                     }
-                });
+                })
             } else {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Выпала решка`
-                    }
-                });
-            }
-        }
-        //музыкальная функция
-        const serverQueue = queue.get(msg.guild.id);
-
-        if (msg.content.startsWith(`${prefix}play`)) {
-            execute(msg, serverQueue);
-            return;
-        } else if (msg.content.startsWith(`${prefix}skip`)) {
-            skip(msg, serverQueue);
-            return;
-        } else if (msg.content.startsWith(`${prefix}stop`)) {
-            stop(msg, serverQueue);
-            return;
-        }
-        //коронавирус
-        if (msg.content.search(`${prefix}[ВвB][Ии][РрPp][УуYy][CcСс]`) > -1 && msg.author.bot === false) {
-            request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
-                if (err) {
-                    console.log('covid ошибка')
-                } else {
-                    let covidData = JSON.parse(body);
-                    let lastday = covidData.Russia[covidData.Russia.length - 1];
-                    msg.reply({
-                        embed: {
-                            color: 15105570,
-                            description: `На данное время на территории Российской Федерации обнаружено 💊${lastday.confirmed}💊 случаев заражения COVID-19, погибло 💀${lastday.deaths}💀 человек.`
-                        }
-                    })
-                }
-            })
-        }
-        //погода
-        if (msg.content.search(`${prefix}[Пп][ОоOo][Гг][[ОоOo][Дд][АаAa]`) > -1 && msg.author.bot === false) {
-            let weatherCountry = msg.content.split(' ');
-            const apiKey = '9552deb6aed115532d3abdc34e24d985';
-            let weatherCountryWithoutCommand = weatherCountry.shift();
-            let weatherCountryWithoutCommand2 = weatherCountry.join(' ');
-            if (weatherCountryWithoutCommand2 == 'ВОЛГОГРАД'.toLowerCase() || weatherCountryWithoutCommand2 == 'ВЛГ'.toLowerCase()) {
-                weatherCountryWithoutCommand2 = 'volgograd';
-            };
-            if (weatherCountryWithoutCommand2 == 'УЛ') {
-                weatherCountryWithoutCommand2 = 'Ust-Labinsk';
-            }
-            const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountryWithoutCommand2}&units=metric&lang=RU&appid=${apiKey}`;
-            request(url, function (err, response, body) {
-                if (err) {
-                    console.log('ошибка');
+                let data2 = data.weather.find(item => item.id);
+                let temp = Math.floor(data.main.temp);
+                if (data2.description == 'ясно') {
                     msg.channel.send({
                         embed: {
                             color: 15105570,
-                            description: `❌🏙️ В моих базах данных такого города нет ❌🏙️`
+                            description: `${data.name}. Погода в настоящий момент. ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
                         }
                     })
-                } else {
-                    let data = JSON.parse(body);
-                    console.log(data);
-                    if (data.message === 'city not found') {
-                        msg.channel.send({
+                }
+                if (data2.description.includes('обла')) {
+                    msg.channel.send({
+                        embed: {
+                            color: 15105570,
+                            description: `${data.name}. Погода в настоящий момент. ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
+                        }
+                    })
+                }
+                if (data2.description.includes('дождь')) {
+                    msg.channel.send({
+                        embed: {
+                            color: 15105570,
+                            description: `${data.name}. Погода в настоящий момент. 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
+                        }
+                    })
+                }
+                if (data2.description.includes('пасму')) {
+                    msg.channel.send({
+                        embed: {
+                            color: 15105570,
+                            description: `${data.name}. Погода в настоящий момент. ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
+                        }
+                    })
+                }
+            }
+        });
+    };
+    //функции музыкальной команды
+    console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
+    async function execute(msg, serverQueue) {
+        let args = msg.content.split(' ');
+        let query = args.shift();
+        let query2 = args.join(' ');
+        let query3 = [query2];
+        let result = await search(query3, opts);
+        let songLink = result.results.find(item => item.link);
+        console.log(result);
+        let songLink2 = '';
+        if (result.results.length < 1) {
+            msg.channel.send(
+                {
+                    embed: {
+                        color: 15105570,
+                        description: `👺Не могу найти видео с подобным названием👺`
+                    }
+                })
+        } else {
+            if (msg.content.startsWith(`${prefix}play http`)) {
+                songLink2 = args[0];
+                if (songLink2.search('([A-Za-z0-9_\-]{11})') === -1) {
+                    msg.channel.send(
+                        {
                             embed: {
                                 color: 15105570,
-                                description: `❌🏙️ В моих базах данных такого города нет ❌🏙️`
+                                description: `👺Указанная ссылка не существует👺`
                             }
                         })
-                    } else {
-                        let data2 = data.weather.find(item => item.id);
-                        let temp = Math.floor(data.main.temp);
-                        if (data2.description == 'ясно') {
-                            msg.channel.send({
-                                embed: {
-                                    color: 15105570,
-                                    description: `${data.name}. Погода в настоящий момент. ☀️${data2.description}☀️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
-                                }
-                            })
-                        }
-                        if (data2.description.includes('обла')) {
-                            msg.channel.send({
-                                embed: {
-                                    color: 15105570,
-                                    description: `${data.name}. Погода в настоящий момент. ⛅${data2.description}⛅\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
-                                }
-                            })
-                        }
-                        if (data2.description.includes('дождь')) {
-                            msg.channel.send({
-                                embed: {
-                                    color: 15105570,
-                                    description: `${data.name}. Погода в настоящий момент. 🌧️${data2.description}🌧️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
-                                }
-                            })
-                        }
-                        if (data2.description.includes('пасму')) {
-                            msg.channel.send({
-                                embed: {
-                                    color: 15105570,
-                                    description: `${data.name}. Погода в настоящий момент. ☁️${data2.description}☁️\nТемпература составляет 🔥${temp} градусов Цельсия🔥\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
-                                }
-                            })
-                        }
-                    }
-                };
-            });
-        };
-        //функции музыкальной команды
-        console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
-        async function execute(msg, serverQueue) {
-            let args = msg.content.split(' ');
-            let query = args.shift();
-            let query2 = args.join(' ');
-            let query3 = [query2];
-            let result = await search(query3, opts);
-            let songLink = result.results.find(item => item.link);
-            console.log(result);
-            let songLink2 = '';
-            if (result.results.length < 1) {
-                msg.channel.send(
-                    {
-                        embed: {
-                            color: 15105570,
-                            description: `👺Не могу найти видео с подобным названием👺`
-                        }
-                    })
-            } else {
-                if (msg.content.startsWith(`${prefix}play http`)) {
-                    songLink2 = args[0];
-                    if (songLink2.search('([A-Za-z0-9_\-]{11})') === -1) {
-                        msg.channel.send(
-                            {
-                                embed: {
-                                    color: 15105570,
-                                    description: `👺Указанная ссылка не существует👺`
-                                }
-                            })
-                    } else {
-                        console.log('песня поется');
-                    }
-
                 } else {
-                    songLink2 = songLink.link;
+                    console.log('песня поется');
                 }
-                const voiceChannel = msg.member.voice.channel;
-                if (!voiceChannel) return msg.channel.send({
+
+            } else {
+                songLink2 = songLink.link;
+            }
+            const voiceChannel = msg.member.voice.channel;
+            if (!voiceChannel) return msg.channel.send({
+                embed: {
+                    color: 15105570,
+                    description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
+                }
+            });
+            const songInfo = await ytdl.getInfo(songLink2);
+            const song = {
+                title: songInfo.title,
+                url: songInfo.video_url,
+            };
+
+            if (!serverQueue) {
+                const queueContruct = {
+                    textChannel: msg.channel,
+                    voiceChannel: voiceChannel,
+                    connection: null,
+                    songs: [],
+                    volume: 5,
+                    playing: true
+                };
+
+                queue.set(msg.guild.id, queueContruct);
+                queueContruct.songs.push(song);
+
+                try {
+                    let connection = await voiceChannel.join();
+                    queueContruct.connection = connection;
+                    play(msg.guild, queueContruct.songs[0]);
+                } catch (err) {
+                    console.log(err);
+                    queue.delete(msg.guild.id);
+                    return msg.channel.send(err);
+                }
+            } else {
+                serverQueue.songs.push(song);
+                console.log(serverQueue.songs);
+                return msg.channel.send({
                     embed: {
                         color: 15105570,
-                        description: 'Чтобы я спел для тебя, зайди на любой голосовой канал, 🤡'
+                        description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
                     }
                 });
-                const songInfo = await ytdl.getInfo(songLink2);
-                const song = {
-                    title: songInfo.title,
-                    url: songInfo.video_url,
-                };
-
-                if (!serverQueue) {
-                    const queueContruct = {
-                        textChannel: msg.channel,
-                        voiceChannel: voiceChannel,
-                        connection: null,
-                        songs: [],
-                        volume: 5,
-                        playing: true
-                    };
-
-                    queue.set(msg.guild.id, queueContruct);
-                    queueContruct.songs.push(song);
-
-                    try {
-                        let connection = await voiceChannel.join();
-                        queueContruct.connection = connection;
-                        play(msg.guild, queueContruct.songs[0]);
-                    } catch (err) {
-                        console.log(err);
-                        queue.delete(msg.guild.id);
-                        return msg.channel.send(err);
-                    }
-                } else {
-                    serverQueue.songs.push(song);
-                    console.log(serverQueue.songs);
-                    return msg.channel.send({
-                        embed: {
-                            color: 15105570,
-                            description: `🤖Добавил 🎤${song.title}🎤 в очередь 🤖`
-                        }
-                    });
-                }
             }
         }
+    }
 
-        function skip(msg, serverQueue) {
-            if (!serverQueue) {
-                return msg.channel.send({
-                    embed: {
-                        color: 15105570,
-                        description: 'Включи хоть одну песню, 🤡'
-                    }
-                })
-            };
-            if (!msg.member.voice.channel) {
-                return msg.channel.send({
-                    embed: {
-                        color: 15105570,
-                        description: 'А я и не для тебя пою, 🤡'
-                    }
-                })
-            };
-            serverQueue.dispatcher.pause();
-            msg.channel.send({
+    function skip(msg, serverQueue) {
+        if (!serverQueue) {
+            return msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: '🤖Включаю следующую песню🤖'
+                    description: 'Включи хоть одну песню, 🤡'
                 }
             })
-        }
-
-        function stop(msg, serverQueue) {
-            if (!msg.member.voice.channel) {
-                return msg.channel.send({
-                    embed: {
-                        color: 15105570,
-                        description: 'А я и не для тебя пою, 🤡'
-                    }
-                })
-            };
-            serverQueue.songs = [];
-            serverQueue.dispatcher.pause();
-            msg.channel.send({
+        };
+        if (!msg.member.voice.channel) {
+            return msg.channel.send({
                 embed: {
                     color: 15105570,
-                    description: `☠️Произвожу отключение через 5 минут☠️`
+                    description: 'А я и не для тебя пою, 🤡'
                 }
             })
+        };
+        serverQueue.dispatcher.pause();
+        msg.channel.send({
+            embed: {
+                color: 15105570,
+                description: '🤖Включаю следующую песню🤖'
+            }
+        })
+    }
+
+    function stop(msg, serverQueue) {
+        if (!msg.member.voice.channel) {
+            return msg.channel.send({
+                embed: {
+                    color: 15105570,
+                    description: 'А я и не для тебя пою, 🤡'
+                }
+            })
+        };
+        serverQueue.songs = [];
+        serverQueue.dispatcher.pause();
+        msg.channel.send({
+            embed: {
+                color: 15105570,
+                description: `☠️Произвожу отключение через 5 минут☠️`
+            }
+        })
+        setTimeout(() => {
+            serverQueue.voiceChannel.leave();
+        }, 300000);
+    }
+
+    function play(guild, song) {
+        let serverQueue = queue.get(guild.id);
+
+        if (!song) {
             setTimeout(() => {
-                serverQueue.voiceChannel.leave();
+                msg.member.voice.channel.leave();
             }, 300000);
+            queue.delete(guild.id);
+            return;
         }
-
-        function play(guild, song) {
-            let serverQueue = queue.get(guild.id);
-
-            if (!song) {
-                setTimeout(() => {
-                    msg.member.voice.channel.leave();
-                }, 300000);
-                queue.delete(guild.id);
-                return;
+        serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url));
+        serverQueue.dispatcher.on('speaking', (value) => {
+            if (!value) {
+                serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0]);
+                msg.channel.send({
+                    embed: {
+                        color: 15105570,
+                        description: `🤖Песня ${song.title} окончена 🤖`
+                    }
+                });
+            };
+        });
+        msg.channel.send({
+            embed: {
+                color: 15105570,
+                description: `Воспроизвожу 🎤🎤🎤 ${song.title} 🎤🎤🎤`
             }
-            serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url));
-            serverQueue.dispatcher.on('speaking', (value) => {
-                if (!value) {
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0]);
-                    msg.channel.send({
-                        embed: {
-                            color: 15105570,
-                            description: `🤖Песня ${song.title} окончена 🤖`
-                        }
-                    });
-                };
-            });
-            msg.channel.send({
-                embed: {
-                    color: 15105570,
-                    description: `Воспроизвожу 🎤🎤🎤 ${song.title} 🎤🎤🎤`
-                }
-            })
-            serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-        }
+        })
+        serverQueue.dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    }
 });
 bot.login(token);
