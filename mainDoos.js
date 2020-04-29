@@ -116,6 +116,7 @@ bot.on('message', async msg => {
             } else {
                 let covidData = JSON.parse(body);
                 let lastday = covidData.Russia[covidData.Russia.length - 1];
+                console.log(lastday);
                 msg.reply({
                     embed: {
                         color: 15105570,
