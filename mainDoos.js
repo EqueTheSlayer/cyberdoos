@@ -55,8 +55,8 @@ bot.on('message', async msg => {
     }
     //случайное число
     if (msg.content.startsWith(`${prefix}roll`) && msg.author.bot === false) {
-        let args2 = msg.content.split(' ');
-        if (isNaN(args2[1]) === false && Number(args2[1]) >= 0) {
+        const args = msg.content.split(' ');
+        if (isNaN(args[1]) === false && Number(args[1]) >= 0) {
             function getRandomInRange(max) {
                 return msg.reply({
                     embed: {
@@ -65,7 +65,7 @@ bot.on('message', async msg => {
                     }
                 });
             }
-            getRandomInRange(Number(args2[1]));
+            getRandomInRange(Number(args[1]));
         } else {
             msg.reply({
                 embed: {
@@ -78,7 +78,7 @@ bot.on('message', async msg => {
     //подброс монетки
     if (msg.content.startsWith(`${prefix}flip`)) {
         const coins = ['орел', 'решка'];
-        let flip = coins[Math.floor(Math.random() * 2)];
+        const flip = coins[Math.floor(Math.random() * 2)];
         if (flip === 'орел') {
             msg.reply({
                 embed: {
@@ -112,11 +112,16 @@ bot.on('message', async msg => {
     if (msg.content.search(`${prefix}[Вв][Ии][Рр][Уу][Сс]`) > -1 && msg.author.bot === false) {
         request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
             if (err) {
-                console.log('covid ошибка')
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `⛔Увы, но что-то пошло не так⛔`
+                    }
+                })
             } else {
-                let covidData = JSON.parse(body);
-                let lastday = covidData.Russia[covidData.Russia.length - 1];
-                console.log(lastday);
+                const covidData = JSON.parse(body);
+                const lastday = covidData.Russia[covidData.Russia.length - 1];
+
                 msg.reply({
                     embed: {
                         color: 15105570,
@@ -132,6 +137,7 @@ bot.on('message', async msg => {
         const apiKey = '9552deb6aed115532d3abdc34e24d985';
         weatherCountry.shift();
         let weatherCountryWithoutCommand = weatherCountry.join(' ');
+
         if (weatherCountryWithoutCommand.search(`[Вв][Лл][Гг]`) > -1 || weatherCountryWithoutCommand.search(`[Вв][Оо][Лл][Гг][Оо][Гг][Рр][Аа][Дд]`) > -1) {
             weatherCountryWithoutCommand = 'volgograd';
         };
@@ -197,10 +203,10 @@ bot.on('message', async msg => {
     console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
     async function execute(msg, serverQueue) {
         let args = msg.content.split(' ');
-        let query = args.shift();
-        let query2 = args.join(' ');
-        let query3 = [query2];
-        let result = await search(query3, opts);
+        args.shift();
+        let queryStr = args.join(' ');
+        let queryArr = [queryStr];
+        let result = await search(queryArr, opts);
         let songLink = result.results.find(item => item.link);
         console.log(result);
         let songLink2 = '';
