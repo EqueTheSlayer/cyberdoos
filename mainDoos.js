@@ -140,6 +140,9 @@ bot.on('message', async msg => {
         if (weatherCountryWithoutCommand.search(`[Сс][Пп][Бб]`) > -1 || weatherCountryWithoutCommand.search(`[Пп][Ии][Тт][Ее][Рр]`) > -1) {
             weatherCountryWithoutCommand = 'Saint Petersburg'
         };
+        if (weatherCountryWithoutCommand.search(`[Мм][Сс][Кк]`) > -1 || weatherCountryWithoutCommand.search(`[Мм][Оо][Сс][Кк][Вв][Аа]`) > -1) {
+            weatherCountryWithoutCommand = 'Moscow'
+        };
         const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountryWithoutCommand}&units=metric&lang=RU&appid=${apiKey}`;
         request(url, function (err, response, body) {
             let data = JSON.parse(body);
