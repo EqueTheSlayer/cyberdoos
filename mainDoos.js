@@ -301,13 +301,13 @@ bot.on('message', async msg => {
                 }
             })
         };
-        serverQueue.dispatcher.pause();
         msg.channel.send({
             embed: {
                 color: 15105570,
                 description: '🤖Включаю следующую песню🤖'
             }
         })
+        serverQueue.dispatcher.pause();
     }
 
     function stop(msg, serverQueue) {
@@ -319,14 +319,14 @@ bot.on('message', async msg => {
                 }
             })
         };
-        serverQueue.songs = [];
-        serverQueue.dispatcher.pause();
         msg.channel.send({
             embed: {
                 color: 15105570,
                 description: `☠️Произвожу отключение через 5 минут☠️`
             }
         })
+        serverQueue.songs = [];
+        serverQueue.dispatcher.pause();
         setTimeout(() => {
             serverQueue.voiceChannel.leave();
         }, 300000);
@@ -345,14 +345,14 @@ bot.on('message', async msg => {
         serverQueue.dispatcher = serverQueue.connection.play(ytdl(song.url));
         serverQueue.dispatcher.on('speaking', (value) => {
             if (!value) {
-                serverQueue.songs.shift();
-                play(guild, serverQueue.songs[0]);
                 msg.channel.send({
                     embed: {
                         color: 15105570,
                         description: `🤖Песня ${song.title} окончена 🤖`
                     }
                 });
+                serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0]);
             };
         });
         msg.channel.send({
