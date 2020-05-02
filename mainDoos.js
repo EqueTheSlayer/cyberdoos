@@ -180,7 +180,7 @@ bot.on('message', async msg => {
                         }
                     })
                 }
-                if (data2.description.includes('дождь')) {
+                if (data2.description.includes('дожд')) {
                     msg.channel.send({
                         embed: {
                             color: 15105570,
