@@ -153,7 +153,6 @@ bot.on('message', async msg => {
         const url = `http://api.openweathermap.org/data/2.5/weather?q=${weatherCountryWithoutCommand}&units=metric&lang=RU&appid=${apiKey}`;
         request(url, function (err, response, body) {
             let data = JSON.parse(body);
-            console.log(data);
             if (data.message === 'city not found') {
                 msg.channel.send({
                     embed: {
@@ -196,11 +195,18 @@ bot.on('message', async msg => {
                         }
                     })
                 }
+                if (data2.description.includes('туман')) {
+                    msg.channel.send({
+                        embed: {
+                            color: 15105570,
+                            description: `${data.name}. Погода в настоящий момент. 🌫️${data2.description}🌫️\nТемпература составляет 🌈${temp} градусов Цельсия🌈\nСкорость ветра 💨${data.wind.speed} метров в секунду💨.`
+                        }
+                    })
+                }
             }
         });
     };
     //функции музыкальной команды
-    console.log(msg.author.username + ' (' + msg.author.id + ') ' + ': ' + msg.content);
     async function execute(msg, serverQueue) {
         let args = msg.content.split(' ');
         args.shift();
@@ -208,7 +214,6 @@ bot.on('message', async msg => {
         let queryArr = [queryStr];
         let result = await search(queryArr, opts);
         let songLink = result.results.find(item => item.link);
-        console.log(result);
         let songLink2 = '';
         if (result.results.length < 1) {
             msg.channel.send(
