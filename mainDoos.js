@@ -198,6 +198,15 @@ bot.on('message', async msg => {
             }
         });
     };
+    //ссылка на змейку
+if (msg.content.search(`${prefix}[Шш][Нн][Ее][Йй][Кк]`) > -1 && msg.author.bot === false) {
+    msg.channel.send({
+        embed: {
+            color: 15105570,
+            description: `🐍🐍🐍 https://equetheslayer.github.io/shnaikjeim 🐍🐍🐍`
+        }
+    })
+}
 })
 
 bot.login(token);
