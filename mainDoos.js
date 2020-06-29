@@ -34,10 +34,14 @@ bot.on('message', async msg => {
         msg.reply({
             embed: {
                 color: 15105570,
-                description: `Список всех заклинаний: \n ${prefix}play (название песни или ссылка)▶️\n ${prefix}skip (если есть очередь)⏹️\n ${prefix}stop⏯️ \n ${prefix}roll <число> (показывает случайное число от 0 до <число>)💻\n ${prefix}flip (подбросить монетку)🏵️ \n ${prefix}погода (текущая погода в указанном городе(eng))🌞\n ${prefix}вирус (статистика заболевших коронавирусом на территории РФ)💊`
+                description: `Список всех заклинаний: \n ${prefix}play (название песни или ссылка)▶️\n ${prefix}skip (если есть очередь)⏹️\n ${prefix}stop⏯️ \n
+                 ${prefix}roll <число> (показывает случайное число от 0 до <число>)💻\n ${prefix}flip (подбросить монетку)🏵️ \n
+                  ${prefix}погода (текущая погода в указанном городе(eng))🌞\n
+                 ${prefix}вирус (статистика заболевших коронавирусом на территории РФ)💊 \n ${prefix}шнейк (показывает ссылку на змейку)🐍 \n
+                 ${prefix}invite (показывает ссылку для добавления бота на свой сервер)🤖`
             }
         })
-    }
+    } ы
     // удаление сообщений каждые 5 минут
     if (msg.content.startsWith(`${prefix}`)) {
         msg.delete({ timeout: 300000 });
@@ -46,7 +50,7 @@ bot.on('message', async msg => {
         msg.delete({ timeout: 300000 });
     }
     //случайное число
-    if (msg.content.startsWith(`${prefix}roll`) && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Rr][Oo][Ll][Ll]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
         if (isNaN(args[1]) === false && Number(args[1]) >= 0) {
             function getRandomInRange(max) {
@@ -67,8 +71,17 @@ bot.on('message', async msg => {
             })
         }
     }
+    //инвайт-ссылка
+    if (msg.content.search(`${prefix}[Ii][Nn][Vv][Ii][Tt][Ee]`) > -1 && msg.author.bot === false) {
+        msg.reply({
+            embed: {
+                color: 15105570,
+                description: `Я прихожу в гости с помощью этого \n 🧶 https://discord.com/oauth2/authorize?client_id=704994955378163783&scope=bot&permissions=0 🧶`
+            }
+        })
+    }
     //подброс монетки
-    if (msg.content.startsWith(`${prefix}flip`)) {
+    if (msg.content.search(`${prefix}[Ff][Ll][Ii][Pp]`) > -1 && msg.author.bot === false) {
         const coins = ['орел', 'решка'];
         const flip = coins[Math.floor(Math.random() * 2)];
         if (flip === 'орел') {
@@ -86,19 +99,6 @@ bot.on('message', async msg => {
                 }
             });
         }
-    }
-    //музыкальная функция
-    const serverQueue = queue.get(msg.guild.id);
-
-    if (msg.content.startsWith(`${prefix}play`)) {
-        execute(msg, serverQueue);
-        return;
-    } else if (msg.content.startsWith(`${prefix}skip`)) {
-        skip(msg, serverQueue);
-        return;
-    } else if (msg.content.startsWith(`${prefix}stop`)) {
-        stop(msg, serverQueue);
-        return;
     }
     //коронавирус
     if (msg.content.search(`${prefix}[Вв][Ии][Рр][Уу][Сс]`) > -1 && msg.author.bot === false) {
@@ -199,14 +199,14 @@ bot.on('message', async msg => {
         });
     };
     //ссылка на змейку
-if (msg.content.search(`${prefix}[Шш][Нн][Ее][Йй][Кк]`) > -1 && msg.author.bot === false) {
-    msg.channel.send({
-        embed: {
-            color: 15105570,
-            description: `🐍🐍🐍 https://equetheslayer.github.io/shnaikjeim 🐍🐍🐍`
-        }
-    })
-}
+    if (msg.content.search(`${prefix}[Шш][Нн][Ее][Йй][Кк]`) > -1 && msg.author.bot === false) {
+        msg.channel.send({
+            embed: {
+                color: 15105570,
+                description: `🐍🐍🐍 https://equetheslayer.github.io/shnaikjeim 🐍🐍🐍`
+            }
+        })
+    }
 })
 
 bot.login(token);
