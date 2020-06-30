@@ -102,6 +102,23 @@ bot.on('message', async msg => {
             });
         }
     }
+
+    //анекдот 
+    if (msg.content.search(`${prefix}[Дд][Жж][Оо][Уу][Кк]`) > -1 && msg.author.bot === false) {
+        request("./funny.json", function (err, response, body) {
+            if (err) {
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Шутки кончились, 🤡`
+                    }
+                })
+            } else {
+                const jokes = JSON.parse(body);
+                console.log(jokes)
+            }
+        })
+}
     //коронавирус
     if (msg.content.search(`${prefix}[Вв][Ии][Рр][Уу][Сс]`) > -1 && msg.author.bot === false) {
         request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
