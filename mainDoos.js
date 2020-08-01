@@ -55,7 +55,7 @@ bot.on('message', async msg => {
         msg.delete({ timeout: 300000 });
     }
     //случайное число
-    if (msg.content.search(`${prefix}[Rr][Oo][Ll][Ll]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Рр][Оо][Лл][Лл]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
         if (isNaN(args[1]) === false && Number(args[1]) >= 0) {
             function getRandomInRange(max) {
@@ -86,7 +86,7 @@ bot.on('message', async msg => {
         })
     }
     //инвайт-ссылка
-    if (msg.content.search(`${prefix}[Ii][Nn][Vv][Ii][Tt][Ee]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Кк][Уу][Лл][Ии][Тт][Ии]`) > -1 && msg.author.bot === false) {
         msg.reply({
             embed: {
                 color: 15105570,
@@ -95,7 +95,7 @@ bot.on('message', async msg => {
         })
     }
     //подброс монетки
-    if (msg.content.search(`${prefix}[Ff][Ll][Ii][Pp]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Фф][Лл][Ии][Пп]`) > -1 && msg.author.bot === false) {
         const coins = ['орел', 'решка'];
         const flip = coins[Math.floor(Math.random() * 2)];
         if (flip === 'орел') {
