@@ -53,15 +53,39 @@ bot.on('message', async msg => {
         const args = msg.content.split(' ');
         if (args[2] = '+') {
             const reply = +args[1] + +args[3];
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Ваш ответ: ${reply}`
+                }
+            })
         }
         if (args[2] = '-') {
             const reply = +args[1] - +args[3];
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Ваш ответ: ${reply}`
+                }
+            })
         }
         if (args[2] = '*') {
             const reply = +args[1] * +args[3];
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Ваш ответ: ${reply}`
+                }
+            })
         }
         if (args[2] = '/') {
             const reply = +args[1] / +args[3];
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Ваш ответ: ${reply}`
+                }
+            })
         }
         
     }
