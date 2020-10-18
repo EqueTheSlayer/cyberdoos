@@ -54,7 +54,7 @@ bot.on('message', async msg => {
         const args = msg.content.split(' ');
         if (args[2] == '+') {
             const reply = +args[1] + +args[3];
-            if (reply == 'NaN') {
+            if (reply != 'NaN') {
                 msg.reply({
                     embed: {
                         color: 15105570,
@@ -72,7 +72,7 @@ bot.on('message', async msg => {
         }
         if (args[2] == '-') {
             const reply = +args[1] - +args[3];
-            if (reply == 'NaN') {
+            if (reply != 'NaN') {
                 msg.reply({
 
                     embed: {
@@ -91,7 +91,7 @@ bot.on('message', async msg => {
         }
         if (args[2] == '*') {
             const reply = +args[1] * +args[3];
-            if (reply == 'NaN') {
+            if (reply != 'NaN') {
                 msg.reply({
                     embed: {
                         color: 15105570,
@@ -109,7 +109,7 @@ bot.on('message', async msg => {
         }
         if (args[2] == '/') {
             const reply = +args[1] / +args[3];
-            if (reply == 'NaN') {
+            if (reply != 'NaN') {
                 msg.reply({
                     embed: {
                         color: 15105570,
