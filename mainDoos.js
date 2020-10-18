@@ -51,7 +51,7 @@ bot.on('message', async msg => {
     //калькулятор
     if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
-        if (args[2] = '+') {
+        if (args[2] == '+') {
             const reply = +args[1] + +args[3];
             msg.reply({
                 embed: {
@@ -60,7 +60,7 @@ bot.on('message', async msg => {
                 }
             })
         }
-        if (args[2] = '-') {
+        if (args[2] == '-') {
             const reply = +args[1] - +args[3];
             msg.reply({
                 embed: {
@@ -69,7 +69,7 @@ bot.on('message', async msg => {
                 }
             })
         }
-        if (args[2] = '*') {
+        if (args[2] == '*') {
             const reply = +args[1] * +args[3];
             msg.reply({
                 embed: {
@@ -77,7 +77,7 @@ bot.on('message', async msg => {
                     description: `Ваш ответ: ${reply}, ${args[2]}`
                 }
             })
-        }if (args[2] = '/') {
+        }if (args[2] == '/') {
             const reply = +args[1] / +args[3];
             msg.reply({
                 embed: {
