@@ -44,7 +44,7 @@ bot.on('message', async msg => {
                  ${prefix}invite (показывает ссылку для добавления бота на свой сервер)🤖\n
                  ${prefix}joke (отправляет в чат случайный анекдот)🤣\n
                  ${prefix}pudge (показывает ссылку на Забань Пуджа) <:frejtmejt:601452487966457876> \n
-                 ${prefix}calc <число> <+-/*> <число> (производит подсчет двух чисел)🗿` 
+                 ${prefix}calc <число> <+-/*> <число> (производит подсчет двух чисел)🗿`
             }
         })
     }
@@ -53,8 +53,8 @@ bot.on('message', async msg => {
     if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
         if (args[2] == '+') {
-            if(typeof +args[1] == 'number' && typeof +args[3] == 'number') {
-                const reply = +args[1] + +args[3];
+            const reply = +args[1] + +args[3];
+            if (reply == 'NaN') {
                 msg.reply({
                     embed: {
                         color: 15105570,
@@ -71,9 +71,10 @@ bot.on('message', async msg => {
             }
         }
         if (args[2] == '-') {
-            if(typeof +args[1] == 'number' && typeof +args[3] == 'number') {
-                const reply = +args[1] - +args[3];
+            const reply = +args[1] - +args[3];
+            if (reply == 'NaN') {
                 msg.reply({
+
                     embed: {
                         color: 15105570,
                         description: `Ваш ответ: ${reply}`
@@ -89,8 +90,8 @@ bot.on('message', async msg => {
             }
         }
         if (args[2] == '*') {
-            if(typeof +args[1] == 'number' && typeof +args[3] == 'number') {
-                const reply = +args[1] * +args[3];
+            const reply = +args[1] * +args[3];
+            if (reply == 'NaN') {
                 msg.reply({
                     embed: {
                         color: 15105570,
@@ -107,8 +108,8 @@ bot.on('message', async msg => {
             }
         }
         if (args[2] == '/') {
-            if(typeof +args[1] == 'number' && typeof +args[3] == 'number') {
-                const reply = +args[1] / +args[3];
+            const reply = +args[1] / +args[3];
+            if (reply == 'NaN') {
                 msg.reply({
                     embed: {
                         color: 15105570,
