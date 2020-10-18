@@ -47,6 +47,25 @@ bot.on('message', async msg => {
             }
         })
     }
+
+    //калькулятор
+    if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
+        const args = msg.content.split(' ');
+        if (args[2] = '+') {
+            const reply = +args[1] + +args[3];
+        }
+        if (args[2] = '-') {
+            const reply = +args[1] - +args[3];
+        }
+        if (args[2] = '*') {
+            const reply = +args[1] * +args[3];
+        }
+        if (args[2] = '/') {
+            const reply = +args[1] / +args[3];
+        }
+        
+    }
+
     // удаление сообщений каждые 5 минут
     if (msg.content.startsWith(`${prefix}`)) {
         msg.delete({ timeout: 300000 });
@@ -55,7 +74,7 @@ bot.on('message', async msg => {
         msg.delete({ timeout: 300000 });
     }
     //случайное число
-    if (msg.content.search(`${prefix}[Рр][Оо][Лл][Лл]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Rr][Oo][Ll][Ll]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
         if (isNaN(args[1]) === false && Number(args[1]) >= 0) {
             function getRandomInRange(max) {
@@ -77,16 +96,16 @@ bot.on('message', async msg => {
         }
     }
     //Забань пуджа
-    if (msg.content.search(`${prefix}[Пп][Уу][Дд][Жж]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Pp][Uu][Dd][Gg][Ee]`) > -1 && msg.author.bot === false) {
         msg.reply({
             embed: {
                 color: 15105570,
-                description: `Попробуй забанить Пуджа \n <:frejtmejt:601452487966457876> https://equetheslayer.github.io/pudgeGame/ <:frejtmejt:601452487966457876>`
+                description: `Попробуй забанить Пуджа \n <:frejtmejt:601452487966457876> http://178.155.72.51/banPudge <:frejtmejt:601452487966457876>`
             }
         })
     }
     //инвайт-ссылка
-    if (msg.content.search(`${prefix}[Кк][Уу][Лл][Ии][Тт][Ии]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Ii][Nn][Vv][Ii][Tt][Ee]`) > -1 && msg.author.bot === false) {
         msg.reply({
             embed: {
                 color: 15105570,
@@ -95,7 +114,7 @@ bot.on('message', async msg => {
         })
     }
     //подброс монетки
-    if (msg.content.search(`${prefix}[Фф][Лл][Ии][Пп]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Ff][Ll][Ii][Pp]`) > -1 && msg.author.bot === false) {
         const coins = ['орел', 'решка'];
         const flip = coins[Math.floor(Math.random() * 2)];
         if (flip === 'орел') {
@@ -122,7 +141,7 @@ bot.on('message', async msg => {
         "Сын пишет письмо Деду Морозу. Рядом в кресле отдыхает свекровь.Сын: \n - Бабушка, а ты будешь писать письмо Деду Морозу? \n Свекровь: \n - Нет. \n Сын: \n- Почему? \n Свекровь: \n - Да мне вроде ничего не нужно. \n Сын: \n - Что, и новая лопата не нужна? - бабушка у нас заядлая огородница. \n Свекровь: \n - Ну, лопата, может, и нужна. \n На другой день обнаружили письмо, написанное заботливым внуком. \n 'Дорогой дедушка мороз, прыщ на жопе волоснёй оброс, я не обсос, получи в ебасос, ответь скорей на мой главный вопрос'.",
         "Заходит негр в бар. Заказал пива, сидит пьет.Рядом трое белых бухают. Один говорит: \n - Эй, ниггер. Знаешь почему ты весь черный, а у тебя белые? Потому что когда я тебя красил в чруки у ерный цвет, ты руками в стены упирался. Сидят угарают. \n- Эй, ниггер. Знаешь почему ты весь черный, а у ноги у тебя белые? Потому что когда я тебя красил, ты ногами в пол упирался.Сидят дальше, угарают.Негр допивает пиво, оборачивается и говорит: \n - А знаешь почему ты весь белый, а очко у тебя черное? Потому что когда я тебя ебал, краска еще не обсохла. 🐒 🐒 🐒"]
 
-    if (msg.content.search(`${prefix}[Дд][Жж][Оо][Уу][Кк]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Jj][Oo][Kk][Ee]`) > -1 && msg.author.bot === false) {
         const joke = plentyOfJokes[Math.floor(Math.random() * plentyOfJokes.length)];
         msg.reply({
             embed: {
@@ -132,7 +151,7 @@ bot.on('message', async msg => {
         });
     }
     //коронавирус
-    if (msg.content.search(`${prefix}[Вв][Ии][Рр][Уу][Сс]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Vv][Ii][Rr][Uu][Ss]`) > -1 && msg.author.bot === false) {
         request("https://pomber.github.io/covid19/timeseries.json", function (err, response, body) {
             if (err) {
                 msg.reply({
@@ -155,7 +174,7 @@ bot.on('message', async msg => {
         })
     }
     //погода
-    if (msg.content.search(`${prefix}[Пп][Оо][Гг][Оо][Дд][Аа]`) > -1 && msg.author.bot === false) {
+    if (msg.content.search(`${prefix}[Ww][Ee][Aa][Tt][Hh][Ee][Rr]`) > -1 && msg.author.bot === false) {
         let weatherCountry = msg.content.split(' ');
         const apiKey = '9552deb6aed115532d3abdc34e24d985';
         weatherCountry.shift();
@@ -229,15 +248,6 @@ bot.on('message', async msg => {
             }
         });
     };
-    //ссылка на змейку
-    if (msg.content.search(`${prefix}[Шш][Нн][Ее][Йй][Кк]`) > -1 && msg.author.bot === false) {
-        msg.channel.send({
-            embed: {
-                color: 15105570,
-                description: `🐍🐍🐍 https://equetheslayer.github.io/shnaikjeim 🐍🐍🐍`
-            }
-        })
-    }
 })
 
 bot.login(token);
