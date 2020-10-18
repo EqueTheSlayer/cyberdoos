@@ -36,14 +36,14 @@ bot.on('message', async msg => {
             embed: {
                 color: 15105570,
                 description: `Список всех заклинаний: \n
-                 ${prefix}ролл <число> (показывает случайное число от 0 до <число>)💻\n 
-                 ${prefix}флип (подбросить монетку)🏵️ \n
-                 ${prefix}погода (текущая погода в указанном городе(eng))🌞\n
-                 ${prefix}вирус (статистика заболевших коронавирусом на территории РФ)💊\n 
-                 ${prefix}шнейк (показывает ссылку на змейку)🐍 \n
+                 ${prefix}roll <число> (показывает случайное число от 0 до <число>)💻\n 
+                 ${prefix}flip (подбросить монетку)🏵️ \n
+                 ${prefix}weather (текущая погода в указанном городе(eng))🌞\n
+                 ${prefix}virus (статистика заболевших коронавирусом на территории РФ)💊\n 
                  ${prefix}invite (показывает ссылку для добавления бота на свой сервер)🤖\n
-                 ${prefix}джоук (отправляет в чат случайный анекдот)🤣\n
-                 ${prefix}пудж (показывает ссылку на Забань Пуджа) <:frejtmejt:601452487966457876>`
+                 ${prefix}joke (отправляет в чат случайный анекдот)🤣\n
+                 ${prefix}pudge (показывает ссылку на Забань Пуджа) <:frejtmejt:601452487966457876> \n
+                 ${prefix}calc <число> <+-/*> <число> (производит подсчет двух чисел)🗿` 
             }
         })
     }
@@ -52,39 +52,76 @@ bot.on('message', async msg => {
     if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
         if (args[2] == '+') {
-            const reply = +args[1] + +args[3];
-            msg.reply({
-                embed: {
-                    color: 15105570,
-                    description: `Ваш ответ: ${reply}`
-                }
-            })
+            if(typeof +args[1] == number && typeof +args[3] == number) {
+                const reply = +args[1] + +args[3];
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ваш ответ: ${reply}`
+                    }
+                })
+            } else {
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                    }
+                })
+            }
         }
         if (args[2] == '-') {
-            const reply = +args[1] - +args[3];
-            msg.reply({
-                embed: {
-                    color: 15105570,
-                    description: `Ваш ответ: ${reply}`
-                }
-            })
+            if(typeof +args[1] == number && typeof +args[3] == number) {
+                const reply = +args[1] - +args[3];
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ваш ответ: ${reply}`
+                    }
+                })
+            } else {
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                    }
+                })
+            }
         }
         if (args[2] == '*') {
-            const reply = +args[1] * +args[3];
-            msg.reply({
-                embed: {
-                    color: 15105570,
-                    description: `Ваш ответ: ${reply}`
-                }
-            })
-        }if (args[2] == '/') {
-            const reply = +args[1] / +args[3];
-            msg.reply({
-                embed: {
-                    color: 15105570,
-                    description: `Ваш ответ: ${reply}`
-                }
-            })
+            if(typeof +args[1] == number && typeof +args[3] == number) {
+                const reply = +args[1] * +args[3];
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ваш ответ: ${reply}`
+                    }
+                })
+            } else {
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                    }
+                })
+            }
+        }
+        if (args[2] == '/') {
+            if(typeof +args[1] == number && typeof +args[3] == number) {
+                const reply = +args[1] / +args[3];
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ваш ответ: ${reply}`
+                    }
+                })
+            } else {
+                msg.reply({
+                    embed: {
+                        color: 15105570,
+                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                    }
+                })
+            }
         }
     }
 
@@ -112,7 +149,7 @@ bot.on('message', async msg => {
             msg.reply({
                 embed: {
                     color: 15105570,
-                    description: `Ты не указал числа или число отрицательное, 🤡`
+                    description: `Ты не указал числа или число отрицательное, <:peepoClown:601743226935705653>`
                 }
             })
         }
