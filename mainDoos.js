@@ -54,73 +54,72 @@ bot.on('message', async msg => {
         const args = msg.content.split(' ');
         if (args[2] == '+') {
             const reply = +args[1] + +args[3];
-            if (reply != 'NaN') {
+            if (isNaN(reply)) {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}, ${typeof +args[3]}`
+                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
                     }
                 })
             } else {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}`
                     }
                 })
             }
         }
         if (args[2] == '-') {
             const reply = +args[1] - +args[3];
-            if (reply != 'NaN') {
+            if (isNaN(reply)) {
                 msg.reply({
-
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}`
+                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
                     }
                 })
             } else {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}`
                     }
                 })
             }
         }
         if (args[2] == '*') {
             const reply = +args[1] * +args[3];
-            if (reply != 'NaN') {
+            if (isNaN(reply)) {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}`
+                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
                     }
                 })
             } else {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}`
                     }
                 })
             }
         }
         if (args[2] == '/') {
             const reply = +args[1] / +args[3];
-            if (reply != 'NaN') {
+            if (isNaN(reply)) {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}`
+                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
                     }
                 })
             } else {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}`
                     }
                 })
             }
