@@ -59,7 +59,8 @@ bot.on('message', async msg => {
                     description: `Ваш ответ: ${reply}, ${args[2]}`
                 }
             })
-        } else if (args[2] = '-') {
+        }
+        if (args[2] = '-') {
             const reply = +args[1] - +args[3];
             msg.reply({
                 embed: {
@@ -67,7 +68,8 @@ bot.on('message', async msg => {
                     description: `Ваш ответ: ${reply}, ${args[2]}`
                 }
             })
-        } else if (args[2] = '*') {
+        }
+        if (args[2] = '*') {
             const reply = +args[1] * +args[3];
             msg.reply({
                 embed: {
@@ -75,7 +77,7 @@ bot.on('message', async msg => {
                     description: `Ваш ответ: ${reply}, ${args[2]}`
                 }
             })
-        } else if (args[2] = '/') {
+        }if (args[2] = '/') {
             const reply = +args[1] / +args[3];
             msg.reply({
                 embed: {
