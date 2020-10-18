@@ -52,7 +52,7 @@ bot.on('message', async msg => {
     if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
         if (args[2] == '+') {
-            if(typeof +args[1] == number && typeof +args[3] == number) {
+            if(typeof +args[1] == 'number' && typeof +args[3] == 'number') {
                 const reply = +args[1] + +args[3];
                 msg.reply({
                     embed: {
@@ -70,7 +70,7 @@ bot.on('message', async msg => {
             }
         }
         if (args[2] == '-') {
-            if(typeof +args[1] == number && typeof +args[3] == number) {
+            if(typeof +args[1] == 'number' && typeof +args[3] == 'number') {
                 const reply = +args[1] - +args[3];
                 msg.reply({
                     embed: {
@@ -88,7 +88,7 @@ bot.on('message', async msg => {
             }
         }
         if (args[2] == '*') {
-            if(typeof +args[1] == number && typeof +args[3] == number) {
+            if(typeof +args[1] == 'number' && typeof +args[3] == 'number') {
                 const reply = +args[1] * +args[3];
                 msg.reply({
                     embed: {
@@ -106,7 +106,7 @@ bot.on('message', async msg => {
             }
         }
         if (args[2] == '/') {
-            if(typeof +args[1] == number && typeof +args[3] == number) {
+            if(typeof +args[1] == 'number' && typeof +args[3] == 'number') {
                 const reply = +args[1] / +args[3];
                 msg.reply({
                     embed: {
