@@ -8,6 +8,7 @@ const express = require("express");
 const path = require('path');
 const PORT = process.env.PORT || 5016;
 let http = require("http");
+const { type } = require('os');
 setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
 }, 300000);
@@ -57,7 +58,7 @@ bot.on('message', async msg => {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}`
+                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}, ${typeof args[3]}`
                     }
                 })
             } else {
