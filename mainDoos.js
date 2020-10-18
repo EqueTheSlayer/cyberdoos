@@ -65,7 +65,7 @@ bot.on('message', async msg => {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}`
+                        description: `Ваш ответ: ${reply}`
                     }
                 })
             }
@@ -83,7 +83,7 @@ bot.on('message', async msg => {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}`
+                        description: `Ваш ответ: ${reply}`
                     }
                 })
             }
@@ -101,7 +101,7 @@ bot.on('message', async msg => {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}`
+                        description: `Ваш ответ: ${reply}`
                     }
                 })
             }
@@ -119,7 +119,7 @@ bot.on('message', async msg => {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}`
+                        description: `Ваш ответ: ${reply}`
                     }
                 })
             }
