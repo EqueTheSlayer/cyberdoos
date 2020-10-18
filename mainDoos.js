@@ -58,7 +58,7 @@ bot.on('message', async msg => {
                 msg.reply({
                     embed: {
                         color: 15105570,
-                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}, ${typeof args[3]}`
+                        description: `Ваш ответ: ${reply}, ${typeof +args[1]}, ${typeof +args[3]}`
                     }
                 })
             } else {
