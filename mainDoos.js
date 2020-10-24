@@ -11,7 +11,7 @@ let http = require("http");
 const { type } = require('os');
 setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
-}, 300000);
+}, 250000);
 
 express()
     .use(express.static(path.join(__dirname, 'public')))
