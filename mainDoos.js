@@ -48,16 +48,21 @@ bot.on('message', async msg => {
     }
 
     //голосовые связки
-    if (msg.content.search(`${prefix}[Pp][Ll][Aa][Yy]`) > - 1 && msg.author.bot === false) {
+    if (msg.content.startsWith(`${prefix}play`) && msg.author.bot === false) {
         if (msg.member.voice.channel) {
             const connection = await msg.member.voice.channel.join();
+
             const ytdl = require('ytdl-core');
-            let stream = ytdl('https://www.youtube.com/watch?v=LEipMKp1uhs', {filter: 'audioonly'});
+            let stream = ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO', {filter: 'audioonly'});
             const dispatcher = connection.play(stream).on('error', error => console.log(error));
+
+            dispatcher.on('finish', () => {
+               dispatcher.destroy();
+            });
         } else {
             msg.reply('Сперва зайди на канал, дурень');
         }
-    };
+    }
 
     //калькулятор
     if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
