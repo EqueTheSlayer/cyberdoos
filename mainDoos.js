@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const request = require('request');
+const ytdl = require('ytdl-core');
 const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
@@ -29,8 +30,6 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-    //функция для использования кастомных эмоджи
-
     //!help список команд
     if (msg.content.startsWith(`${prefix}help`)) {
         msg.reply({
@@ -48,6 +47,16 @@ bot.on('message', async msg => {
             }
         })
     }
+
+    //голосовые связки
+    if (msg.content.search(`${prefix}[Pp][Ll][Aa][Yy]`) > - 1 && msg.author.bot === false) {
+        if (msg.member.voice.channel) {
+            const connection = msg.member.voice.channel.join();
+            connection.play(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO', { filter: 'audioonly' }));
+        } else {
+            msg.reply('Сперва зайди на канал, дурень');
+        }
+    };
 
     //калькулятор
     if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
