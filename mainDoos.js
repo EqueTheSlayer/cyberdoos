@@ -9,6 +9,9 @@ const path = require('path');
 const PORT = process.env.PORT || 5016;
 let http = require("http");
 const { type } = require('os');
+const play = {
+    dispatcher: null,
+};
 setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
 }, 300000);
@@ -46,9 +49,6 @@ bot.on('message', async msg => {
             }
         })
     }
-    const dispatch = {
-
-    }
 
     //голосовые связки
     if (msg.content.startsWith(`${prefix}play`) && msg.author.bot === false) {
@@ -58,17 +58,20 @@ bot.on('message', async msg => {
 
             const ytdl = require('ytdl-core');
             let stream = ytdl(link[1], {filter: 'audioonly'});
-            player(stream, connection);
+            play.dispatcher = connection.play(stream);
+
+            play.dispatcher.on('finish', () => {
+                play.dispatcher.destroy();
+                msg.member.voice.channel.leave();
+            });
         } else {
             msg.reply('Сперва зайди на канал, дурень');
         }
     }
 
-    function player(stream, connection, destroy) {
-        const dispatcher = connection.play(stream);
-        if (destroy) {
-            dispatcher.destroy();
-        }
+    if (msg.content.startsWith(`${prefix}stop`) && msg.author.bot === false) {
+        play.dispatcher.destroy();
+        msg.member.voice.channel.leave();
     }
 
     //калькулятор
