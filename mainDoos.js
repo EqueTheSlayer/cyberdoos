@@ -53,7 +53,7 @@ bot.on('message', async msg => {
             const connection = await msg.member.voice.channel.join();
             const ytdl = require('ytdl-core');
             // const dispatcher = connection.play(ytdl('https://www.youtube.com/watch?v=LEipMKp1uhs&ab_channel=PeachesLamb', { filter : 'audioonly'}));
-            const dispatcher = connection.play('http://www.sample-videos.com/audio/mp3/wave.mp3');
+            const dispatcher = connection.play(ytdl('https://www.youtube.com/watch?v=ZlAU_w7-Xp8', { filter: 'audioonly' }));
         } else {
             msg.reply('Сперва зайди на канал, дурень');
         }
