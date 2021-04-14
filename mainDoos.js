@@ -53,7 +53,7 @@ bot.on('message', async msg => {
             const connection = await msg.member.voice.channel.join();
             const ytdl = require('ytdl-core');
             const dispatcher = connection.play(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO', { filter : 'audioonly'}));
-            dispatcher.setVolume(1);
+            console.log(dispatcher)
         } else {
             msg.reply('Сперва зайди на канал, дурень');
         }
