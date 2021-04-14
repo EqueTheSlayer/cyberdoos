@@ -59,11 +59,6 @@ bot.on('message', async msg => {
             const ytdl = require('ytdl-core');
             let stream = ytdl(link[1], {filter: 'audioonly'});
             player(stream, connection);
-
-            dispatcher.on('finish', () => {
-
-               dispatcher.destroy();
-            });
         } else {
             msg.reply('Сперва зайди на канал, дурень');
         }
