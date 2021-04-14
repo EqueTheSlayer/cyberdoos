@@ -52,7 +52,8 @@ bot.on('message', async msg => {
         if (msg.member.voice.channel) {
             const connection = await msg.member.voice.channel.join();
             const ytdl = require('ytdl-core');
-            connection.play(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO'));
+            const dispatcher = connection.play(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO'));
+            dispatcher.setVolume(1);
         } else {
             msg.reply('Сперва зайди на канал, дурень');
         }
