@@ -46,21 +46,33 @@ bot.on('message', async msg => {
             }
         })
     }
+    const dispatch = {
+
+    }
 
     //голосовые связки
     if (msg.content.startsWith(`${prefix}play`) && msg.author.bot === false) {
         if (msg.member.voice.channel) {
+            const link = msg.content.split(' ')
             const connection = await msg.member.voice.channel.join();
 
             const ytdl = require('ytdl-core');
-            let stream = ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO', {filter: 'audioonly'});
-            const dispatcher = connection.play(stream).on('error', error => console.log(error));
+            let stream = ytdl(link[1], {filter: 'audioonly'});
+            player(stream, connection);
 
             dispatcher.on('finish', () => {
+
                dispatcher.destroy();
             });
         } else {
             msg.reply('Сперва зайди на канал, дурень');
+        }
+    }
+
+    function player(stream, connection, destroy) {
+        const dispatcher = connection.play(stream);
+        if (destroy) {
+            dispatcher.destroy();
         }
     }
 
