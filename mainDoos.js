@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const request = require('request');
-const ytdl = require('ytdl-core');
 const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
