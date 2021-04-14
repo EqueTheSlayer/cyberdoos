@@ -52,8 +52,8 @@ bot.on('message', async msg => {
         if (msg.member.voice.channel) {
             const connection = await msg.member.voice.channel.join();
             const ytdl = require('ytdl-core');
-            const dispatcher = connection.play(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO', { filter : 'audioonly'}));
-            console.log(dispatcher)
+            // const dispatcher = connection.play(ytdl('https://www.youtube.com/watch?v=LEipMKp1uhs&ab_channel=PeachesLamb', { filter : 'audioonly'}));
+            const dispatcher = connection.play('http://www.sample-videos.com/audio/mp3/wave.mp3');
         } else {
             msg.reply('Сперва зайди на канал, дурень');
         }
