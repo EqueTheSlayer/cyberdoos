@@ -51,7 +51,8 @@ bot.on('message', async msg => {
     if (msg.content.search(`${prefix}[Pp][Ll][Aa][Yy]`) > - 1 && msg.author.bot === false) {
         if (msg.member.voice.channel) {
             const connection = await msg.member.voice.channel.join();
-            connection.play('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO');
+            const ytdl = require('ytdl-core');
+            connection.play(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO'));
         } else {
             msg.reply('Сперва зайди на канал, дурень');
         }
