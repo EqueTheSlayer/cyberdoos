@@ -32,6 +32,38 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
+    function calc(firstArgument, operation, secondArgument) {
+        let result;
+        switch (operation) {
+            case '+':
+                result = +firstArgument + +secondArgument;
+                break;
+            case '-':
+                result = +firstArgument - +secondArgument;
+                break;
+            case '*':
+                result = +firstArgument * +secondArgument;
+                break;
+            case '/':
+                result = + firstArgument * secondArgument;
+                break;
+        }
+        if (isNaN(result)) {
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
+                }
+            })
+        } else {
+            msg.reply({
+                embed: {
+                    color: 15105570,
+                    description: `Ваш ответ: ${result}`
+                }
+            })
+        }
+    }
     //!help список команд
     if (msg.content.startsWith(`${prefix}help`)) {
         msg.reply({
@@ -77,78 +109,7 @@ bot.on('message', async msg => {
     //калькулятор
     if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
-        if (args[2] == '+') {
-            const reply = +args[1] + +args[3];
-            if (isNaN(reply)) {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
-                    }
-                })
-            } else {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Ваш ответ: ${reply}`
-                    }
-                })
-            }
-        }
-        if (args[2] == '-') {
-            const reply = +args[1] - +args[3];
-            if (isNaN(reply)) {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
-                    }
-                })
-            } else {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Ваш ответ: ${reply}`
-                    }
-                })
-            }
-        }
-        if (args[2] == '*') {
-            const reply = +args[1] * +args[3];
-            if (isNaN(reply)) {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
-                    }
-                })
-            } else {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Ваш ответ: ${reply}`
-                    }
-                })
-            }
-        }
-        if (args[2] == '/') {
-            const reply = +args[1] / +args[3];
-            if (isNaN(reply)) {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
-                    }
-                })
-            } else {
-                msg.reply({
-                    embed: {
-                        color: 15105570,
-                        description: `Ваш ответ: ${reply}`
-                    }
-                })
-            }
-        }
+        calc(args[1], args[2], args[3]);
     }
 
     // удаление сообщений каждые 5 минут
