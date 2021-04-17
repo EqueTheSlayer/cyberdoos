@@ -5,13 +5,15 @@ const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
 let http = require("http");
+const CommandChecker = require('./commands/CommandChecker');
 const play = {
     dispatcher: null,
 };
 setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
 }, 300000);
-const Calculator = require('./commands/Calculator');
+
+http.createServer().listen(process.env.PORT || 3000);
 
 //ссылка приглашение бота
 bot.on('ready', () => {
@@ -22,29 +24,9 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-    if (msg.content.startsWith('!calc')) {
-        const calc = new Calculator(prefix, msg)
+    const checker = new CommandChecker(prefix, msg);
 
-        calc.calculate();
-    }
-
-    //!help список команд
-    if (msg.content.startsWith(`${prefix}help`)) {
-        msg.reply({
-            embed: {
-                color: 15105570,
-                description: `Список всех заклинаний: \n
-                 ${prefix}roll <число> (показывает случайное число от 0 до <число>)💻\n 
-                 ${prefix}flip (подбросить монетку)🏵️ \n
-                 ${prefix}weather (текущая погода в указанном городе(eng))🌞\n
-                 ${prefix}virus (статистика заболевших коронавирусом на территории РФ)💊\n 
-                 ${prefix}invite (показывает ссылку для добавления бота на свой сервер)🤖\n
-                 ${prefix}joke (отправляет в чат случайный анекдот)🤣\n
-                 ${prefix}pudge (показывает ссылку на Забань Пуджа) <:frejtmejt:601452487966457876> \n
-                 ${prefix}calc <число> <+-/*> <число> (производит подсчет двух чисел)🗿`
-            }
-        })
-    }
+    checker.commandCheck();
 
     //голосовые связки
     if (msg.content.startsWith(`${prefix}play`) && msg.author.bot === false) {

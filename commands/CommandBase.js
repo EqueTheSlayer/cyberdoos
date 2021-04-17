@@ -18,6 +18,12 @@ class CommandBase {
       }
     });
   }
+
+  deletingMsg = () => {
+    if (this.msg.content.startsWith(this.prefix) || this.msg.author.bot === true) {
+      this.msg.delete({ timeout: 300000 });
+    }
+  }
 }
 
 module.exports = CommandBase;
