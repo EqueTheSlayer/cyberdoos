@@ -4,27 +4,15 @@ const request = require('request');
 const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
-const express = require("express");
-const path = require('path');
-const PORT = process.env.PORT || 5016;
 let http = require("http");
-const { type } = require('os');
 const play = {
     dispatcher: null,
 };
 setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
 }, 300000);
-
-const CommandBase = require('./commands/CommandBase');
 const Calculator = require('./commands/Calculator');
 
-// express()
-//     .use(express.static(path.join(__dirname, 'public')))
-//     .set('views', path.join(__dirname, 'views'))
-//     .set('view engine', 'ejs')
-//     .get('/', (req, res) => res.render('pages/index'))
-//     .listen(PORT, () => console.log(`Listening on ${PORT}`))
 //ссылка приглашение бота
 bot.on('ready', () => {
     console.log(`Запустился бот ${bot.user.username}`);
