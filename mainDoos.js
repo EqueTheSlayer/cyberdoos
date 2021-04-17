@@ -16,13 +16,15 @@ setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
 }, 300000);
 
-express()
-    .use(express.static(path.join(__dirname, 'public')))
-    .set('views', path.join(__dirname, 'views'))
-    .set('view engine', 'ejs')
-    .get('/', (req, res) => res.render('pages/index'))
-    .listen(PORT, () => console.log(`Listening on ${PORT}`))
+const CommandBase = require('./commands/CommandBase');
+const Calculator = require('./commands/Calculator');
 
+// express()
+//     .use(express.static(path.join(__dirname, 'public')))
+//     .set('views', path.join(__dirname, 'views'))
+//     .set('view engine', 'ejs')
+//     .get('/', (req, res) => res.render('pages/index'))
+//     .listen(PORT, () => console.log(`Listening on ${PORT}`))
 //ссылка приглашение бота
 bot.on('ready', () => {
     console.log(`Запустился бот ${bot.user.username}`);
@@ -32,38 +34,12 @@ bot.on('ready', () => {
 });
 
 bot.on('message', async msg => {
-    function calc(firstArgument, operation, secondArgument) {
-        let result;
-        switch (operation) {
-            case '+':
-                result = +firstArgument + +secondArgument;
-                break;
-            case '-':
-                result = +firstArgument - +secondArgument;
-                break;
-            case '*':
-                result = +firstArgument * +secondArgument;
-                break;
-            case '/':
-                result = + firstArgument * secondArgument;
-                break;
-        }
-        if (isNaN(result)) {
-            msg.reply({
-                embed: {
-                    color: 15105570,
-                    description: `Ты не ввел числа, <:peepoClown:601743226935705653>`
-                }
-            })
-        } else {
-            msg.reply({
-                embed: {
-                    color: 15105570,
-                    description: `Ваш ответ: ${result}`
-                }
-            })
-        }
+    if (msg.content.startsWith('!calc')) {
+        const calc = new Calculator(prefix, msg)
+
+        calc.calculate();
     }
+
     //!help список команд
     if (msg.content.startsWith(`${prefix}help`)) {
         msg.reply({
@@ -85,7 +61,7 @@ bot.on('message', async msg => {
     //голосовые связки
     if (msg.content.startsWith(`${prefix}play`) && msg.author.bot === false) {
         if (msg.member.voice.channel) {
-            const link = msg.content.split(' ')
+            const link = msg.content.split(' ');
             const connection = await msg.member.voice.channel.join();
 
             const ytdl = require('ytdl-core');
@@ -104,12 +80,6 @@ bot.on('message', async msg => {
     if (msg.content.startsWith(`${prefix}stop`) && msg.author.bot === false) {
         play.dispatcher.destroy();
         msg.member.voice.channel.leave();
-    }
-
-    //калькулятор
-    if (msg.content.search(`${prefix}[Cc][Aa][Ll][Cc]`) > -1 && msg.author.bot === false) {
-        const args = msg.content.split(' ');
-        calc(args[1], args[2], args[3]);
     }
 
     // удаление сообщений каждые 5 минут
