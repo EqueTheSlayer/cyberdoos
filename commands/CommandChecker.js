@@ -1,13 +1,15 @@
 const CommandBase = require('./CommandBase');
 const Calculator = require('./Calculator');
 const Help = require('./Help');
+const CoinFlip = require('./CoinFlip');
 
 class CommandChecker extends CommandBase {
   constructor(prefix, msg) {
     super(prefix, msg);
     this.commands = {
       '!calc': Calculator,
-      '!help': Help
+      '!help': Help,
+      '!flip': CoinFlip
     }
     this.deletingMsg();
   }

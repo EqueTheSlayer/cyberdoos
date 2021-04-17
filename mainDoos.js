@@ -51,14 +51,6 @@ bot.on('message', async msg => {
         play.dispatcher.destroy();
         msg.member.voice.channel.leave();
     }
-
-    // удаление сообщений каждые 5 минут
-    if (msg.content.startsWith(`${prefix}`)) {
-        msg.delete({ timeout: 300000 });
-    }
-    if (msg.author.bot === true) {
-        msg.delete({ timeout: 300000 });
-    }
     //случайное число
     if (msg.content.search(`${prefix}[Rr][Oo][Ll][Ll]`) > -1 && msg.author.bot === false) {
         const args = msg.content.split(' ');
@@ -80,24 +72,6 @@ bot.on('message', async msg => {
                 }
             })
         }
-    }
-    //Забань пуджа
-    if (msg.content.search(`${prefix}[Pp][Uu][Dd][Gg][Ee]`) > -1 && msg.author.bot === false) {
-        msg.reply({
-            embed: {
-                color: 15105570,
-                description: `Попробуй забанить Пуджа \n <:frejtmejt:601452487966457876> http://178.155.72.51/banPudge <:frejtmejt:601452487966457876>`
-            }
-        })
-    }
-    //инвайт-ссылка
-    if (msg.content.search(`${prefix}[Ii][Nn][Vv][Ii][Tt][Ee]`) > -1 && msg.author.bot === false) {
-        msg.reply({
-            embed: {
-                color: 15105570,
-                description: `Я прихожу в гости с помощью этого \n 🧶 https://discord.com/oauth2/authorize?client_id=704994955378163783&scope=bot&permissions=0 🧶`
-            }
-        })
     }
     //подброс монетки
     if (msg.content.search(`${prefix}[Ff][Ll][Ii][Pp]`) > -1 && msg.author.bot === false) {
