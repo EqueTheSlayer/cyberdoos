@@ -10,7 +10,7 @@ class RandomNumber extends CommandBase {
   getNumber = () => {
     const args = this.getArgs();
     let answer = isNaN(args[1]) === false && Number(args[1]) >= 0
-      ? `Ваше число ${Math.floor(Math.random() * (args[1] + 1))}`
+      ? `Ваше число ${Math.floor(Math.random() * Number(args[1]))}`
       : `Ты не указал числа или число отрицательное, <:peepoClown:601743226935705653>`;
 
     this.reply(answer)
