@@ -9,9 +9,8 @@ class CoinFlip extends CommandBase {
 
   getCoin = () => {
     const coins = ['орел', 'решка'];
-    const flip = coins[Math.floor(Math.random() * 2)];
 
-    this.reply(`Результат: ${flip}`);
+    this.reply(`Результат: ${coins[Math.floor(Math.random() * 2)]}`);
   }
 }
 
