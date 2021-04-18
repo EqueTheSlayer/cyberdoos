@@ -11,9 +11,11 @@ const play = {
     dispatcher: null,
 };
 
-http.createServer().listen(process.env.PORT || 3000);
+const app = http.createServer().listen(process.env.PORT || 3000);
 setInterval(function () {
-    let response = fetch('/');
+    app.get('/', (req, res) => {
+        return res.send('Pinged!');
+    })
 }, 1000);
 
 //ссылка приглашение бота
