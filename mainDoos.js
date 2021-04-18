@@ -11,7 +11,7 @@ const play = {
 };
 setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
-}, 300000);
+}, 100000);
 
 http.createServer().listen(process.env.PORT || 3000);
 
