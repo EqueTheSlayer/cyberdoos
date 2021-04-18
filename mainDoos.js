@@ -18,7 +18,7 @@ setInterval(function () {
             console.log('we did it');
         })
     });
-}, 1000);
+}, 30000);
 
 //ссылка приглашение бота
 bot.on('ready', () => {
