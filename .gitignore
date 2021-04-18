@@ -1,4 +1,5 @@
 botconfig.json
+.git
 
 # Node build artifacts
 node_modules
