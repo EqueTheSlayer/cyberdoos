@@ -9,11 +9,11 @@ const CommandChecker = require('./commands/CommandChecker');
 const play = {
     dispatcher: null,
 };
+
+http.createServer().listen(process.env.PORT || 3000);
 setInterval(function () {
     http.get('http://cyberdoos.herokuapp.com');
 }, 100000);
-
-http.createServer().listen(process.env.PORT || 3000);
 
 //ссылка приглашение бота
 bot.on('ready', () => {
