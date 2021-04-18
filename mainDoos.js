@@ -10,7 +10,7 @@ const play = {
     dispatcher: null,
 };
 setInterval(function () {
-    http.get('http://cyberdoos.herokuapp.com');
+    http.get('https://cyberdoos.herokuapp.com');
 }, 100000);
 
 http.createServer().listen(process.env.PORT || 3000);
