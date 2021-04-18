@@ -12,16 +12,18 @@ const play = {
 
 http.createServer().listen(process.env.PORT || 3000);
 setInterval( () => {
-  http.request('http://cyberdoos.herokuapp.com/', (responce) => {
-    responce.on('data', chunk => {
-      console.log(chunk);
-    });
-
-    responce.on('end', () => {
-      console.log('we did it');
-    });
-  })
+  http.get('http://cyberdoos.herokuapp.com/');
 }, 1000);
+
+http.request('http://cyberdoos.herokuapp.com/', (responce) => {
+  responce.on('data', chunk => {
+    console.log(chunk);
+  });
+
+  responce.on('end', () => {
+    console.log('we did it');
+  });
+})
 
 //ссылка приглашение бота
 bot.on('ready', () => {
