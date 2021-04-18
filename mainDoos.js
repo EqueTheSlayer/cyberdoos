@@ -4,7 +4,6 @@ const request = require('request');
 const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
-const fetch = require('node-fetch');
 let http = require("http");
 const CommandChecker = require('./commands/CommandChecker');
 const play = {
@@ -18,7 +17,7 @@ setInterval(function () {
             console.log('we did it');
         })
     });
-}, 30000);
+}, 100000);
 
 //ссылка приглашение бота
 bot.on('ready', () => {
