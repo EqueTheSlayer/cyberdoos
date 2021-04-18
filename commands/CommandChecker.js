@@ -3,6 +3,7 @@ const Calculator = require('./Calculator');
 const Help = require('./Help');
 const CoinFlip = require('./CoinFlip');
 const RandomNumber = require('./RandomNumber');
+const Joke = require('./Joke');
 
 class CommandChecker extends CommandBase {
   constructor(prefix, msg) {
@@ -11,7 +12,8 @@ class CommandChecker extends CommandBase {
       '!calc': Calculator,
       '!help': Help,
       '!flip': CoinFlip,
-      '!roll': RandomNumber
+      '!roll': RandomNumber,
+      '!joke': Joke
     }
     this.deletingMsg();
   }
