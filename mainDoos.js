@@ -13,7 +13,11 @@ const play = {
 
 http.createServer().listen(process.env.PORT || 3000);
 setInterval(function () {
-    http.get('http://cyberdoos.herokuapp.com/');
+    http.get('http://cyberdoos.herokuapp.com/', (res, req) => {
+        res.on('end', () => {
+            console.log('we did it');
+        })
+    });
 }, 1000);
 
 //ссылка приглашение бота
