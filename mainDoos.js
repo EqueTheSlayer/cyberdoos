@@ -5,6 +5,7 @@ const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
 let http = require("http");
+let https = require('https');
 const CommandChecker = require('./commands/CommandChecker');
 const play = {
     dispatcher: null,
@@ -12,18 +13,16 @@ const play = {
 
 http.createServer().listen(process.env.PORT || 3000);
 setInterval( () => {
-  http.get('http://cyberdoos.herokuapp.com/');
+  https.get('https://cyberdoos.herokuapp.com/', responce => {
+    responce.on('data', chunk => {
+      console.log(chunk);
+    });
+
+    responce.on('end', () => {
+      console.log('we did it');
+    });
+  });
 }, 1000);
-
-http.request('http://cyberdoos.herokuapp.com/', (responce) => {
-  responce.on('data', chunk => {
-    console.log(chunk);
-  });
-
-  responce.on('end', () => {
-    console.log('we did it');
-  });
-})
 
 //ссылка приглашение бота
 bot.on('ready', () => {
