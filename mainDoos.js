@@ -12,7 +12,8 @@ const play = {
 
 http.createServer().listen(process.env.PORT || 3000);
 setInterval(function () {
-    http.get('http://cyberdoos.herokuapp.com');
+    let response = fetch('https://cyberdoos.herokuapp.com');
+    response.ok ? console.log('send some shit') : console.log('fucking crashed');
 }, 100000);
 
 //ссылка приглашение бота
