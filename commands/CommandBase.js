@@ -1,3 +1,5 @@
+require("./../discordAPI/InlineMessage");
+
 class CommandBase {
   constructor(prefix, msg) {
     this.prefix = prefix;
@@ -11,7 +13,7 @@ class CommandBase {
   };
 
   reply = (answer) => {
-    this.msg.reply({
+    this.msg.inlineReply({
       embed: {
         color: 15105570,
         description: answer

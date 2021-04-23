@@ -4,6 +4,7 @@ const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
 const CommandChecker = require('./commands/CommandChecker');
+const inlineMessage = require('./discordAPI/InlineMessage');
 const play = {
     dispatcher: null,
 };
