@@ -1,11 +1,6 @@
 const CommandBase = require('./CommandBase');
 
 class Help extends CommandBase {
-  constructor(prefix, msg) {
-    super(prefix,msg);
-
-    this.messageReply();
-  }
 
   messageReply = () => {
     let answer = `Список всех заклинаний: \n
@@ -17,6 +12,10 @@ class Help extends CommandBase {
                  ${this.prefix}calc <число> <+-/*> <число> (производит подсчет двух чисел)🗿`;
 
     this.reply(answer);
+  }
+
+  run = () => {
+    this.messageReply();
   }
 }
 

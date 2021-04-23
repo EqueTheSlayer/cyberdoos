@@ -1,11 +1,6 @@
 const CommandBase = require('./CommandBase');
 
 class RandomNumber extends CommandBase {
-  constructor(prefix, msg) {
-    super(prefix, msg);
-
-    this.getNumber();
-  }
 
   getNumber = () => {
     const args = this.getArgs();
@@ -14,6 +9,10 @@ class RandomNumber extends CommandBase {
       : `Ты не указал числа или число отрицательное, <:peepoClown:601743226935705653>`;
 
     this.reply(answer)
+  }
+
+  run = () => {
+    this.getNumber();
   }
 }
 

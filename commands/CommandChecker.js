@@ -23,7 +23,8 @@ class CommandChecker extends CommandBase {
     if(args) {
       for (let key in this.commands) {
         if (args[0] === key) {
-          new this.commands[key](this.prefix, this.msg);
+          let obj = new this.commands[key](this.prefix, this.msg);
+          obj.run();
         }
       }
     }

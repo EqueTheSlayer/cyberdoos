@@ -1,10 +1,6 @@
 const CommandBase = require('./CommandBase');
 
 class Calculator extends CommandBase {
-  constructor(prefix, msg) {
-    super(prefix, msg);
-    this.calculate();
-  }
 
   calculate = () => {
     let args = this.getArgs();
@@ -26,6 +22,10 @@ class Calculator extends CommandBase {
     }
 
     this.messageReply(result);
+  }
+
+  run = () => {
+    this.calculate();
   }
 
   messageReply = (result) => {
