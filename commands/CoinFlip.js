@@ -1,7 +1,6 @@
 const CommandBase = require('./CommandBase');
 
 class CoinFlip extends CommandBase {
-
   getCoin = () => {
     const coins = ['орел', 'решка'];
 
