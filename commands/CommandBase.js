@@ -15,7 +15,7 @@ class CommandBase {
   reply = (answer) => {
     this.msg.inlineReply({
       embed: {
-        title: answer,
+        description: answer,
         color: 0xff2400,
       }
     })
