@@ -8,26 +8,18 @@ const Joke = require('./Joke');
 class CommandChecker extends CommandBase {
   constructor(prefix, msg) {
     super(prefix, msg);
-    this.commands = {
-      '!calc': Calculator,
-      '!help': Help,
-      '!flip': CoinFlip,
-      '!roll': RandomNumber,
-      '!joke': Joke
-    }
+    this.commands = [Calculator, Help, CoinFlip, RandomNumber, Joke];
     this.deletingMsg();
   }
 
   commandCheck = () => {
     const args = this.getArgs();
-    if(args) {
-      for (let key in this.commands) {
-        if (args[0] === key) {
-          let obj = new this.commands[key](this.prefix, this.msg);
-          obj.run();
-        }
+    args && this.commands.map(item => {
+      if (args[0] === item.command(this.prefix)) {
+        let obj = new item(this.prefix, this.msg);
+        obj.run();
       }
-    }
+    })
   }
 }
 

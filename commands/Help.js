@@ -17,6 +17,8 @@ class Help extends CommandBase {
   run = () => {
     this.messageReply();
   }
+
+  static command = () => `${this.prefix}help`;
 }
 
 module.exports = Help;

@@ -10,6 +10,9 @@ class CoinFlip extends CommandBase {
   run = () => {
     this.getCoin()
   }
+
+  static command = (prefix) => `${prefix}flip`;
 }
+
 
 module.exports = CoinFlip;

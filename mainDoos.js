@@ -4,17 +4,13 @@ const config = require('./botconfig.json');
 const token = config.token;
 const prefix = config.prefix;
 const CommandChecker = require('./commands/CommandChecker');
-const inlineMessage = require('./discordAPI/InlineMessage');
 const play = {
     dispatcher: null,
 };
 
-//ссылка приглашение бота
 bot.on('ready', () => {
     console.log(`Запустился бот ${bot.user.username}`);
-    bot.generateInvite(["ADMINISTRATOR"]).then(link => {
-    });
-    bot.user.setActivity('🤖кибержизнь🤖')
+    bot.user.setActivity('Илюхуса и его прихвостней', {type: 'LISTENING'});
 });
 
 bot.on('message', async msg => {

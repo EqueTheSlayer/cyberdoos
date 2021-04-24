@@ -14,6 +14,8 @@ class RandomNumber extends CommandBase {
   run = () => {
     this.getNumber();
   }
+
+  static command = () => `${this.prefix}roll`;
 }
 
 module.exports = RandomNumber;
