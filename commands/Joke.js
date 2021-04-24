@@ -14,7 +14,7 @@ class Joke extends CommandBase {
     this.getJoke();
   }
 
-  static command = (prefix) => `${prefix}joke`;
+  static command = (prefix) => `${prefix}true`;
 }
 
 module.exports = Joke;
