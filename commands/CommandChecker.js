@@ -15,6 +15,7 @@ class CommandChecker extends CommandBase {
   commandCheck = () => {
     const args = this.getArgs();
     args && this.commands.map(item => {
+      console.log(args[0], item.command(this.prefix))
       if (args[0] === item.command(this.prefix)) {
         let obj = new item(this.prefix, this.msg);
         obj.run();

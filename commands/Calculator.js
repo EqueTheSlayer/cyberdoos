@@ -34,7 +34,7 @@ class Calculator extends CommandBase {
     this.reply(answer);
   }
 
-  static command = () => `${this.prefix}calc`;
+  static command = (prefix) => `${prefix}calc`;
 }
 
 module.exports = Calculator;
