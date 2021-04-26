@@ -2,7 +2,7 @@ import {CommandBase} from "commands/CommandBase";
 
 export class CoinFlipCommand implements CommandBase {
   commandName = "flip";
-  coins: ['орел', 'решка'];
+  coins = ['орел', 'решка'];
 
   getCoin = () => {
     return `Результат: ${this.coins[Math.floor(Math.random() * 2)]}`;

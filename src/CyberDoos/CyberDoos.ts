@@ -14,10 +14,10 @@ export class CyberDoos<T extends CommandBase> {
   private readonly commandHandler: CommandHandler;
 
   constructor(config: Config, commands: CommandList<T>) {
+    this.config = config;
     this.bot = new Discord.Client();
     this.commandChecker = new CommandChecker(this.config.prefix, commands);
     this.commandHandler = this.commandChecker.getCommandHandler(CyberDoos.answer);
-    this.config = config;
   }
 
   public async start() {
