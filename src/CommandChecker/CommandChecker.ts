@@ -43,7 +43,7 @@ export class CommandChecker<T extends CommandBase> {
     };
   }
 
-  public getCommandHandler = (callback: (message: Message, answer: APIMessageContentResolvable) => void) => {
+  public getCommandHandler = (callback: (message: Message, answer: string) => void) => {
     return (message: Message) => {
       if (message.author.bot === false && message.content.startsWith(this.prefix)) {
         const {commandName, commandArguments} = this.getCommandArguments(message.content);

@@ -1,10 +1,12 @@
 import * as Discord from "discord.js";
-import {APIMessageContentResolvable, Message} from "discord.js";
+import {Message} from "discord.js";
+import "lib/discordAPI/InlineMessage";
 import {Config} from "models/Config.model";
 import {CommandHandler, CommandList} from "models/Command.model";
 import {CommandBase} from "commands/CommandBase";
 import {CommandChecker} from "CommandChecker/CommandChecker";
-import "lib/discordAPI/InlineMessage";
+import {colors} from "./CyberDoos.model";
+import {getRandomElement} from "../utils";
 
 
 export class CyberDoos<T extends CommandBase> {
@@ -36,8 +38,14 @@ export class CyberDoos<T extends CommandBase> {
     }
   };
 
-  private static answer(message: Message, answer: APIMessageContentResolvable) {
-    message.reply(answer);
+  private static answer(message: Message, answer: string) {
+    // @ts-ignore
+    message.inlineReply({
+      embed: {
+        description: answer,
+        color: getRandomElement(colors),
+      }
+    });
   }
 
 }

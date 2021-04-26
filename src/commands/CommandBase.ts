@@ -8,7 +8,7 @@ export abstract class CommandBase {
   constructor() {
   }
 
-  abstract do(command: string, args: string[], message: Message): APIMessageContentResolvable;
+  abstract do(command: string, args: string[], message: Message): string;
 
   // private getArgs = (message: Message): string[]  => {
   //   if (message.author.bot === false && message.content.startsWith(this.prefix)) {
