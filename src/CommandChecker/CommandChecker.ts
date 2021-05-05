@@ -5,11 +5,11 @@ import {CommandHandler, CommandList} from "models/Command.model";
 
 export class CommandChecker<T extends CommandBase> {
   private commandMap: {
-    [key: string]: T
+    [key: string]: CommandBase
   } = null;
   private readonly prefix: string = null;
 
-  constructor(prefix: string, commands: CommandList<T>) {
+  constructor(prefix: string, commands: CommandList<CommandBase>) {
     this.prefix = prefix;
     this.commandMap = commands.reduce((commandMap, Command) => {
       const command = new Command();

@@ -5,9 +5,6 @@ import {APIMessageContentResolvable, Message} from "discord.js";
 export abstract class CommandBase {
   abstract commandName: string | string[];
 
-  constructor() {
-  }
-
   abstract do(command: string, args: string[], message: Message): string;
 
   // private getArgs = (message: Message): string[]  => {
