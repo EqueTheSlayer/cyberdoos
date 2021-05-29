@@ -4,14 +4,13 @@ import {Play} from "../models/Play.model";
 import ytdl from "ytdl-core";
 import config from "../botconfig.json";
 import youtubeSearch, {YouTubeSearchResults} from "youtube-search";
+import {timeout} from "../CyberDoos/CyberDoos.model";
 
 export class MusicCommand implements CommandBase {
     commandName = ["play", "stop", "next", "queue"];
     play: Play = {
         connection: null,
         dispatcher: null,
-        timeout: 300000,
-        link: null,
     };
     searchOptions: youtubeSearch.YouTubeSearchOptions = {
         maxResults: 1,
@@ -22,30 +21,36 @@ export class MusicCommand implements CommandBase {
     do(command: string, args: string[], message: Message) {
         switch (command) {
             case 'play':
-                this.playStream(message, args);
-                break;
+                return this.playStream(message, args);
             case 'stop':
-                this.stopStream(message);
-                break;
+                return this.stopStream(message);
         }
-        return '123';
     }
 
     connect(message: Message) {
-        return message.member.voice.channel.join();
+        if (message.member.voice.channel) {
+            return message.member.voice.channel.join();
+        } else {
+            let guy = 'Сначала зайди на какой-нибудь голосовой канал';
+        }
     }
 
-    async playStream(message:Message, args: string[]) {
-        this.play.connection = await this.connect(message);
-        await youtubeSearch(args.join(' '), this.searchOptions, (err: Error, results: YouTubeSearchResults[] | undefined) => {
-            if (err) return console.log(err);
-            this.play.dispatcher = this.play.connection.play(ytdl(results[0].link, {filter: "audioonly"}));
-        });
+    playStream(message:Message, args: string[]):Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.play.connection = await this.connect(message);
+            await youtubeSearch(args.join(' '), this.searchOptions, (err: Error, results: YouTubeSearchResults[] | undefined) => {
+                if (err) reject(err);
+                this.play.dispatcher = this.play.connection.play(ytdl(results[0].link, {filter: "audioonly"}));
+                resolve(`Воспроизвожу ${results[0].title}`);
+            });
+        })
     }
 
     stopStream(message:Message) {
         this.play.dispatcher.destroy();
-        this.leaveChannel(message, this.play.timeout);
+        this.leaveChannel(message, timeout);
+
+        return 'Песню спел, а теперь сыбался';
     }
 
     leaveChannel(message:Message, timeout:number) {

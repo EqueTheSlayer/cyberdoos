@@ -49,7 +49,12 @@ export class CommandChecker<T extends CommandBase> {
         const {commandName, commandArguments} = this.getCommandArguments(message.content);
 
         if (this.commandMap.hasOwnProperty(commandName)) {
-          callback(message, this.commandMap[commandName].do(commandName, commandArguments, message));
+          const answer = this.commandMap[commandName].do(commandName, commandArguments, message);
+          if (answer instanceof Promise) {
+            answer.then(text => callback(message, text));
+          } else {
+            callback(message, answer);
+          }
         }
       }
     }
