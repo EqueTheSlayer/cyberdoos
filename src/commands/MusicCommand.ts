@@ -16,7 +16,8 @@ export class MusicCommand implements CommandBase {
     searchOptions: youtubeSearch.YouTubeSearchOptions = {
         maxResults: 1,
         key: config.youtubeToken,
-        order: 'relevance'
+        order: 'relevance',
+        safeSearch: 'none'
     }
 
     do(command: string, args: string[], message: Message) {
