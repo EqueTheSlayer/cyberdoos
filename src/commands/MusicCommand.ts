@@ -57,7 +57,7 @@ export class MusicCommand implements CommandBase {
         });
 
         if (this.queue.length > 1) {
-          resolve(`${this.queue[0].songName} добавлена в очередь.`);
+          resolve(`${results[0].title} добавлена в очередь.`);
         } else {
           resolve(this.playSong(message));
         }
