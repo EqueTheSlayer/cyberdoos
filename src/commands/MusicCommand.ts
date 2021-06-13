@@ -15,6 +15,8 @@ export class MusicCommand implements CommandBase {
     dispatcher: null,
   };
 
+  isHandler:boolean = true;
+
   queue:Array<{songName: string, songLink: string}> = [];
 
   searchOptions: youtubeSearch.YouTubeSearchOptions = {
@@ -66,6 +68,7 @@ export class MusicCommand implements CommandBase {
   }
 
   finishSongHandler(message: Message) {
+    if (!this.isHandler) return;
     this.play.dispatcher.on('finish', () => {
       if (this.queue.length > 1) {
         this.queue.pop();
@@ -86,7 +89,7 @@ export class MusicCommand implements CommandBase {
   stopStream(message: Message) {
     if (this.play.dispatcher) {
       this.play.dispatcher.destroy();
-
+      this.queue = [];
       this.leaveChannel(message, timeout);
 
       return 'Песню спел, пора по койкам';
