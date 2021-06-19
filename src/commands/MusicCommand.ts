@@ -15,9 +15,9 @@ export class MusicCommand implements CommandBase {
     dispatcher: null,
   };
 
-  isHandler:boolean = true;
+  isHandler: boolean = true;
 
-  queue:Array<{songName: string, songLink: string}> = [];
+  queue: Array<{ songName: string, songLink: string }> = [];
 
   searchOptions: youtubeSearch.YouTubeSearchOptions = {
     maxResults: 1,
@@ -70,13 +70,7 @@ export class MusicCommand implements CommandBase {
   finishSongHandler(message: Message) {
     if (!this.isHandler) return;
     this.play.dispatcher.on('finish', () => {
-      if (this.queue.length > 1) {
-        this.queue.pop();
-        this.playSong(message);
-      } else {
-        this.queue = [];
-        this.leaveChannel(message, timeout);
-      }
+      this.nextSong(message);
     })
   }
 
@@ -100,12 +94,12 @@ export class MusicCommand implements CommandBase {
 
   nextSong(message: Message) {
     if (this.queue.length > 1) {
-      this.queue.pop();
+      this.queue.shift();
 
       return this.playSong(message);
-    } else {
-      return 'В очереди нет песен';
     }
+    this.queue = [];
+    return 'В очереди нет песен';
   }
 
   leaveChannel(message: Message, timeout: number) {
