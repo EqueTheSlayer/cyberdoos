@@ -51,7 +51,6 @@ export class MusicCommand implements CommandBase {
       await youtubeSearch(args.join(' '), this.searchOptions, (err: Error, results: YouTubeSearchResults[] | undefined) => {
 
         if (err) reject(err);
-        console.log()
 
         this.queue.push({
           songName: decode(results[0].title),
@@ -70,9 +69,9 @@ export class MusicCommand implements CommandBase {
       this.nextSong(message);
 
       // @ts-ignore
-      message.inlineReply({
+      this.queue[0] && message.inlineReply({
         embed: {
-          description: `Воспроизвожу ${this.queue[0]?.songName}`,
+          description: `Воспроизвожу ${this.queue[0].songName}`,
           color: getRandomElement(colors),
         }
       });
