@@ -57,7 +57,7 @@ export class MusicCommand implements CommandBase {
           songLink: decode(results[0].link)
         });
 
-        this.queue.length > 1 ? resolve(`${this.queue[0].songName} добавлена в очередь.`) : resolve(this.playSong(message));
+        this.queue.length > 1 ? resolve(`${decode(results[0].title)} добавлена в очередь.`) : resolve(this.playSong(message));
       });
     })
   }
