@@ -5,6 +5,7 @@ import ytdl from "ytdl-core";
 import config from "../botconfig.json";
 import youtubeSearch, {YouTubeSearchResults} from "youtube-search";
 import {colors, timeout} from "../CyberDoos/CyberDoos.model";
+import {decode} from 'html-entities';
 import {VoiceConnection} from "discord.js";
 import {getRandomElement} from "../utils";
 import "lib/discordAPI/InlineMessage";
@@ -50,13 +51,14 @@ export class MusicCommand implements CommandBase {
       await youtubeSearch(args.join(' '), this.searchOptions, (err: Error, results: YouTubeSearchResults[] | undefined) => {
 
         if (err) reject(err);
+        console.log()
 
         this.queue.push({
-          songName: results[0].title,
-          songLink: results[0].link
+          songName: decode(results[0].title),
+          songLink: decode(results[0].link)
         });
 
-        this.queue.length > 1 ? resolve(`${results[0].title} добавлена в очередь.`) : resolve(this.playSong(message));
+        this.queue.length > 1 ? resolve(`${this.queue[0].songName} добавлена в очередь.`) : resolve(this.playSong(message));
       });
     })
   }

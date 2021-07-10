@@ -20,9 +20,11 @@
     "express": "^4.17.1",
     "ffmpeg-static": "^4.3.0",
     "form-data": "^3.0.0",
+    "html-entities": "^2.3.2",
     "ms": "^2.1.2",
     "node": "^14.0.0",
     "request": "^2.88.2",
+    "utf8": "^3.0.0",
     "youtube-search": "^1.1.4",
     "ytdl-core": "^4.8.3"
   },
