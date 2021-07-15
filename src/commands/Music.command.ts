@@ -1,17 +1,17 @@
 import {CommandBase} from "commands/CommandBase";
 import {Message} from "discord.js";
-import {Play} from "../models/Play.model";
+import {MusicCommandName, Play} from "../models/MusicComand.model";
 import ytdl from "ytdl-core";
 import config from "../botconfig.json";
 import youtubeSearch, {YouTubeSearchResults} from "youtube-search";
 import {colors, timeout} from "../CyberDoos/CyberDoos.model";
 import {decode} from 'html-entities';
-import {VoiceConnection} from "discord.js";
 import {getRandomElement} from "../utils";
 import "lib/discordAPI/InlineMessage";
+import Timeout = NodeJS.Timeout;
 
 export class MusicCommand implements CommandBase {
-  commandName = ["play", "stop", "next", "queue"];
+  commandName = [MusicCommandName.Play, MusicCommandName.Stop, MusicCommandName.Next, MusicCommandName.Queue];
 
   play: Play = {
     connection: null,
@@ -25,13 +25,15 @@ export class MusicCommand implements CommandBase {
     order: 'relevance'
   }
 
-  do(command: string, args: string[], message: Message) {
+  leaveChannelTimeout: Timeout = null;
+
+  do(command: MusicCommandName, args: string[], message: Message) {
     switch (command) {
-      case 'play':
+      case MusicCommandName.Play:
         return this.playStream(message, args);
-      case 'stop':
+      case MusicCommandName.Stop:
         return this.stopStream(message);
-      case 'next':
+      case MusicCommandName.Next:
         return this.nextSong(message);
     }
   }
@@ -49,22 +51,23 @@ export class MusicCommand implements CommandBase {
       }
 
       await youtubeSearch(args.join(' '), this.searchOptions, (err: Error, results: YouTubeSearchResults[] | undefined) => {
+        const {title, link} = results[0];
 
-        if (err) reject(err);
+        err && reject(err);
 
         this.queue.push({
-          songName: decode(results[0].title),
-          songLink: decode(results[0].link)
+          songName: decode(title),
+          songLink: decode(link)
         });
 
-        this.queue.length > 1 ? resolve(`${this.queue[this.queue.length - 1].songName} добавлена в очередь.`) : resolve(this.playSong(message));
+        this.queue.length > 1
+          ? resolve(`${this.queue[this.queue.length - 1].songName} добавлена в очередь.`)
+          : resolve(this.playSong(message));
       });
     })
   }
 
   finishSongHandler(message: Message) {
-    if (!this.isHandler) return;
-
     this.play.dispatcher.on('finish', () => {
       this.nextSong(message);
 
@@ -79,10 +82,13 @@ export class MusicCommand implements CommandBase {
   }
 
   playSong(message: Message) {
-    this.play.dispatcher = this.play.connection.play(ytdl(this.queue[0].songLink, {filter: "audioonly"}));
+    const {songLink, songName} = this.queue[0];
+
+    this.play.dispatcher = this.play.connection.play(ytdl(songLink, {filter: "audioonly"}));
+    clearTimeout(this.leaveChannelTimeout);
     this.finishSongHandler(message);
 
-    return `Воспроизвожу ${this.queue[0]?.songName}`;
+    return `Воспроизвожу ${songName}`;
   }
 
   stopStream(message: Message) {
@@ -109,7 +115,7 @@ export class MusicCommand implements CommandBase {
   }
 
   leaveChannel(message: Message, timeout: number) {
-    setTimeout(() => {
+    this.leaveChannelTimeout = setTimeout(() => {
       message.member.voice.channel.leave();
     }, timeout);
   }
