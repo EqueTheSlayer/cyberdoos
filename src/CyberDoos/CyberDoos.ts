@@ -33,7 +33,7 @@ export class CyberDoos<T extends CommandBase> {
     });
     this.bot.on("message", this.commandHandler);
     this.bot.on("message", this.deleteCommandAfterTimeout);
-    this.bot.on('speech', (message) => this.commandHandler(message, true))
+    this.bot.on('speech', (message) => this.commandHandler(message, true));
   }
 
   private deleteCommandAfterTimeout: CommandHandler = (message) => {

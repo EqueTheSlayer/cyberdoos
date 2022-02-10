@@ -12,30 +12,30 @@
   "author": "EqueTheSlayer",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.5.0",
-    "core-js": "^3.6.5",
+    "@discordjs/opus": "^0.5.3",
+    "core-js": "^3.16.0",
     "discord.js": "^12.2.0",
     "discordjs-ytdl": "^2.2.0",
     "ejs": "^2.5.6",
     "express": "^4.17.1",
-    "ffmpeg-static": "^4.3.0",
+    "ffmpeg-static": "^4.4.0",
     "form-data": "^3.0.0",
     "html-entities": "^2.3.2",
     "ms": "^2.1.2",
-    "node": "^14.0.0",
+    "node": "^14.17.4",
     "request": "^2.88.2",
     "utf8": "^3.0.0",
     "youtube-search": "^1.1.4",
-    "ytdl-core": "^4.8.3"
+    "ytdl-core": "^4.9.1"
   },
   "devDependencies": {
-    "@types/node": "14.14.41",
     "@types/app-module-path": "^2.2.0",
+    "@types/node": "14.14.41",
+    "app-module-path": "^2.2.0",
     "request": "^2.81.0",
-    "tape": "^4.7.0",
+    "tape": "^4.14.0",
     "ts-node": "^9.1.1",
-    "typescript": "^4.2.4",
-    "app-module-path": "^2.2.0"
+    "typescript": "^4.3.5"
   },
   "repository": {
     "type": "git",

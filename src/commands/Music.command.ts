@@ -12,7 +12,6 @@ import Timeout = NodeJS.Timeout;
 
 export class MusicCommand implements CommandBase {
   commandName = [MusicCommandName.Play, MusicCommandName.Stop, MusicCommandName.Next, MusicCommandName.Queue];
-
   play: Play = {
     connection: null,
     dispatcher: null,
@@ -51,18 +50,20 @@ export class MusicCommand implements CommandBase {
       }
 
       await youtubeSearch(args.join(' '), this.searchOptions, (err: Error, results: YouTubeSearchResults[] | undefined) => {
-        const {title, link} = results[0];
+        try {
+          const {title, link} = results[0];
 
-        err && reject(err);
+          this.queue.push({
+            songName: decode(title),
+            songLink: decode(link)
+          });
 
-        this.queue.push({
-          songName: decode(title),
-          songLink: decode(link)
-        });
-
-        this.queue.length > 1
-          ? resolve(`${this.queue[this.queue.length - 1].songName} добавлена в очередь.`)
-          : resolve(this.playSong(message));
+          this.queue.length > 1
+            ? resolve(`${this.queue[this.queue.length - 1].songName} добавлена в очередь.`)
+            : resolve(this.playSong(message));
+        } catch (e) {
+          console.log(e);
+        }
       });
     })
   }

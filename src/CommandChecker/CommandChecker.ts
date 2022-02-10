@@ -38,7 +38,7 @@ export class CommandChecker<T extends CommandBase> {
   private getCommandArguments(message: APIMessageContentResolvable & string) {
     const [commandName, ...commandArguments] = message.split(" ");
     return {
-      commandName: commandName.replace(this.prefix, ""),
+      commandName: commandName.replace(this.prefix, "").toLowerCase(),
       commandArguments
     };
   }
