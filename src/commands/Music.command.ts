@@ -85,7 +85,16 @@ export class MusicCommand implements CommandBase {
   playSong(message: Message) {
     const {songLink, songName} = this.queue[0];
 
-    this.play.dispatcher = this.play.connection.play(ytdl(songLink, {filter: "audioonly"}));
+    this.play.dispatcher = this.play.connection.play(ytdl(songLink, {
+      filter: "audioonly",
+      quality: 'highestaudio',
+      requestOptions: {
+        headers: {
+          cookie: config.cookieForYouTube
+        }
+      }
+    }));
+
     clearTimeout(this.leaveChannelTimeout);
     this.finishSongHandler(message);
 
