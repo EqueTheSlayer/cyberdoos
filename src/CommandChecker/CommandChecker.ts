@@ -1,6 +1,9 @@
 import {CommandBase} from "commands/CommandBase";
-import {APIMessageContentResolvable, Message} from "discord.js";
+import {APIMessageContentResolvable, Message, MessageEmbed} from "discord.js";
 import {CommandHandler, CommandList} from "models/Command.model";
+import {log} from "util";
+import {getRandomElement} from "../utils";
+import {colors} from "../CyberDoos/CyberDoos.model";
 
 
 export class CommandChecker<T extends CommandBase> {
@@ -43,15 +46,23 @@ export class CommandChecker<T extends CommandBase> {
     };
   }
 
-  public getCommandHandler = (callback: (message: Message, answer: string) => void) => {
-    return (message: Message, disablePrefix?:boolean) => {
-      if (message.author.bot === false && (disablePrefix || message.content.startsWith(this.prefix) )) {
+  public getCommandHandler = (callback: (message: Message, answer: any) => void) => {
+    return (message: Message, disablePrefix?: boolean) => {
+
+      if (message.author.bot === false && (disablePrefix || message.content.startsWith(this.prefix))) {
         const {commandName, commandArguments} = this.getCommandArguments(message.content);
 
         if (this.commandMap.hasOwnProperty(commandName)) {
           const answer = this.commandMap[commandName].do(commandName, commandArguments, message);
           if (answer instanceof Promise) {
-            answer.then(text => callback(message, text));
+            const embedMessage = (text: any) => {
+              return new MessageEmbed()
+                .setColor(getRandomElement(colors))
+                .setTitle(text.title || null)
+                .setThumbnail(text.image || null)
+                .setAuthor(text.description || null)
+            }
+            answer.then(text => callback(message, embedMessage(text)))
           } else {
             callback(message, answer);
           }

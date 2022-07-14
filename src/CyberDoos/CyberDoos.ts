@@ -43,13 +43,8 @@ export class CyberDoos<T extends CommandBase> {
   };
 
   private static answer(message: Message, answer: string) {
-    // @ts-ignore
-    message.inlineReply({
-      embed: {
-        description: answer,
-        color: getRandomElement(colors),
-      }
-    });
+    //@ts-ignore
+    message.channel.send({ embed: answer});
   }
 }
 
