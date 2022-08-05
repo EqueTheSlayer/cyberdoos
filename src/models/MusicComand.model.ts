@@ -9,5 +9,7 @@ export enum MusicCommandName {
     Play = 'play',
     Stop = 'stop',
     Queue = 'queue',
-    Next = 'next'
+    Next = 'next',
+    Louder = 'louder',
+    Quieter = 'hush'
 }

@@ -20,7 +20,6 @@ export class CyberDoos<T extends CommandBase> {
   constructor(config: Config, commands: CommandList<CommandBase>) {
     this.config = config;
     this.bot = new Discord.Client();
-    this.voiceBot = new DiscordSR(this.bot);
     this.commandChecker = new CommandChecker(this.config.prefix, commands);
     this.commandHandler = this.commandChecker.getCommandHandler(CyberDoos.answer);
   }
@@ -33,7 +32,6 @@ export class CyberDoos<T extends CommandBase> {
     });
     this.bot.on("message", this.commandHandler);
     this.bot.on("message", this.deleteCommandAfterTimeout);
-    this.bot.on('speech', (message) => this.commandHandler(message, true));
   }
 
   private deleteCommandAfterTimeout: CommandHandler = (message) => {

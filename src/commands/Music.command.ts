@@ -4,14 +4,13 @@ import {MusicCommandName, Play} from "../models/MusicComand.model";
 import ytdl from "ytdl-core";
 import config from "../botconfig.json";
 import youtubeSearch, {YouTubeSearchResults} from "youtube-search";
-import {colors, timeout} from "../CyberDoos/CyberDoos.model";
+import {timeout} from "../CyberDoos/CyberDoos.model";
 import {decode} from 'html-entities';
-import {getRandomElement} from "../utils";
 import "lib/discordAPI/InlineMessage";
 import Timeout = NodeJS.Timeout;
 
 export class MusicCommand implements CommandBase {
-  commandName = [MusicCommandName.Play, MusicCommandName.Stop, MusicCommandName.Next, MusicCommandName.Queue];
+  commandName = [MusicCommandName.Play, MusicCommandName.Stop, MusicCommandName.Next, MusicCommandName.Queue, MusicCommandName.Louder, MusicCommandName.Quieter];
   play: Play = {
     connection: null,
     dispatcher: null,
@@ -36,11 +35,37 @@ export class MusicCommand implements CommandBase {
         return this.stopStream(message);
       case MusicCommandName.Next:
         return this.nextSong(message);
+      case MusicCommandName.Louder:
+        return this.louderMusic();
+      case MusicCommandName.Quieter:
+        return this.quieterMusic();
     }
   }
 
   connectToVoiceChannel(message: Message) {
     if (message.member.voice.channel) return message.member.voice.channel.join();
+  }
+
+  louderMusic() {
+    if (this.play.dispatcher) {
+      this.play.dispatcher.setVolume(this.play.dispatcher.volume + 0.25);
+      return {
+        title: 'Увеличил громкость музыкального произведения на 25%'
+      }
+    }
+
+    return {title: 'В данный момент воспроизведение музыкального произведения отрицательно присутствует'};
+  }
+
+  quieterMusic() {
+    if (this.play.dispatcher) {
+      this.play.dispatcher.setVolume(this.play.dispatcher.volume - 0.25);
+      return {
+        title: 'Уменьшил громкость музыкального произведения на 25%'
+      }
+    }
+
+    return {title: 'В данный момент воспроизведение музыкального произведения отрицательно присутствует'};
   }
 
   playStream(message: Message, args: string[]): Promise<any> {
@@ -54,8 +79,6 @@ export class MusicCommand implements CommandBase {
       await youtubeSearch(args.join(' '), this.searchOptions, (err: Error, results: YouTubeSearchResults[] | undefined) => {
         try {
           const {title, link, thumbnails} = results[0];
-          console.log(results[0])
-
           this.queue.push({
             songName: decode(title),
             songLink: decode(link),
@@ -63,7 +86,11 @@ export class MusicCommand implements CommandBase {
           });
 
           this.queue.length > 1
-            ? resolve(`${this.queue[this.queue.length - 1].songName} добавлена в очередь.`)
+            ? resolve({
+              description: 'Следующее музыкальное произведение было добавлено в очередь',
+              title: this.queue[this.queue.length - 1].songName,
+              image: this.queue[this.queue.length - 1].songImage
+            })
             : resolve(this.playSong(message));
         } catch (e) {
           console.log(e);
@@ -72,35 +99,13 @@ export class MusicCommand implements CommandBase {
     })
   }
 
+
   finishSongHandler(message: Message) {
+    const {songName, songImage} = this.queue[0];
+
     this.play.dispatcher.on('finish', () => {
-      this.nextSong(message);
-
-      // @ts-ignore
-      this.queue[0] && message.inlineReply({
-        embed: {
-          description: `${this.queue[0].songName}`,
-          color: getRandomElement(colors),
-        }
-      });
-    })
-  }
-
-  playSong(message: Message) {
-    const {songLink, songName, songImage} = this.queue[0];
-
-    this.play.dispatcher = this.play.connection.play(ytdl(songLink, {
-      filter: "audioonly",
-      quality: 'highestaudio',
-      requestOptions: {
-        headers: {
-          cookie: config.cookieForYouTube
-        }
-      }
-    }));
-
-    clearTimeout(this.leaveChannelTimeout);
-    this.finishSongHandler(message);
+      return this.nextSong(message);
+    });
 
     return {
       title: songName,
@@ -109,16 +114,36 @@ export class MusicCommand implements CommandBase {
     };
   }
 
+  playSong(message: Message) {
+    const {songLink} = this.queue[0];
+    const stream = ytdl(songLink, {
+      filter: "audioonly",
+      quality: 'highestaudio',
+      requestOptions: {
+        headers: {
+          cookie: config.cookieForYouTube
+        }
+      }
+    });
+    this.play.dispatcher = this.play.connection.play(stream);
+
+    clearTimeout(this.leaveChannelTimeout);
+    return this.finishSongHandler(message);
+  }
+
   stopStream(message: Message) {
     if (this.play.dispatcher) {
       this.play.dispatcher.destroy();
       this.queue = [];
       this.leaveChannel(message, timeout);
 
-      return {description: 'Процесс пения закончил я, пришла пора уйти за занавес'};
+      return {
+        title: 'Процесс пения закончил я, пришла пора уйти за занавес',
+        image: 'http://1.bp.blogspot.com/--InTDMsbqcM/Tqbfi-zEsXI/AAAAAAAAADs/WuxFWbnrwCc/s1600/6528975-man-raising-the-hat-3d-rendered-illustration.jpg',
+      };
     }
 
-    return {description: 'В данный момент воспроизведение музыкального произведения отрицательно присутствует'};
+    return {title: 'В данный момент воспроизведение музыкального произведения отрицательно присутствует'};
   }
 
   nextSong(message: Message) {
@@ -129,7 +154,7 @@ export class MusicCommand implements CommandBase {
     }
     this.queue = [];
 
-    return {description: 'В очереди нет музыкальных произведений'};
+    return {title: 'В очереди нет музыкальных произведений'};
   }
 
   leaveChannel(message: Message, timeout: number) {
