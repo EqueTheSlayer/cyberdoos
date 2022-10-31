@@ -4,8 +4,9 @@ import config from "./botconfig.json";
 import {CoinFlipCommand} from "commands/CoinFlip.command";
 import {CyberDoos} from "CyberDoos/CyberDoos";
 import {MusicCommand} from "./commands/Music.command";
+import {DuelCommand} from "./commands/Duel.command";
 
-const commands = [CoinFlipCommand, MusicCommand];
+const commands = [CoinFlipCommand, MusicCommand, DuelCommand];
 const cyberDoos = new CyberDoos(config, commands);
 
 cyberDoos.start();
