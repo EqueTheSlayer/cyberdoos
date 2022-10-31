@@ -1,6 +1,6 @@
 import {CommandBase} from "commands/CommandBase";
 import {Message} from "discord.js";
-import {MusicCommandName, Play} from "../models/MusicComand.model";
+import {MusicCommandName, Play} from "../models/MusicCommand.model";
 import ytdl from "ytdl-core";
 import config from "../botconfig.json";
 import youtubeSearch, {YouTubeSearchResults} from "youtube-search";
@@ -24,8 +24,6 @@ export class MusicCommand implements CommandBase {
   }
 
   leaveChannelTimeout: Timeout = null;
-
-  //убрать any
 
   do(command: MusicCommandName, args: string[], message: Message) {
     switch (command) {
@@ -128,6 +126,7 @@ export class MusicCommand implements CommandBase {
     this.play.dispatcher = this.play.connection.play(stream);
 
     clearTimeout(this.leaveChannelTimeout);
+
     return this.finishSongHandler(message);
   }
 
@@ -149,11 +148,11 @@ export class MusicCommand implements CommandBase {
   nextSong(message: Message) {
     if (this.queue.length > 1) {
       this.queue.shift();
-
       return this.playSong(message);
     }
-    this.queue = [];
 
+    this.queue = [];
+    this.leaveChannel(message, timeout);
     return {title: 'В очереди нет музыкальных произведений'};
   }
 

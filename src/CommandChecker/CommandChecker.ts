@@ -64,7 +64,12 @@ export class CommandChecker<T extends CommandBase> {
             }
             answer.then(text => callback(message, embedMessage(text)))
           } else {
-            callback(message, answer);
+            const embedMessage = (text: any) => {
+              return new MessageEmbed()
+                .setColor(getRandomElement(colors))
+                .setTitle(text.title || null)
+            }
+            callback(message, embedMessage(answer));
           }
         }
       }

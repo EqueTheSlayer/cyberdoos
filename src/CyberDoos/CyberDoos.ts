@@ -12,7 +12,6 @@ import {DiscordSR, speechRecognition} from 'discord-speech-recognition';
 
 export class CyberDoos<T extends CommandBase> {
   private bot: Discord.Client = null;
-  private voiceBot:any = null;
   private config: Config = null;
   private commandChecker: CommandChecker<CommandBase>;
   private readonly commandHandler: CommandHandler;

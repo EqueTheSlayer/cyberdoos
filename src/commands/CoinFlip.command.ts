@@ -2,15 +2,18 @@ import {CommandBase} from "commands/CommandBase";
 import {getRandomElement} from "utils";
 
 export class CoinFlipCommand implements CommandBase {
-  commandName = "flip";
+  commandName = 'flip';
   coins = ['орел', 'решка'];
 
   getCoin = () => {
-    return `Результат: ${getRandomElement(this.coins)}`;
+    return {
+      title: `Результат: ${getRandomElement(this.coins)}`,
+      color: 'red'
+    };
   }
 
   do() {
-    return this.getCoin()
+    return this.getCoin();
   }
 }
 
