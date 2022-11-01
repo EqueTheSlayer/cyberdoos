@@ -3,3 +3,8 @@ export enum DuelCommandName {
   Status = 'status',
   Heal = 'heal',
 }
+
+export interface Duelist{
+  name: string;
+  number: number;
+}
