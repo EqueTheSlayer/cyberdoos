@@ -1,9 +1,8 @@
 import {CommandBase} from "./CommandBase";
 import {Message} from "discord.js";
 import {DuelCommandName, Duelist} from "../models/DuelCommand.model";
-import {getRandomElement, shuffle} from "../utils";
+import {getRandomElement} from "../utils";
 import {timeout} from "../CyberDoos/CyberDoos.model";
-import {log} from "util";
 
 export class DuelCommand implements CommandBase {
   commandName = [DuelCommandName.Duel, DuelCommandName.Heal, DuelCommandName.Status];
