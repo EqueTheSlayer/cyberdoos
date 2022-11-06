@@ -1,7 +1,7 @@
 import {CommandBase} from "commands/CommandBase";
 import {Message} from "discord.js";
 import {MusicCommandName, Play} from "../models/MusicCommand.model";
-import ytdl from "ytdl-core";
+import ytdl from "discord-ytdl-core";
 import config from "../botconfig.json";
 import youtubeSearch, {YouTubeSearchResults} from "youtube-search";
 import {timeout} from "../CyberDoos/CyberDoos.model";
@@ -120,9 +120,11 @@ export class MusicCommand implements CommandBase {
         headers: {
           cookie: config.cookieForYouTube
         }
-      }
+      },
+      opusEncoded: true,
+      encoderArgs: ['-af', 'bass=g=10,dynaudnorm=f=200']
     });
-    this.play.dispatcher = this.play.connection.play(stream);
+    this.play.dispatcher = this.play.connection.play(stream, {type: 'opus'});
 
     clearTimeout(this.leaveChannelTimeout);
 

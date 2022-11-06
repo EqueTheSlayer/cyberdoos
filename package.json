@@ -15,6 +15,7 @@
     "@discordjs/opus": "^0.5.3",
     "core-js": "^3.16.0",
     "discord-speech-recognition": "^1.0.6",
+    "discord-ytdl-core": "^5.0.4",
     "discord.js": "^12.2.0",
     "discordjs-ytdl": "^2.2.0",
     "ejs": "^2.5.6",
