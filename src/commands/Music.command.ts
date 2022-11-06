@@ -116,7 +116,6 @@ export class MusicCommand implements CommandBase {
     const {songLink} = this.queue[0];
     const stream = ytdl(songLink, {
       filter: "audioonly",
-      quality: 'highestaudio',
       requestOptions: {
         headers: {
           cookie: config.cookieForYouTube
