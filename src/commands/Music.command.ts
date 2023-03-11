@@ -102,6 +102,7 @@ export class MusicCommand implements CommandBase {
     const {songName, songImage} = this.queue[0];
 
     this.play.dispatcher.on('finish', () => {
+      console.log('123')
       return this.nextSong(message);
     });
 
@@ -113,6 +114,9 @@ export class MusicCommand implements CommandBase {
   }
 
   playSong(message: Message) {
+    if (this.leaveChannelTimeout) {
+      clearTimeout(this.leaveChannelTimeout);
+    }
     const {songLink} = this.queue[0];
     const stream = ytdl(songLink, {
       filter: "audioonly",
@@ -126,8 +130,6 @@ export class MusicCommand implements CommandBase {
     });
     this.play.dispatcher = this.play.connection.play(stream, {type: 'opus'});
 
-    clearTimeout(this.leaveChannelTimeout);
-
     return this.finishSongHandler(message);
   }
 
@@ -139,7 +141,7 @@ export class MusicCommand implements CommandBase {
 
       return {
         title: 'Процесс пения закончил я, пришла пора уйти за занавес',
-        image: 'http://1.bp.blogspot.com/--InTDMsbqcM/Tqbfi-zEsXI/AAAAAAAAADs/WuxFWbnrwCc/s1600/6528975-man-raising-the-hat-3d-rendered-illustration.jpg',
+        image: '',
       };
     }
 
