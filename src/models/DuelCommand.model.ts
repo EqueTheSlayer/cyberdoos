@@ -6,5 +6,4 @@ export enum DuelCommandName {
 
 export interface Duelist{
   name: string;
-  number: number;
 }

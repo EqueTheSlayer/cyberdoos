@@ -35,22 +35,17 @@ export class DuelCommand implements CommandBase {
   }
 
   duel(message: Message, args: string[]) {
-    const randomNumber = Math.floor(Math.random() * 100);
-
     setTimeout(() => this.duelists = [], timeout);
 
     if (this.duelists[0]?.name !== message.author.username) {
       this.duelists.push({
         name: message.author.username,
-        number: Number(args[0]),
       });
 
       if (this.duelists.length === 2) {
-        let challengers: Duelist[] = [];
+        const winner = getRandomElement(this.duelists);
 
-        (randomNumber - this.duelists[0].number) >= (randomNumber - this.duelists[1].number) ? challengers = this.duelists : challengers.push(this.duelists[1]) && challengers.push(this.duelists[0]);
-
-        const answer = {title: `${challengers[0].name} ${getRandomElement(this.possibleHits)} ${challengers[1].name} нанеся ему ${getRandomElement(this.hp)}`};
+        const answer = {title: `${winner.name} ${getRandomElement(this.possibleHits)} ${winner.name === this.duelists[0].name ? this.duelists[1].name : this.duelists[0].name} нанеся ему ${getRandomElement(this.hp)}`};
 
         this.duelists = [];
 
@@ -60,8 +55,10 @@ export class DuelCommand implements CommandBase {
       return {title: `${message.author.username} готов пострелять. Кто осмелится бросить ему вызов?`}
     }
 
+    this.duelists = [];
+
     return {
-      title: `В результате попытки самоубийства ${message.author.username} ${getRandomElement(this.possibleHits)} нанося себе ${getRandomElement(this.hp)}`
+      title: `В результате попытки самоубийства ${message.author.username} ${getRandomElement(this.possibleHits)} отняв у себя ${getRandomElement(this.hp)}`
     }
   }
 }
