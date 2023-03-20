@@ -54,7 +54,6 @@ export class CommandChecker<T extends CommandBase> {
 
         if (this.commandMap.hasOwnProperty(commandName)) {
           const answer = this.commandMap[commandName].do(commandName, commandArguments, message);
-          if (answer instanceof Promise) {
             const embedMessage = (text: any) => {
               return new MessageEmbed()
                 .setColor(getRandomElement(colors))
@@ -62,15 +61,7 @@ export class CommandChecker<T extends CommandBase> {
                 .setThumbnail(text.image || null)
                 .setAuthor(text.description || null)
             }
-            answer.then(text => callback(message, embedMessage(text)))
-          } else {
-            const embedMessage = (text: any) => {
-              return new MessageEmbed()
-                .setColor(getRandomElement(colors))
-                .setTitle(text.title || null)
-            }
-            callback(message, embedMessage(answer));
-          }
+          answer instanceof Promise ? answer.then(text => callback(message, embedMessage(text))) : callback(message, embedMessage(answer));
         }
       }
     }

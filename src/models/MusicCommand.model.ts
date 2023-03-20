@@ -11,5 +11,6 @@ export enum MusicCommandName {
     Queue = 'queue',
     Next = 'next',
     Louder = 'louder',
-    Quieter = 'hush'
+    Quieter = 'hush',
+    Repeat = 'repeat'
 }

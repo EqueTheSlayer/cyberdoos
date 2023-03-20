@@ -10,12 +10,11 @@ import "lib/discordAPI/InlineMessage";
 import Timeout = NodeJS.Timeout;
 
 export class MusicCommand implements CommandBase {
-  commandName = [MusicCommandName.Play, MusicCommandName.Stop, MusicCommandName.Next, MusicCommandName.Queue, MusicCommandName.Louder, MusicCommandName.Quieter];
+  commandName = [MusicCommandName.Play, MusicCommandName.Stop, MusicCommandName.Next, MusicCommandName.Queue, MusicCommandName.Louder, MusicCommandName.Quieter, MusicCommandName.Repeat];
   play: Play = {
     connection: null,
     dispatcher: null,
   };
-  isHandler: boolean = true;
   queue: Array<{ songName: string, songLink: string, songImage?: string }> = [];
   searchOptions: youtubeSearch.YouTubeSearchOptions = {
     maxResults: 1,
@@ -24,6 +23,7 @@ export class MusicCommand implements CommandBase {
   }
 
   leaveChannelTimeout: Timeout = null;
+  isRepeating: boolean = false;
 
   do(command: MusicCommandName, args: string[], message: Message) {
     switch (command) {
@@ -37,6 +37,8 @@ export class MusicCommand implements CommandBase {
         return this.louderMusic();
       case MusicCommandName.Quieter:
         return this.quieterMusic();
+      case MusicCommandName.Repeat:
+        return this.repeatCurrentSong();
     }
   }
 
@@ -102,7 +104,9 @@ export class MusicCommand implements CommandBase {
     const {songName, songImage} = this.queue[0];
 
     this.play.dispatcher.on('finish', () => {
-      console.log('123')
+      if (this.isRepeating) {
+        return this.playSong(message);
+      }
       return this.nextSong(message);
     });
 
@@ -113,12 +117,10 @@ export class MusicCommand implements CommandBase {
     };
   }
 
-  playSong(message: Message) {
-    if (this.leaveChannelTimeout) {
-      clearTimeout(this.leaveChannelTimeout);
-    }
+  setStream() {
     const {songLink} = this.queue[0];
-    const stream = ytdl(songLink, {
+
+    return ytdl(songLink, {
       filter: "audioonly",
       requestOptions: {
         headers: {
@@ -128,24 +130,46 @@ export class MusicCommand implements CommandBase {
       opusEncoded: true,
       encoderArgs: ['-af', 'bass=g=10,dynaudnorm=f=200']
     });
+  }
+
+  playSong(message: Message) {
+    if (this.leaveChannelTimeout) {
+      clearTimeout(this.leaveChannelTimeout);
+    }
+    const stream = this.setStream();
     this.play.dispatcher = this.play.connection.play(stream, {type: 'opus'});
 
     return this.finishSongHandler(message);
   }
 
-  stopStream(message: Message) {
+  repeatCurrentSong() {
     if (this.play.dispatcher) {
+      const {songName, songImage} = this.queue[0];
+      this.isRepeating = true;
+
+      return {
+        title: songName,
+        image: songImage,
+        description: 'Следующее произведение было поставленно на повтор'
+      }
+    }
+  }
+
+  stopStream(message: Message) {
+    if (this.play.dispatcher && message.member.voice.channel) {
       this.play.dispatcher.destroy();
       this.queue = [];
       this.leaveChannel(message, timeout);
+      this.isRepeating = false;
 
       return {
-        title: 'Процесс пения закончил я, пришла пора уйти за занавес',
-        image: '',
+        title: 'Песню петь окончил я',
+        description: 'теперь на пенсию отправлюсь',
+        image: decode('https://i.ytimg.com/vi/4RrBSA1AVFY/default.jpg'),
       };
     }
 
-    return {title: 'В данный момент воспроизведение музыкального произведения отрицательно присутствует'};
+    return {description: 'В данный момент воспроизведение музыкального произведения отрицательно присутствует'};
   }
 
   nextSong(message: Message) {
