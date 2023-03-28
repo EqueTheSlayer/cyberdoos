@@ -9,8 +9,8 @@ import {Token} from './config.json';
 import path from 'path';
 import fs from 'fs';
 import {DisTube} from 'distube';
-import {leaveVoiceChannel, sendMessage} from "./utils";
-import {distubeModel} from "./models/distube.model";
+import {sendMessage} from "./utils";
+import {distubeModel, FormattedSongForAnswer} from "./models/distube.model";
 
 //TODO настрой линтер ленивая жопа, я знаю это душно и не это тебе нравится в кодинге, но кто если не ты, завтрашний илюха, кто если не ты...
 
@@ -64,22 +64,33 @@ client.on(Events.InteractionCreate, async (interaction: BaseInteraction) => {
 
 // TODO переделать строку с ответом в объект с типом embed?, чтоб нормально можно было юзать embed (title, thumbnail, description и тд)
 // TODO СДЕЛАТЬ ОБРАБОТЧИК ЭВЕНТОВ ПО АНАЛОГИИ С КОМАНДАМИ
+
 client.distube
     .on('addSong', (queue, song) => {
         const answerString = queue.songs.length > 1
-            ? `${song.user} добавил ${song.name} в очередь`
-            : `Воспроизвожу ${song.name} по заказу ${song.user}`;
+            ? `добавлен в очередь пользователем ${song.user}`
+            : `по заказу ${song.user}`;
 
-        sendMessage(queue.textChannel, answerString, song.thumbnail)
+        const formattedSong: FormattedSongForAnswer = {
+            thumbnail: song.thumbnail,
+            description: answerString,
+            title: song.name
+        }
+
+        sendMessage(queue.textChannel, formattedSong)
     })
     .on('error', (textChannel, e) => {
         //TODO шо за цифры
-        sendMessage(textChannel, `Ошибка: ${e.message.slice(0, 2000)}`);
+        sendMessage(textChannel, {
+            description: `Ошибка: ${e.message.slice(0, 2000)}`,
+        })
         console.error(e);
     })
-    .on('deleteQueue', queue => {
-        sendMessage(queue.textChannel, 'Песни кончились', 'https://i.redd.it/pn1n2ctvla231.jpg');
-        leaveVoiceChannel(client)
+    .on('finish', queue => {
+        sendMessage(queue.textChannel, {
+            description: 'Песни кончились',
+            thumbnail: 'https://i.redd.it/pn1n2ctvla231.jpg',
+        })
     });
 
 //TODO СДЕЛАТЬ МЕХАНИКУ ПЕРЕСТРЕЛОК В НОВОЙ КОМАНДЕ

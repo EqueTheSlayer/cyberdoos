@@ -1,13 +1,18 @@
 import {timeout} from "../models/main.model";
 import {EmbedBuilder, GuildTextBasedChannel, TextChannel} from "discord.js";
-import {GuildId} from "../config.json";
-import {ClientModel} from "../models/client.model";
+import {FormattedSongForAnswer} from "../models/distube.model";
 
+export const colors = [0xff2400, 0xE91E63, 0x9B59B6, 0x00db0f, 0x00ffee, 0x0004ff, 0xf6ff00, 0xff9100];
 
-//TODO забери из старого бота рандомный выбор цвета и прикрути к sendMessage
-export function sendMessage(textChannel: GuildTextBasedChannel, song: string, thumbnail?: string): void {
+export function sendMessage(textChannel: GuildTextBasedChannel, song: FormattedSongForAnswer): void {
     textChannel.send({
-        embeds: [new EmbedBuilder().setColor('Red').setDescription(song).setImage(thumbnail)]
+        embeds: [
+            new EmbedBuilder()
+            .setColor(getRandomElement(colors))
+            .setDescription(song.description)
+            .setImage(song.thumbnail)
+            .setTitle(song.title)
+        ]
     }).then(msg => {
         setTimeout(() => {
             msg.delete();
@@ -15,6 +20,6 @@ export function sendMessage(textChannel: GuildTextBasedChannel, song: string, th
     });
 }
 
-export function leaveVoiceChannel(client: ClientModel) {
-    client.distube.voices.leave(GuildId);
+export function getRandomElement(array: any[]) {
+    return array[Math.floor(Math.random() * array.length)];
 }
