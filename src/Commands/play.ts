@@ -28,7 +28,11 @@ module.exports = {
                 .addStringOption(option =>
                     option.setName('repeat')
                         .setDescription('0 - отключить повтор, 1 - включить повтор')
-                        .setRequired(true))),
+                        .setRequired(true)))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('status')
+                .setDescription('Показывает информацию о текущем треке')),
     async execute(interaction, client: ClientModel) {
         const {options, member, guild, channel} = interaction;
         const subCommand = options.getSubcommand();
@@ -56,15 +60,15 @@ module.exports = {
                     await queue?.setRepeatMode(Number(options.getString('repeat')));
                     await interaction.editReply({
                         content: queue.repeatMode === 1 ? 'Поставил на повтор' : 'Снял с повтора'
-                    })
-
+                    });
                     break;
                 case 'next':
                     await interaction.deferReply({ ephemeral: true });
                     await queue?.skip();
                     await interaction.editReply({content: 'Включаю следующую песню'});
-
-                //TODO  добавить status с названием песни, юрлом, и статусом типа isRepeating, мож как-то это все отрефакторить хз
+                    break;
+                case 'status':
+                    await interaction.reply({content: `Сейчас играет: ${queue.songs[0].name}. Повтор: ${queue.repeatMode === 1 ? 'вкл.' : 'выкл.'} `, ephemeral: true});
             }
         } catch (e) {
             console.log(e)

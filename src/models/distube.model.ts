@@ -11,7 +11,7 @@ export const distubeModel = {
 }
 
 export type FormattedSongForAnswer = {
-    thumbnail?: string;
+    thumbnail: string;
     description: string;
-    title?: string;
+    title: string;
 }

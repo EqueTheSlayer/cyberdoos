@@ -88,7 +88,7 @@ client.distube
     })
     .on('finish', queue => {
         sendMessage(queue.textChannel, {
-            description: 'Песни кончились',
+            title: 'Песни кончились',
             thumbnail: 'https://i.redd.it/pn1n2ctvla231.jpg',
         })
     });
