@@ -1,4 +1,5 @@
 import {CookiesForYoutube} from '../config.json';
+import {YtDlpPlugin} from "@distube/yt-dlp";
 
 export const distubeModel = {
     searchSongs: 5,
@@ -8,6 +9,7 @@ export const distubeModel = {
     leaveOnStop: false,
     youtubeCookie: CookiesForYoutube,
     nsfw: true,
+    plugins: [new YtDlpPlugin({ update: true })],
 }
 
 export type FormattedSongForAnswer = {
