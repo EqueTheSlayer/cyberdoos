@@ -4,8 +4,8 @@ import {YtDlpPlugin} from "@distube/yt-dlp";
 export const distubeModel = {
     searchSongs: 5,
     searchCooldown: 30,
-    leaveOnEmpty: true,
-    leaveOnFinish: false,
+    leaveOnEmpty: false,
+    leaveOnFinish: true,
     leaveOnStop: false,
     youtubeCookie: CookiesForYoutube,
     nsfw: true,

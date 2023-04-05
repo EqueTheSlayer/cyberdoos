@@ -2,19 +2,18 @@ import {
     Client,
     Events,
     Collection,
-    BaseInteraction,
+    BaseInteraction, EmbedBuilder,
 } from 'discord.js';
 import {ClientModel} from "./models/client.model";
-import {Token} from './config.json';
+import {Token, AnnaId} from './config.json';
 import path from 'path';
 import fs from 'fs';
 import {DisTube} from 'distube';
-import {sendMessage} from "./utils";
+import {colors, getRandomElement, sendMessage} from "./utils";
 import {distubeModel, FormattedSongForAnswer} from "./models/distube.model";
+import {imagesForGoodNightWishes, isGoodNightWish, nameForAnya} from "./models/main.model";
 
-//TODO настрой линтер ленивая жопа, я знаю это душно и не это тебе нравится в кодинге, но кто если не ты, завтрашний илюха, кто если не ты...
-
-const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 'GuildMessages']});
+const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 'GuildMessages', 'MessageContent']});
 
 client.once(Events.ClientReady, c => {
     console.log(`Бот авторизован как ${c.user.tag}`);
@@ -59,6 +58,20 @@ client.on(Events.InteractionCreate, async (interaction: BaseInteraction) => {
         } else {
             await interaction.reply({content: 'При выполнении команды произошла ошибка!', ephemeral: true});
         }
+    }
+});
+
+//пожелание спокойной ночи одному человеку
+client.on('messageCreate', (message) => {
+    if (message.author.id === AnnaId && isGoodNightWish(message.content.toLowerCase())) {
+        void message.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(getRandomElement(colors))
+                    .setTitle(`Спокойной ночи ${getRandomElement(nameForAnya)}, сладких тебе сновидений`)
+                    .setImage(getRandomElement(imagesForGoodNightWishes))
+            ]
+        });
     }
 });
 
