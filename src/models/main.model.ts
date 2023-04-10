@@ -7,7 +7,7 @@ export const isGoodNightWish = (message: string):boolean => {
     return;
 }
 
-export const imagesForGoodNightWishes = [
+export const imagesForGoodNightWishes: string[] = [
     'https://media.tenor.com/UZxQKC5Pk-MAAAAC/sailor-cat-sleeping.gif',
     'https://media.tenor.com/dw0l45Ic1EsAAAAC/adorable-cat.gif',
     'https://media.tenor.com/FnykXKRyX-YAAAAd/cat-sleeping.gif',
@@ -22,4 +22,4 @@ export const imagesForGoodNightWishes = [
 
 ];
 
-export const nameForAnya = ['Анечка', 'Анчартед', 'Анюта', 'Аннушка', 'Андаинг', 'Анюша', 'Аннус', 'Анняме', 'Анншлаг', 'Аня', 'Анневризма', 'Кураганя', 'Аннапа', 'Аннаконда', 'Анекдот', 'Анна', '']
+export const nameForAnya: string[]  = ['Анечка', 'Анчартед', 'Анюта', 'Аннушка', 'Андаинг', 'Анюша', 'Аннус', 'Анняме', 'Анншлаг', 'Аня', 'Анневризма', 'Кураганя', 'Аннапа', 'Аннаконда', 'Анекдот', 'Анна'];

@@ -1,5 +1,6 @@
 import {SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheType} from'discord.js';
 import {ClientModel} from "../models/client.model";
+import {repeatType} from "../models/play.model";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,7 +28,7 @@ module.exports = {
                 .setDescription('Повтор песни')
                 .addStringOption(option =>
                     option.setName('repeat')
-                        .setDescription('0 - отключить повтор, 1 - включить повтор')
+                        .setDescription('0 - отключить повтор, 1 - включить повтор песни, 2 - включить повтор плейлиста')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
@@ -59,7 +60,7 @@ module.exports = {
                     await interaction.deferReply({ ephemeral: true });
                     await queue?.setRepeatMode(Number(options.getString('repeat')));
                     await interaction.editReply({
-                        content: queue.repeatMode === 1 ? 'Поставил на повтор' : 'Снял с повтора'
+                        content: repeatType[queue.repeatMode]
                     });
                     break;
                 case 'next':
