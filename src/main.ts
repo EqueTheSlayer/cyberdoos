@@ -36,10 +36,12 @@ client.once(Events.ClientReady, async (c) => {
             const db = mongoClient.db(databaseName);
             const collection = db.collection(collectionName);
             await collection.updateOne({userId: randomUser.user.id}, {
-                $inc: {"timesChosen": 1}
+                $setOnInsert: {
+                    userId: randomUser.user.id,
+                },
+                $inc: {timesChosen: 1}
             }, {upsert: true});
             const result = await collection.find({userId: randomUser.user.id}).toArray();
-            await collection.drop();
             const color = getRandomElement(colors);
             channels.forEach(channel => {
                 channel.then(data => {
@@ -48,7 +50,7 @@ client.once(Events.ClientReady, async (c) => {
                         embeds: [
                             new EmbedBuilder()
                                 .setColor(color)
-                                .setDescription(`${randomUser.user} поздравляю! Ты стал(а) главным пидорасом на сегодняшний день` || null)
+                                .setDescription(`${randomUser.user} поздравляю! Ты стал(а) главным \n пидорасом на сегодняшний день` || null)
                                 .setImage(randomUserImage || null)
                                 .setTitle('РУБРИКА "ПИДОРАС ДНЯ"' || null)
                                 .addFields({ name: 'Был(а) главным пидорасом дня:', value: `${result[0].timesChosen} раз(а)` || null})
