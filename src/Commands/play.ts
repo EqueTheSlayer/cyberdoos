@@ -1,4 +1,4 @@
-import {SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheType} from'discord.js';
+import {SlashCommandBuilder} from'discord.js';
 import {ClientModel} from "../models/client.model";
 import {repeatType} from "../models/play.model";
 
@@ -35,7 +35,7 @@ module.exports = {
                 .setName('status')
                 .setDescription('Показывает информацию о текущем треке')),
     async execute(interaction, client: ClientModel) {
-        const {options, member, guild, channel} = interaction;
+        const {options, member, channel} = interaction;
         const subCommand = options.getSubcommand();
         const voiceChannel = member?.voice.channel;
         const queue = await client.distube?.getQueue(voiceChannel);
@@ -69,7 +69,7 @@ module.exports = {
                     await interaction.editReply({content: 'Включаю следующую песню'});
                     break;
                 case 'status':
-                    await interaction.reply({content: `Сейчас играет: ${queue.songs[0].name}. Повтор: ${queue.repeatMode === 1 ? 'вкл.' : 'выкл.'} `, ephemeral: true});
+                    await interaction.reply({content: `Сейчас играет: ${queue.songs[0].name}. Повтор: ${queue.repeatMode > 0 ? 'вкл.' : 'выкл.'} `, ephemeral: true});
             }
         } catch (e) {
             console.log(e)

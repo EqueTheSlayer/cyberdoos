@@ -2,24 +2,51 @@ import {
     Client,
     Events,
     Collection,
-    BaseInteraction, EmbedBuilder,
+    BaseInteraction, EmbedBuilder, GuildMember
 } from 'discord.js';
 import {ClientModel} from "./models/client.model";
-import {Token, AnnaId} from './config.json';
+import {Token, AnnaId, GuildId, ChannelIds} from './config.json';
 import path from 'path';
 import fs from 'fs';
 import {DisTube} from 'distube';
 import {colors, getRandomElement, sendMessage} from "./utils";
 import {distubeModel, FormattedSongForAnswer} from "./models/distube.model";
 import {imagesForGoodNightWishes, isGoodNightWish, nameForAnya} from "./models/main.model";
+import {schedule} from 'node-cron';
 
-const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 'GuildMessages', 'MessageContent']});
+const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 'GuildMessages', 'GuildMembers', 'MessageContent']});
 
-client.once(Events.ClientReady, c => {
+client.once(Events.ClientReady, async (c) => {
     console.log(`Бот авторизован как ${c.user.tag}`);
+
+    const guild = client.guilds.cache.get(GuildId);
+    const guildUsers = await guild.members.fetch();
+    const channels = ChannelIds.map(async id => {
+        return client.channels.cache.get(id)
+    });
+
+    schedule('00 21 * * *', () => {
+        const randomUser: GuildMember = getRandomElement(Array.from(guildUsers))[1];
+        const randomUserImage = randomUser.displayAvatarURL({size: 1024})
+
+        channels.forEach(channel => {
+            channel.then(data => {
+                //@ts-ignore
+                data.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(getRandomElement(colors))
+                            .setDescription(`${randomUser.user} поздравляю! Ты стал(а) главным пидорасом на сегодняшний день` || null)
+                            .setImage(randomUserImage || null)
+                            .setTitle('РУБРИКА "ПИДОРАС ДНЯ"' || null)
+                    ]
+                })
+            })
+        })
+    });
 });
 
-client.commands = new Collection<string, { data: '', execute: () => {}}>();
+client.commands = new Collection<string, { data: '', execute: () => {} }>();
 
 const commandsPath = path.join(__dirname, 'Commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
@@ -75,7 +102,6 @@ client.on('messageCreate', (message) => {
     }
 });
 
-// TODO переделать строку с ответом в объект с типом embed?, чтоб нормально можно было юзать embed (title, thumbnail, description и тд)
 // TODO СДЕЛАТЬ ОБРАБОТЧИК ЭВЕНТОВ ПО АНАЛОГИИ С КОМАНДАМИ
 
 client.distube
