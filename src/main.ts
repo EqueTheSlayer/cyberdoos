@@ -134,7 +134,8 @@ client.distube
         const formattedSong: FormattedSongForAnswer = {
             thumbnail: song.thumbnail,
             description: answerString,
-            title: song.name
+            title: song.name,
+            url: song.url
         }
 
         sendMessage(queue.textChannel, formattedSong)

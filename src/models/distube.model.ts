@@ -16,4 +16,5 @@ export type FormattedSongForAnswer = {
     thumbnail: string;
     description: string;
     title: string;
+    url: string;
 }
