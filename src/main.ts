@@ -6,6 +6,7 @@ import {
 } from 'discord.js';
 import {ClientModel} from "./models/client.model";
 import {Token, AnnaId, GuildId, ChannelIds} from './config.json';
+import {mongoConnectAddress, databaseName, collectionName} from './mongoConfig.json';
 import path from 'path';
 import fs from 'fs';
 import {DisTube} from 'distube';
@@ -13,36 +14,54 @@ import {colors, getRandomElement, sendMessage} from "./utils";
 import {distubeModel, FormattedSongForAnswer} from "./models/distube.model";
 import {imagesForGoodNightWishes, isGoodNightWish, nameForAnya} from "./models/main.model";
 import {schedule} from 'node-cron';
+import {MongoClient} from "mongodb";
 
 const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 'GuildMessages', 'GuildMembers', 'MessageContent']});
+const mongoClient = new MongoClient(mongoConnectAddress);
 
 client.once(Events.ClientReady, async (c) => {
     console.log(`Бот авторизован как ${c.user.tag}`);
-
     const guild = client.guilds.cache.get(GuildId);
     const guildUsers = await guild.members.fetch();
     const channels = ChannelIds.map(async id => {
         return client.channels.cache.get(id)
     });
 
-    schedule('00 21 * * *', () => {
-        const randomUser: GuildMember = getRandomElement(Array.from(guildUsers))[1];
-        const randomUserImage = randomUser.displayAvatarURL({size: 1024})
+    schedule('00 21 * * *', async () => {
+        try {
+            const randomUser: GuildMember = getRandomElement(Array.from(guildUsers))[1];
+            const randomUserImage = randomUser.displayAvatarURL({size: 1024})
+            await mongoClient.connect();
 
-        channels.forEach(channel => {
-            channel.then(data => {
-                //@ts-ignore
-                data.send({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(getRandomElement(colors))
-                            .setDescription(`${randomUser.user} поздравляю! Ты стал(а) главным пидорасом на сегодняшний день` || null)
-                            .setImage(randomUserImage || null)
-                            .setTitle('РУБРИКА "ПИДОРАС ДНЯ"' || null)
-                    ]
+            const db = mongoClient.db(databaseName);
+            const collection = db.collection(collectionName);
+            await collection.updateOne({userId: randomUser.user.id}, {
+                $inc: {"timesChosen": 1}
+            }, {upsert: true});
+            const result = await collection.find({userId: randomUser.user.id}).toArray();
+            await collection.drop();
+            const color = getRandomElement(colors);
+            channels.forEach(channel => {
+                channel.then(data => {
+                    //@ts-ignore
+                    data.send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(color)
+                                .setDescription(`${randomUser.user} поздравляю! Ты стал(а) главным пидорасом на сегодняшний день` || null)
+                                .setImage(randomUserImage || null)
+                                .setTitle('РУБРИКА "ПИДОРАС ДНЯ"' || null)
+                                .addFields({ name: 'Был(а) главным пидорасом дня:', value: `${result[0].timesChosen} раз(а)` || null})
+                        ]
+                    })
                 })
             })
-        })
+        } catch (err) {
+            console.log(err)
+        } finally {
+            await mongoClient.close();
+        }
+
     });
 });
 

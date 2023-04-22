@@ -1,3 +1,4 @@
 src/config.json
 build
 package-lock.json
+src/mongoConfig.json
