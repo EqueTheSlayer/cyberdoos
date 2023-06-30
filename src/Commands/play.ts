@@ -1,6 +1,7 @@
-import {SlashCommandBuilder} from'discord.js';
+import {ActionRowBuilder, ButtonBuilder, SlashCommandBuilder} from 'discord.js';
 import {ClientModel} from "../models/client.model";
 import {repeatType} from "../models/play.model";
+import {stop, status, repeat, next, row, row2} from "../components/buttons";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -49,7 +50,7 @@ module.exports = {
                         member: member,
                         position: -1,
                     });
-                    await interaction.editReply({content: 'Нашел, врубаю'});
+                    await interaction.editReply({content: 'Нашел, врубаю', components: [row, row2]});
                     break;
                 case 'stop':
                     await interaction.deferReply({ ephemeral: true });
@@ -59,17 +60,19 @@ module.exports = {
                 case 'repeat':
                     await interaction.deferReply({ ephemeral: true });
                     await queue?.setRepeatMode(Number(options.getString('repeat')));
+                    repeat.setEmoji(queue.repeatMode === 2 ? '🔂' : '🔁')
                     await interaction.editReply({
-                        content: repeatType[queue.repeatMode]
+                        content: repeatType[queue.repeatMode],
+                        components: [row, row2]
                     });
                     break;
                 case 'next':
                     await interaction.deferReply({ ephemeral: true });
                     await queue?.skip();
-                    await interaction.editReply({content: 'Включаю следующую песню'});
+                    await interaction.editReply({content: 'Включаю следующую песню', components: [row, row2]});
                     break;
                 case 'status':
-                    await interaction.reply({content: `Сейчас играет: ${queue.songs[0].name}. Повтор: ${queue.repeatMode > 0 ? 'вкл.' : 'выкл.'} `, ephemeral: true});
+                    await interaction.reply({content: `Сейчас играет: ${queue.songs[0].name}. ${repeatType[queue.repeatMode]}`, ephemeral: true, components: [row, row2]});
             }
         } catch (e) {
             console.log(e)

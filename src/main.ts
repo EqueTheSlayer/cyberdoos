@@ -5,7 +5,7 @@ import {
     BaseInteraction, EmbedBuilder, GuildMember
 } from 'discord.js';
 import {ClientModel} from "./models/client.model";
-import {Token, AnnaId, GuildId, ChannelIds} from './config.json';
+import {Token, AnnaId, GuildId, ChannelIds, BannedGuildId} from './config.json';
 import {mongoConnectAddress, databaseName, collectionName} from './mongoConfig.json';
 import path from 'path';
 import fs from 'fs';
@@ -13,21 +13,34 @@ import {DisTube} from 'distube';
 import {colors, getRandomElement, sendMessage} from "./utils";
 import {distubeModel, FormattedSongForAnswer} from "./models/distube.model";
 import {imagesForGoodNightWishes, isGoodNightWish, nameForAnya} from "./models/main.model";
+import {repeatType} from "./models/play.model";
+import {next, playPause, previous, repeat, row, row2, status, stop} from "./components/buttons";
 import {schedule} from 'node-cron';
 import {MongoClient} from "mongodb";
 
 const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 'GuildMessages', 'GuildMembers', 'MessageContent']});
 const mongoClient = new MongoClient(mongoConnectAddress);
 
+// client.on(Events.GuildCreate, (guild) => {
+//     if (guild.id === BannedGuildId) {
+//         void guild.leave()
+//     }
+// })
+
 client.once(Events.ClientReady, async (c) => {
+
     console.log(`Бот авторизован как ${c.user.tag}`);
-    const guild = client.guilds.cache.get(GuildId);
-    const guildUsers = await guild.members.fetch();
+    const guild = await client.guilds.cache.get(GuildId);
+    const guildUsers = await guild?.members.fetch();
     const channels = ChannelIds.map(async id => {
         return client.channels.cache.get(id)
     });
 
-    schedule('00 21 * * *', async () => {
+    // if (guild.id === BannedGuildId) {
+    //     void guild.leave()
+    // }
+
+    schedule('43 16 * * *', async () => {
         try {
             const randomUser: GuildMember = getRandomElement(Array.from(guildUsers))[1];
             const randomUserImage = randomUser.displayAvatarURL({size: 1024})
@@ -53,7 +66,10 @@ client.once(Events.ClientReady, async (c) => {
                                 .setDescription(`${randomUser.user} поздравляю! Ты стал(а) главным \n пидорасом на сегодняшний день` || null)
                                 .setImage(randomUserImage || null)
                                 .setTitle('РУБРИКА "ПИДОРАС ДНЯ"' || null)
-                                .addFields({ name: 'Был(а) главным пидорасом дня:', value: `${result[0].timesChosen} раз(а)` || null})
+                                .addFields({
+                                    name: 'Был(а) главным пидорасом дня:',
+                                    value: `${result[0].timesChosen} раз(а)` || null
+                                })
                         ]
                     })
                 })
@@ -65,6 +81,81 @@ client.once(Events.ClientReady, async (c) => {
         }
 
     });
+});
+
+client.on(Events.InteractionCreate, async (interaction) => {
+    const previousEmoji = client.emojis.cache.get("1104726827756429343"),
+        nextEmoji = client.emojis.cache.get("1104731726518943784"),
+        stopEmoji = client.emojis.cache.get("1104731761151324170"),
+        statusEmoji = client.emojis.cache.get("1104732831290236978"),
+        playPauseEmoji = client.emojis.cache.get("1104731744957120522"),
+        repeatListEmoji = client.emojis.cache.get("1104731776443764787"),
+        repeatSongEmoji = client.emojis.cache.get("1104733022168809532");
+
+    next.setEmoji(nextEmoji.toString());
+    previous.setEmoji(previousEmoji.toString());
+    playPause.setEmoji(playPauseEmoji.toString());
+    playPause.setEmoji(playPauseEmoji.toString());
+    stop.setEmoji(stopEmoji.toString());
+    status.setEmoji(statusEmoji.toString());
+    repeat.setEmoji(repeatListEmoji.toString())
+
+    if (interaction.isButton()) {
+        const {member} = interaction;
+        //@ts-ignore
+        const voiceChannel = member?.voice.channel;
+        const queue = await client.distube?.getQueue(voiceChannel);
+        switch (interaction.customId) {
+            case 'next':
+                await interaction.deferReply({ephemeral: true});
+                await queue?.skip();
+                //@ts-ignore
+                await interaction.editReply({content: 'Включаю следующую песню', components: [row, row2]});
+                break;
+            case 'previous':
+                if (queue.previousSongs.length > 0) {
+                    await interaction.deferReply({ephemeral: true});
+                    await queue?.previous();
+                    //@ts-ignore
+                    await interaction.editReply({content: 'Включаю предыдущюю песню', components: [row, row2]});
+                }
+                break;
+            case 'playPause':
+                await interaction.deferReply({ephemeral: true});
+                if (queue.paused) {
+                    queue.resume();
+                    //@ts-ignore
+                    await interaction.editReply({content: 'Продолжаю воспроизведение песни', components: [row, row2]});
+                    break;
+                }
+                queue.pause();
+                //@ts-ignore
+                await interaction.editReply({content: 'Останавливаю песню', components: [row, row2]});
+                break;
+            case 'stop':
+                await interaction.deferReply({ephemeral: true});
+                await queue?.stop();
+                //@ts-ignore
+                await interaction.editReply({content: 'Выключаю песню и обнуляю очередь'});
+                break;
+            case 'status':
+                //@ts-ignore
+                await interaction.reply({
+                    content: `Сейчас играет: ${queue.songs[0].name}. ${repeatType[queue.repeatMode]}`,
+                    ephemeral: true,
+                    components: [row, row2]
+                });
+                break;
+            case 'repeat':
+                await interaction.deferReply({ephemeral: true});
+                await queue?.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1);
+                repeat.setStyle(queue.repeatMode > 0 ? 1 : 2)
+                repeat.setEmoji(queue.repeatMode === 2 ? repeatListEmoji.toString() : repeatSongEmoji.toString())
+                //@ts-ignore
+                await interaction.editReply({content: repeatType[queue.repeatMode], components: [row, row2]});
+                break;
+        }
+    }
 });
 
 client.commands = new Collection<string, { data: '', execute: () => {} }>();
@@ -109,7 +200,6 @@ client.on(Events.InteractionCreate, async (interaction: BaseInteraction) => {
     }
 });
 
-//пожелание спокойной ночи одному человеку
 client.on('messageCreate', (message) => {
     if (message.author.id === AnnaId && isGoodNightWish(message.content.toLowerCase())) {
         void message.reply({

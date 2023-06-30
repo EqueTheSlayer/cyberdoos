@@ -6,6 +6,13 @@ export const isGoodNightWish = (message: string):boolean => {
     }
     return;
 }
+//
+// export const isGoodNightWish = (message: string):boolean => {
+//     if(message.includes('хуй') || message.includes('член') || message.includes('залупа') || message.includes('дрын') || message.includes('дрын')) {
+//         return message.includes('добр') || message.includes('сладк') || message.includes('пок')
+//     }
+//     return;
+// }
 
 export const imagesForGoodNightWishes: string[] = [
     'https://media.tenor.com/UZxQKC5Pk-MAAAAC/sailor-cat-sleeping.gif',
