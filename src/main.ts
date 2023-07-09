@@ -5,61 +5,143 @@ import {
     BaseInteraction, EmbedBuilder, GuildMember
 } from 'discord.js';
 import {ClientModel} from "./models/client.model";
-import {Token, AnnaId, GuildId, ChannelIds, BannedGuildId} from './config.json';
-import {mongoConnectAddress, databaseName, collectionName} from './mongoConfig.json';
+import {Token, AnnaId, GuildId, ChannelIds, BannedGuildId, SubsiteId} from './config.json';
+import {mongoConnectAddress, databaseName, guildCollection} from './mongoConfig.json';
 import path from 'path';
 import fs from 'fs';
 import {DisTube} from 'distube';
 import {colors, getRandomElement, sendMessage} from "./utils";
 import {distubeModel, FormattedSongForAnswer} from "./models/distube.model";
-import {imagesForGoodNightWishes, isGoodNightWish, nameForAnya} from "./models/main.model";
+import {
+    imagesForGoodNightWishes,
+    isGoodNightWish,
+    leroiPhrases,
+    BotGuildData,
+    nameForAnya
+} from "./models/main.model";
 import {repeatType} from "./models/play.model";
 import {next, playPause, previous, repeat, row, row2, status, stop} from "./components/buttons";
-import {schedule} from 'node-cron';
 import {MongoClient} from "mongodb";
+import io from "socket.io-client"
+import {deployCommands} from "./deploy-commands";
+import {schedule} from "node-cron";
 
 const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 'GuildMessages', 'GuildMembers', 'MessageContent']});
 const mongoClient = new MongoClient(mongoConnectAddress);
 
-// client.on(Events.GuildCreate, (guild) => {
-//     if (guild.id === BannedGuildId) {
-//         void guild.leave()
-//     }
-// })
-
-client.once(Events.ClientReady, async (c) => {
-
-    console.log(`Бот авторизован как ${c.user.tag}`);
-    const guild = await client.guilds.cache.get(GuildId);
-    const guildUsers = await guild?.members.fetch();
-    const channels = ChannelIds.map(async id => {
-        return client.channels.cache.get(id)
-    });
-
+client.on(Events.GuildCreate, async (guild) => {
     // if (guild.id === BannedGuildId) {
     //     void guild.leave()
     // }
 
-    schedule('43 16 * * *', async () => {
-        try {
-            const randomUser: GuildMember = getRandomElement(Array.from(guildUsers))[1];
-            const randomUserImage = randomUser.displayAvatarURL({size: 1024})
+    // const channel = guild.channels.create({name: '📣лента-якоря'});
+    await mongoClient.connect();
+
+    const db = mongoClient.db(databaseName);
+    const collection = db.collection(guildCollection);
+
+    await collection.updateOne({guildId: guild.id}, {
+        $set: {
+            guildId: guild.id,
+            dtfSubsite: false,
+            dtfSubsiteLink: '',
+            dtfSubsiteChannel: '',
+            manOfTheDay: false,
+            manOfTheDayChannel: '',
+            users: []
+        } as BotGuildData
+    }, {upsert: true});
+
+    deployCommands(guild.id)
+
+    await mongoClient.close();
+    // channel.then((data) => {
+    //     console.log(data.id)
+    // })
+})
+
+client.once(Events.ClientReady, async (c) => {
+
+    console.log(`Бот авторизован как ${c.user.tag}`);
+
+
+    let socket = io("https://ws-sio.dtf.ru", {
+        transports: ["websocket"],
+    });
+
+    socket.emit("subscribe", {"channel": "api"});
+
+    socket.on("event", async (data) => {
+        if (data.data.type === 'new_entry_published') {
             await mongoClient.connect();
 
             const db = mongoClient.db(databaseName);
-            const collection = db.collection(collectionName);
-            await collection.updateOne({userId: randomUser.user.id}, {
-                $setOnInsert: {
-                    userId: randomUser.user.id,
-                },
-                $inc: {timesChosen: 1}
-            }, {upsert: true});
-            const result = await collection.find({userId: randomUser.user.id}).toArray();
-            const color = getRandomElement(colors);
-            channels.forEach(channel => {
-                channel.then(data => {
+            const collection = db.collection(guildCollection);
+
+            const guilds = await collection.find<BotGuildData>({}).toArray();
+
+            guilds.map(async guild => {
+                if (guild.dtfSubsite) {
+                    const discordGuild = await client.guilds.cache.get(guild.guildId);
+                    console.log(typeof data.data.subsite_id, data.data.subsite_id, guild.dtfSubsiteLink)
+                    if (data.data.subsite_id === Number(guild.dtfSubsiteLink)) {
+                        const reply = `https://dtf.ru/s/${guild.dtfSubsiteLink}/${data.data.content_id}`;
+                        const channel = discordGuild.channels.cache.get(guild.dtfSubsiteChannel);
+
+                        //@ts-ignore
+                        channel.send(reply);
+
+                    }
+                }
+            })
+
+            await mongoClient.close();
+        }
+    });
+
+
+    schedule('00 12 * * *', async () => {
+        await mongoClient.connect();
+
+        const db = mongoClient.db(databaseName);
+        const collection = db.collection(guildCollection);
+
+        const guilds = await collection.find<BotGuildData>({}).toArray();
+
+        guilds.map(async guild => {
+            try {
+                if (guild.manOfTheDay) {
+                    const discordGuild = await client.guilds.cache.get(guild.guildId);
+                    const guildUsers = await discordGuild.members.fetch();
+                    const randomUser: GuildMember = getRandomElement(Array.from(guildUsers))[1];
+                    const channel = discordGuild.channels.cache.get(guild.manOfTheDayChannel);
+                    const randomUserImage = randomUser.displayAvatarURL({size: 1024});
+                    const result = await collection.find<BotGuildData>({guildId: guild.guildId}).toArray();
+                    const userCreatedIndex = result[0].users.findIndex(user => user.userId === randomUser.user.id);
+                    const usersArray = result[0].users;
+                    let userCreated;
+                    if (userCreatedIndex > 0) {
+                        userCreated = usersArray[userCreatedIndex];
+
+                        userCreated.timesChosen += 1;
+                        usersArray[userCreatedIndex] = userCreated;
+                    } else {
+                        userCreated = {
+                            userId: randomUser.user.id,
+                            timesChosen: 1
+                        }
+                        usersArray.push(userCreated);
+                    }
+
+                    await collection.updateOne({guildId: guild.guildId}, {
+                        $set: {
+                            users: usersArray
+                        }
+                    });
+
+                    const color = getRandomElement(colors);
                     //@ts-ignore
-                    data.send({
+                    channel.send({
                         embeds: [
                             new EmbedBuilder()
                                 .setColor(color)
@@ -68,19 +150,24 @@ client.once(Events.ClientReady, async (c) => {
                                 .setTitle('РУБРИКА "ПИДОРАС ДНЯ"' || null)
                                 .addFields({
                                     name: 'Был(а) главным пидорасом дня:',
-                                    value: `${result[0].timesChosen} раз(а)` || null
+                                    value: `${userCreated.timesChosen} раз(а)` || null
                                 })
                         ]
                     })
-                })
-            })
-        } catch (err) {
-            console.log(err)
-        } finally {
-            await mongoClient.close();
-        }
+                }
+            } catch (err) {
+                console.log(err)
+            } finally {
+                await mongoClient.close();
+            }
 
+        });
     });
+
+
+    // if (guild.id === BannedGuildId) {
+    //     void guild.leave()
+    // }
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -158,6 +245,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
 });
 
+
+client.distube = new DisTube(client, distubeModel);
+
 client.commands = new Collection<string, { data: '', execute: () => {} }>();
 
 const commandsPath = path.join(__dirname, 'Commands');
@@ -173,10 +263,6 @@ for (const file of commandFiles) {
         console.log(`[WARNING] У команды ${filePath} нет полей "data" или "execute".`);
     }
 }
-
-client.distube = new DisTube(client, distubeModel);
-
-module.exports = client;
 
 client.on(Events.InteractionCreate, async (interaction: BaseInteraction) => {
     if (!interaction.isChatInputCommand()) return;
