@@ -2,7 +2,7 @@ import {
     Client,
     Events,
     Collection,
-    BaseInteraction, EmbedBuilder, GuildMember
+    BaseInteraction, EmbedBuilder, GuildMember, TextChannel
 } from 'discord.js';
 import {ClientModel} from "./models/client.model";
 import {Token, AnnaId, GuildId, ChannelIds, BannedGuildId, SubsiteId} from './config.json';
@@ -10,7 +10,7 @@ import {mongoConnectAddress, databaseName, guildCollection} from './mongoConfig.
 import path from 'path';
 import fs from 'fs';
 import {DisTube} from 'distube';
-import {colors, getRandomElement, sendMessage} from "./utils";
+import {colors, getRandomElement, sendMessage, updateGuildInDb, updateSlashCommands} from "./utils";
 import {distubeModel, FormattedSongForAnswer} from "./models/distube.model";
 import {
     imagesForGoodNightWishes,
@@ -25,6 +25,7 @@ import {MongoClient} from "mongodb";
 import io from "socket.io-client"
 import {deployCommands} from "./deploy-commands";
 import {schedule} from "node-cron";
+import {dtfSocket} from "./utils/dtf-sockets";
 
 const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 'GuildMessages', 'GuildMembers', 'MessageContent']});
 const mongoClient = new MongoClient(mongoConnectAddress);
@@ -33,74 +34,21 @@ client.on(Events.GuildCreate, async (guild) => {
     // if (guild.id === BannedGuildId) {
     //     void guild.leave()
     // }
+    await updateGuildInDb(mongoClient, guild.id);
 
-    // const channel = guild.channels.create({name: '📣лента-якоря'});
-    await mongoClient.connect();
-
-    const db = mongoClient.db(databaseName);
-    const collection = db.collection(guildCollection);
-
-    await collection.updateOne({guildId: guild.id}, {
-        $set: {
-            guildId: guild.id,
-            dtfSubsite: false,
-            dtfSubsiteLink: '',
-            dtfSubsiteChannel: '',
-            manOfTheDay: false,
-            manOfTheDayChannel: '',
-            users: []
-        } as BotGuildData
-    }, {upsert: true});
-
-    deployCommands(guild.id)
-
-    await mongoClient.close();
-    // channel.then((data) => {
-    //     console.log(data.id)
-    // })
-})
+    await updateSlashCommands(guild.id)
+});
 
 client.once(Events.ClientReady, async (c) => {
-
     console.log(`Бот авторизован как ${c.user.tag}`);
 
+    await Promise.all(c.guilds.cache.map(guild => updateGuildInDb(mongoClient, guild.id)));
 
-    let socket = io("https://ws-sio.dtf.ru", {
-        transports: ["websocket"],
-    });
+    await updateSlashCommands(mongoClient);
 
-    socket.emit("subscribe", {"channel": "api"});
+    await dtfSocket(mongoClient, client);
 
-    socket.on("event", async (data) => {
-        if (data.data.type === 'new_entry_published') {
-            await mongoClient.connect();
-
-            const db = mongoClient.db(databaseName);
-            const collection = db.collection(guildCollection);
-
-            const guilds = await collection.find<BotGuildData>({}).toArray();
-
-            guilds.map(async guild => {
-                if (guild.dtfSubsite) {
-                    const discordGuild = await client.guilds.cache.get(guild.guildId);
-                    console.log(typeof data.data.subsite_id, data.data.subsite_id, guild.dtfSubsiteLink)
-                    if (data.data.subsite_id === Number(guild.dtfSubsiteLink)) {
-                        const reply = `https://dtf.ru/s/${guild.dtfSubsiteLink}/${data.data.content_id}`;
-                        const channel = discordGuild.channels.cache.get(guild.dtfSubsiteChannel);
-
-                        //@ts-ignore
-                        channel.send(reply);
-
-                    }
-                }
-            })
-
-            await mongoClient.close();
-        }
-    });
-
-
-    schedule('00 12 * * *', async () => {
+    schedule('45 13 * * *', async () => {
         await mongoClient.connect();
 
         const db = mongoClient.db(databaseName);
@@ -108,7 +56,7 @@ client.once(Events.ClientReady, async (c) => {
 
         const guilds = await collection.find<BotGuildData>({}).toArray();
 
-        guilds.map(async guild => {
+        await Promise.all(guilds.map(async guild => {
             try {
                 if (guild.manOfTheDay) {
                     const discordGuild = await client.guilds.cache.get(guild.guildId);
@@ -157,11 +105,11 @@ client.once(Events.ClientReady, async (c) => {
                 }
             } catch (err) {
                 console.log(err)
-            } finally {
-                await mongoClient.close();
             }
 
-        });
+        }));
+
+        await mongoClient?.close();
     });
 
 
@@ -314,17 +262,17 @@ client.distube
             url: song.url
         }
 
-        sendMessage(queue.textChannel, formattedSong)
+        sendMessage(queue.textChannel as TextChannel, formattedSong)
     })
     .on('error', (textChannel, e) => {
         //TODO шо за цифры
-        sendMessage(textChannel, {
+        sendMessage(textChannel as TextChannel, {
             description: `Ошибка: ${e.message.slice(0, 2000)}`,
         })
         console.error(e);
     })
     .on('finish', queue => {
-        sendMessage(queue.textChannel, {
+        sendMessage(queue.textChannel as TextChannel, {
             title: 'Песни кончились',
             thumbnail: 'https://i.redd.it/pn1n2ctvla231.jpg',
         })

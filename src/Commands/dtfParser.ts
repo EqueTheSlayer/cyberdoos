@@ -21,7 +21,11 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('go')
-                .setDescription('Запускает или останавливает функцию на сервере')),
+                .setDescription('Запускает или останавливает функцию на сервере'))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('channel')
+                .setDescription('Создает канал для данной комманды')),
     async execute(interaction, client: ClientModel) {
         try {
             const {options, guild, member, channel} = interaction;
@@ -78,6 +82,18 @@ module.exports = {
                         });
 
                         await interaction.reply({content: 'Хорошо, отныне в созданном мной канале я буду постить ссылки именно на эти посты'});
+                        break;
+                    case 'channel':
+                        const createdChannel = await guild.channels.create({name: 'Пидорас дня'});
+
+                        await collection.updateOne({guildId: guild.id}, {
+                            $set: {
+                                dtfSubsite: true,
+                                dtfSubsiteChannel: createdChannel.id
+                            }
+                        }, {upsert: true});
+                        await interaction.reply({content: 'Канал был успешно создан, не забудьте переименовать его под ваши нужды!'});
+                        break;
                 }
 
 
