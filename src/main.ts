@@ -5,7 +5,7 @@ import {
     BaseInteraction, EmbedBuilder, GuildMember, TextChannel
 } from 'discord.js';
 import {ClientModel} from "./models/client.model";
-import {Token, AnnaId, GuildId, ChannelIds, BannedGuildId, SubsiteId} from './config.json';
+import {Token, AnnaId, BannedGuildId, GuildId, JujaId, JujaMainChannelId } from './config.json';
 import {mongoConnectAddress, databaseName, guildCollection} from './mongoConfig.json';
 import path from 'path';
 import fs from 'fs';
@@ -15,15 +15,12 @@ import {distubeModel, FormattedSongForAnswer} from "./models/distube.model";
 import {
     imagesForGoodNightWishes,
     isGoodNightWish,
-    leroiPhrases,
     BotGuildData,
-    nameForAnya
+    nameForAnya, NightJuj
 } from "./models/main.model";
 import {repeatType} from "./models/play.model";
 import {next, playPause, previous, repeat, row, row2, status, stop} from "./components/buttons";
 import {MongoClient} from "mongodb";
-import io from "socket.io-client"
-import {deployCommands} from "./deploy-commands";
 import {schedule} from "node-cron";
 import {dtfSocket} from "./utils/dtf-sockets";
 
@@ -31,9 +28,9 @@ const client: ClientModel = new Client({intents: ['Guilds', 'GuildVoiceStates', 
 const mongoClient = new MongoClient(mongoConnectAddress);
 
 client.on(Events.GuildCreate, async (guild) => {
-    // if (guild.id === BannedGuildId) {
-    //     void guild.leave()
-    // }
+    if (guild.id === BannedGuildId) {
+        void guild.leave()
+    }
     await updateGuildInDb(mongoClient, guild.id);
 
     await updateSlashCommands(guild.id)
@@ -42,11 +39,40 @@ client.on(Events.GuildCreate, async (guild) => {
 client.once(Events.ClientReady, async (c) => {
     console.log(`Бот авторизован как ${c.user.tag}`);
 
-    await Promise.all(c.guilds.cache.map(guild => updateGuildInDb(mongoClient, guild.id)));
+    await Promise.all(c.guilds.cache.map(guild => {
+        updateGuildInDb(mongoClient, guild.id);
+        if (guild.id === BannedGuildId) {
+            guild.leave();
+        }
+    }));
 
     await updateSlashCommands(mongoClient);
 
-    await dtfSocket(mongoClient, client);
+    // await dtfSocket(mongoClient, client);
+
+    schedule('00 23 * * *', async () => {
+        c.guilds.cache.map(guild => {
+            if (guild.id === GuildId) {
+                const juja = guild.members.cache.get(JujaId);
+                juja.edit({nick: 'Ночной Жуж'});
+                const messageChannel = guild.channels.cache.get(JujaMainChannelId) as TextChannel;
+
+                sendMessage(messageChannel, {
+                    thumbnail: `${getRandomElement(NightJuj)}`,
+                    title: 'Осторожно! Ночной Жуж выходит на охоту'
+                }, false);
+            }
+        })
+    });
+
+    schedule('00 8 * * *', async () => {
+        c.guilds.cache.map(guild => {
+            if (guild.id === GuildId) {
+                const juja = guild.members.cache.get(JujaId);
+                juja.edit({nick: 'Жуж'});
+            }
+        })
+    });
 
     schedule('45 13 * * *', async () => {
         await mongoClient.connect();
@@ -111,11 +137,6 @@ client.once(Events.ClientReady, async (c) => {
 
         await mongoClient?.close();
     });
-
-
-    // if (guild.id === BannedGuildId) {
-    //     void guild.leave()
-    // }
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -235,7 +256,7 @@ client.on(Events.InteractionCreate, async (interaction: BaseInteraction) => {
 });
 
 client.on('messageCreate', (message) => {
-    if (message.author.id === AnnaId && isGoodNightWish(message.content.toLowerCase())) {
+    if (AnnaId.includes(message.author.id) && isGoodNightWish(message.content.toLowerCase())) {
         void message.reply({
             embeds: [
                 new EmbedBuilder()

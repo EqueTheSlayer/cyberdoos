@@ -8,7 +8,7 @@ import {MongoClient} from "mongodb";
 
 export const colors = [0xff2400, 0xE91E63, 0x9B59B6, 0x00db0f, 0x00ffee, 0x0004ff, 0xf6ff00, 0xff9100];
 
-export function sendMessage(textChannel: TextChannel, song: Partial<FormattedSongForAnswer>): void {
+export function sendMessage(textChannel: TextChannel, song: Partial<FormattedSongForAnswer>, canBeDeleted: boolean = true): void {
     textChannel.send({
         embeds: [
             new EmbedBuilder()
@@ -19,9 +19,11 @@ export function sendMessage(textChannel: TextChannel, song: Partial<FormattedSon
                 .setURL(song.url || null)
         ]
     }).then(msg => {
-        setTimeout(() => {
-            msg.delete();
-        }, timeout);
+        if (canBeDeleted) {
+            setTimeout(() => {
+                msg.delete();
+            }, timeout);
+        }
     });
 }
 
@@ -44,7 +46,7 @@ export async function updateSlashCommands(mongoClient?, guildId?) {
 
     guilds.forEach(guild => deployCommands(guild.guildId))
 
-    await mongoClient.close();
+    setTimeout(() => mongoClient.close(), 5000);
 }
 
 export async function updateGuildInDb(mongoClient: MongoClient, guildId?: Snowflake) {
@@ -63,5 +65,5 @@ export async function updateGuildInDb(mongoClient: MongoClient, guildId?: Snowfl
         return;
     }
 
-    await mongoClient.close();
+    setTimeout(() => mongoClient.close(), 5000);
 }

@@ -26,6 +26,12 @@ export const imagesForGoodNightWishes: string[] = [
 
 export const nameForAnya: string[]  = ['Анечка', 'Анчартед', 'Анюта', 'Аннушка', 'Андаинг', 'Анюша', 'Аннус', 'Анняме', 'Анншлаг', 'Аня', 'Анневризма', 'Кураганя', 'Аннапа', 'Аннаконда', 'Анекдот', 'Анна'];
 
+export const NightJuj: string[] = [
+    'https://cdn.discordapp.com/attachments/1102342819491881150/1170762467731849306/image.png',
+    'https://cdn.discordapp.com/attachments/1102342819491881150/1170764549239083132/image.png',
+    'https://cdn.discordapp.com/attachments/1102342819491881150/1170764198108745728/image.png',
+];
+
 export const leroiPhrases: string[] = [
     'Фуфыкс ну ты и дурак, нахуя ты играешь в это говно если есть гирзы?',
     'Сони сами виноваты в таком поколении говноедов, оно и не удивительно после такого-то 8-ого поколения консолей',
