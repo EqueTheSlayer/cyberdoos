@@ -31,6 +31,10 @@ export function getRandomElement(array: any[]) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
+export function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
 export async function updateSlashCommands(mongoClient?, guildId?) {
     if (guildId) {
         deployCommands(guildId);
