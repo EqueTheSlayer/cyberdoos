@@ -77,7 +77,7 @@ client.once(Events.ClientReady, async (c) => {
 		c.guilds.cache.map(guild => {
 			if (guild.id === GuildId) {
 				guild.members.fetch(JujaId).then(result => {
-					result.edit({nick: 'Ночной Жуж'});
+					result.edit({nick: 'ночной жуж'});
 				});
 				const messageChannel = guild.channels.cache.get(JujaMainChannelId) as TextChannel;
 
@@ -93,7 +93,7 @@ client.once(Events.ClientReady, async (c) => {
 		c.guilds.cache.map(guild => {
 			if (guild.id === GuildId) {
 				guild.members.fetch(JujaId).then(result => {
-					result.edit({nick: 'Жуж'});
+					result.edit({nick: 'жуж'});
 				});
 			}
 		})
@@ -165,77 +165,82 @@ client.once(Events.ClientReady, async (c) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-	const previousEmoji = client.emojis.cache.get("1104726827756429343"),
-		nextEmoji = client.emojis.cache.get("1104731726518943784"),
-		stopEmoji = client.emojis.cache.get("1104731761151324170"),
-		statusEmoji = client.emojis.cache.get("1104732831290236978"),
-		playPauseEmoji = client.emojis.cache.get("1104731744957120522"),
-		repeatListEmoji = client.emojis.cache.get("1104731776443764787"),
-		repeatSongEmoji = client.emojis.cache.get("1104733022168809532");
+	try {
+		const previousEmoji = client.emojis.cache.get("1104726827756429343"),
+			nextEmoji = client.emojis.cache.get("1104731726518943784"),
+			stopEmoji = client.emojis.cache.get("1104731761151324170"),
+			statusEmoji = client.emojis.cache.get("1104732831290236978"),
+			playPauseEmoji = client.emojis.cache.get("1104731744957120522"),
+			repeatListEmoji = client.emojis.cache.get("1104731776443764787"),
+			repeatSongEmoji = client.emojis.cache.get("1104733022168809532");
 
-	next.setEmoji(nextEmoji.toString());
-	previous.setEmoji(previousEmoji.toString());
-	playPause.setEmoji(playPauseEmoji.toString());
-	playPause.setEmoji(playPauseEmoji.toString());
-	stop.setEmoji(stopEmoji.toString());
-	status.setEmoji(statusEmoji.toString());
-	repeat.setEmoji(repeatListEmoji.toString())
+		// next.setEmoji(nextEmoji.toString());
+		// previous.setEmoji(previousEmoji.toString());
+		// playPause.setEmoji(playPauseEmoji.toString());
+		// playPause.setEmoji(playPauseEmoji.toString());
+		// stop.setEmoji(stopEmoji.toString());
+		// status.setEmoji(statusEmoji.toString());
+		// repeat.setEmoji(repeatListEmoji.toString());
 
-	if (interaction.isButton()) {
-		const {member} = interaction;
-		//@ts-ignore
-		const voiceChannel = member?.voice.channel;
-		const queue = await client.distube?.getQueue(voiceChannel);
-		switch (interaction.customId) {
-			case 'next':
-				await interaction.deferReply({ephemeral: true});
-				await queue?.skip();
-				//@ts-ignore
-				await interaction.editReply({content: 'Включаю следующую песню', components: [row, row2]});
-				break;
-			case 'previous':
-				if (queue.previousSongs.length > 0) {
+		if (interaction.isButton()) {
+
+			const {member} = interaction;
+			//@ts-ignore
+			const voiceChannel = member?.voice.channel;
+			const queue = await client.distube?.getQueue(voiceChannel);
+			switch (interaction.customId) {
+				case 'next':
 					await interaction.deferReply({ephemeral: true});
-					await queue?.previous();
+					await queue?.skip();
 					//@ts-ignore
-					await interaction.editReply({content: 'Включаю предыдущюю песню', components: [row, row2]});
-				}
-				break;
-			case 'playPause':
-				await interaction.deferReply({ephemeral: true});
-				if (queue.paused) {
-					queue.resume();
-					//@ts-ignore
-					await interaction.editReply({content: 'Продолжаю воспроизведение песни', components: [row, row2]});
+					await interaction.editReply({content: 'Включаю следующую песню', components: [row, row2]});
 					break;
-				}
-				queue.pause();
-				//@ts-ignore
-				await interaction.editReply({content: 'Останавливаю песню', components: [row, row2]});
-				break;
-			case 'stop':
-				await interaction.deferReply({ephemeral: true});
-				await queue?.stop();
-				//@ts-ignore
-				await interaction.editReply({content: 'Выключаю песню и обнуляю очередь'});
-				break;
-			case 'status':
-				//@ts-ignore
-				await interaction.reply({
-					content: `Сейчас играет: ${queue.songs[0].name}. ${repeatType[queue.repeatMode]}`,
-					ephemeral: true,
-					components: [row, row2]
-				});
-				break;
-			case 'repeat':
-				await interaction.deferReply({ephemeral: true});
-				await queue?.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1);
-				repeat.setStyle(queue.repeatMode > 0 ? 1 : 2)
-				repeat.setEmoji(queue.repeatMode === 2 ? repeatListEmoji.toString() : repeatSongEmoji.toString())
-				//@ts-ignore
-				await interaction.editReply({content: repeatType[queue.repeatMode], components: [row, row2]});
-				break;
+				case 'previous':
+					if (queue.previousSongs.length > 0) {
+						await interaction.deferReply({ephemeral: true});
+						await queue?.previous();
+						//@ts-ignore
+						await interaction.editReply({content: 'Включаю предыдущюю песню', components: [row, row2]});
+					}
+					break;
+				case 'playPause':
+					await interaction.deferReply({ephemeral: true});
+					if (queue.paused) {
+						queue.resume();
+						//@ts-ignore
+						await interaction.editReply({content: 'Продолжаю воспроизведение песни', components: [row, row2]});
+						break;
+					}
+					queue.pause();
+					//@ts-ignore
+					await interaction.editReply({content: 'Останавливаю песню', components: [row, row2]});
+					break;
+				case 'stop':
+					await interaction.deferReply({ephemeral: true});
+					await queue?.stop();
+					//@ts-ignore
+					await interaction.editReply({content: 'Выключаю песню и обнуляю очередь'});
+					break;
+				case 'status':
+					//@ts-ignore
+					await interaction.reply({
+						content: `Сейчас играет: ${queue.songs[0].name}. ${repeatType[queue.repeatMode]}`,
+						ephemeral: true,
+						components: [row, row2]
+					});
+					break;
+				case 'repeat':
+					await interaction.deferReply({ephemeral: true});
+					await queue?.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1);
+					repeat.setStyle(queue.repeatMode > 0 ? 1 : 2)
+					repeat.setEmoji(queue.repeatMode === 2 ? repeatListEmoji.toString() : repeatSongEmoji.toString())
+					//@ts-ignore
+					await interaction.editReply({content: repeatType[queue.repeatMode], components: [row, row2]});
+					break;
+			}
 		}
+	} catch (e) {
+		console.log(e);
 	}
 });
 
@@ -292,8 +297,6 @@ client.on('messageCreate', (message) => {
 		});
 	}
 });
-
-// TODO СДЕЛАТЬ ОБРАБОТЧИК ЭВЕНТОВ ПО АНАЛОГИИ С КОМАНДАМИ
 
 client.distube
 	.on('addSong', (queue, song) => {

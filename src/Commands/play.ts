@@ -39,16 +39,18 @@ module.exports = {
         const {options, member, channel} = interaction;
         const subCommand = options.getSubcommand();
         const voiceChannel = member?.voice.channel;
-        const queue = await client.distube?.getQueue(voiceChannel);
+        const queue = await client.distube.getQueue(voiceChannel);
 
         try {
             switch (subCommand) {
                 case 'play':
                     await interaction.deferReply({ ephemeral: true });
-                    await client.distube?.play(voiceChannel, options.getString("input"), {
+                    await client.distube.play(voiceChannel, options.getString("input"), {
                         textChannel: channel,
                         member: member,
                         position: -1,
+                    }).catch(err => {
+                        console.log(err)
                     });
                     await interaction.editReply({content: 'Нашел, врубаю', components: [row, row2]});
                     break;
